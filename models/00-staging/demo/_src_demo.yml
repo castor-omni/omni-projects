@@ -25,5 +25,5 @@ sources:
       - name: shipped_order_items
       - name: usage_js
       - name: users
-      - name: users_js
+      - name: user_js
       

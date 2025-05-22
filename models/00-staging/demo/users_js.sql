@@ -1,3 +1,3 @@
 select
-  {{ dbt_utils.star(source('demo', 'users_js')) }}
-from {{ source('demo', 'users_js') }}
+  {{ dbt_utils.star(source('demo', 'user_js')) }}
+from {{ source('demo', 'user_js') }}

@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: asset_management
+    schema: public
+    database: asset_management
+    tables:
+      - name: dim_accounts
+      - name: dim_assets
+      - name: dim_clients
+      - name: dim_portfolios
+      - name: fct_transactions

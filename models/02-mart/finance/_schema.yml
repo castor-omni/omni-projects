@@ -73,4 +73,163 @@ models:
 
       - name: unit_name
         data_type: varchar
-        description: "The unit of measurement for the line item value (e.g., Thousands, Ones)."
+        description: "The unit of measurement for the line item value"
+
+  - name: accounts
+    description: "Financial accounts that hold client assets and cash balances. Each account represents a specific investment vehicle or container for a client's holdings."
+    columns:
+      - name: account_id
+        data_type: varchar
+        description: "Unique identifier for each financial account"
+
+      - name: account_type
+        data_type: varchar
+        description: "Type of account"
+
+      - name: account_status
+        data_type: varchar
+        description: "Current status of the account"
+
+      - name: balance
+        data_type: number
+        description: "Current total balance/value of the account in the account's base currency"
+
+      - name: currency
+        data_type: varchar
+        description: "Base currency for the account"
+
+      - name: open_date
+        data_type: timestamp_ntz
+        description: "Date and time when the account was opened"
+
+  - name: assets
+    description: "Master reference table of all investable assets available in the system, including their current market information and classifications."
+    columns:
+      - name: asset_id
+        data_type: varchar
+        description: "Unique identifier for each asset"
+
+      - name: asset_name
+        data_type: varchar
+        description: "Full name or description of the asset"
+
+      - name: asset_type
+        data_type: varchar
+        description: "Broad category of asset"
+
+      - name: asset_class
+        data_type: varchar
+        description: "Investment classification for portfolio allocation"
+
+      - name: sector
+        data_type: varchar
+        description: "Industry sector or category"
+
+      - name: current_price
+        data_type: number
+        description: "Most recent market price per unit of the asset"
+
+  - name: clients
+    description: "Individual or institutional clients who invest through the asset management platform. Contains client profile and investment preferences."
+    columns:
+      - name: client_id
+        data_type: varchar
+        description: "Unique identifier for each client"
+
+      - name: client_name
+        data_type: varchar
+        description: "Full name of the client (individual or institution)"
+
+      - name: client_email
+        data_type: varchar
+        description: "Primary email address for client communications"
+
+      - name: investment_style
+        data_type: varchar
+        description: "Client's preferred investment approach"
+
+      - name: risk_tolerance
+        data_type: varchar
+        description: "Client's risk appetite level"
+
+      - name: account_manager
+        data_type: varchar
+        description: "Name or ID of the assigned relationship manager or advisor"
+
+      - name: created_at
+        data_type: timestamp_ntz
+        description: "Date and time when the client record was created in the system"
+
+  - name: portfolios
+    description: "Investment portfolios that group assets according to specific investment strategies and objectives. Each portfolio has defined risk and return targets."
+    columns:
+      - name: portfolio_id
+        data_type: varchar
+        description: "Unique identifier for each investment portfolio"
+
+      - name: portfolio_name
+        data_type: varchar
+        description: "Descriptive name of the portfolio"
+
+      - name: portfolio_type
+        data_type: varchar
+        description: "Portfolio strategy category"
+
+      - name: target_return
+        data_type: number
+        description: "Expected annual return percentage for the portfolio"
+
+      - name: risk_level
+        data_type: varchar
+        description: "Portfolio risk classification"
+
+      - name: inception_date
+        data_type: timestamp_ntz
+        description: "Date and time when the portfolio strategy was created or launched"
+
+  - name: transactions
+    description: "Complete record of all trading activity and asset movements. Each row represents a single buy, sell, or transfer transaction."
+    columns:
+      - name: transaction_id
+        data_type: varchar
+        description: "Unique identifier for each transaction"
+
+      - name: client_id
+        data_type: varchar
+        description: "Foreign key reference to the client who initiated or owns this transaction"
+
+      - name: portfolio_id
+        data_type: varchar
+        description: "Foreign key reference to the portfolio this transaction belongs to"
+
+      - name: asset_id
+        data_type: varchar
+        description: "Foreign key reference to the specific asset being traded"
+
+      - name: account_id
+        data_type: varchar
+        description: "Foreign key reference to the account where this transaction occurred"
+
+      - name: transaction_type
+        data_type: varchar
+        description: "Type of transaction"
+
+      - name: quantity
+        data_type: number
+        description: "Number of units/shares traded"
+
+      - name: price_per_unit
+        data_type: number
+        description: "Price paid or received per unit of the asset"
+
+      - name: total_amount
+        data_type: number
+        description: "Total monetary value of the transaction"
+
+      - name: fees
+        data_type: number
+        description: "Transaction fees, commissions, or other costs associated with the trade"
+
+      - name: created_at
+        data_type: timestamp_ntz
+        description: "Date and time when the transaction was executed or recorded"

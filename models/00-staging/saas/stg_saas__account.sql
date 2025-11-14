@@ -3,6 +3,5 @@
 {{ log("Current database: " ~ target.database, info=True) }}
 {{ log("Current warehouse: " ~ target.warehouse, info=True) }}
 
-select
-  {{ dbt_utils.star(source('saas', 'account')) }}
+select *
 from {{ source('saas', 'account') }}

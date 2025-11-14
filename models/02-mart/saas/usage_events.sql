@@ -1,0 +1,1 @@
+select * from {{ ref('int_saas__usage_events') }}

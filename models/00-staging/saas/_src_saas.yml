@@ -1,0 +1,19 @@
+version: 2
+
+sources:
+  - name: saas
+    database: saas_source
+    schema: public
+    tables: 
+      - name: account_history
+      - name: account
+      - name: contacts
+      - name: jira_issues
+      - name: opportunities
+      - name: opportunity_history
+      - name: opportunity_line_items
+      - name: products
+      - name: sessions
+      - name: usage_events
+      - name: users
+      - name: zendesk_tickets

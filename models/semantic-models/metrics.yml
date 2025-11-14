@@ -1,0 +1,31 @@
+metrics:
+- name: complete_order_sales
+  description: >
+    Orders that have a status of complete.
+  type: simple 
+  label: Complete Order Sales
+  type_params: 
+    measure:
+      name: total_sales 
+      filter: |
+        {{ Dimension('sem_order_items__status') }} = 'Complete'
+- name: california_sales
+  description: >
+    Orders that were sold to customers in California.
+  type: simple 
+  label: California Sales
+  type_params: 
+    measure:
+      name: total_sales 
+      filter: |
+        {{ Dimension('sem_users__state') }} = 'California'
+- name: california_average_age
+  description: >
+    Orders were sold to customers in California.
+  type: simple 
+  label: California Average Age
+  type_params: 
+    measure:
+      name: average_age
+      filter: |
+        {{ Dimension('sem_users__state') }} = 'California'

@@ -152,6 +152,11 @@ models:
       - name: status
         data_type: varchar
         description: "Current status of the order"
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Complete', 'Shipped', 'Processing', 'Cancelled', 'Returned']
+
       - name: created_at
         data_type: timestamp_ntz
         description: "Timestamp when the order was created"

@@ -1,23 +1,8 @@
-with 
+-- {{ log("Current role: " ~ target.role, info=True) }}
+-- {{ log("Current user: " ~ target.user, info=True) }}
+-- {{ log("Current database: " ~ target.database, info=True) }}
+-- {{ log("Current warehouse: " ~ target.warehouse, info=True) }}
 
-source as (
-
-    select * from {{ source('asset_management', 'dim_accounts') }}
-
-),
-
-renamed as (
-
-    select
-        account_id,
-        account_type,
-        account_status,
-        balance,
-        currency,
-        open_date
-
-    from source
-
-)
-
-select * from renamed
+select
+  {{ dbt_utils.star(source('asset_management', 'dim_accounts')) }}
+from {{ source('asset_management', 'dim_accounts') }}

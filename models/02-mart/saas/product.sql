@@ -1,0 +1,1 @@
+select * from {{ ref('stg_saas__products') }}

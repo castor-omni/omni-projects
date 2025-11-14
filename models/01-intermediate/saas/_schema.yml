@@ -1,0 +1,345 @@
+version: 2
+
+models:
+  - name: int_saas__account
+    description: "Intermidiate table describing accounts for the data company Blobby Data"
+    columns:
+      - name: id
+        description: "Unique identifier for an account"
+      - name: name
+        description: "Account company name"
+      - name: type
+        description: "Identifier is the account is a customer, prospect or partner"
+      - name: billing_street
+        description: "Account billing street"
+      - name: billing_state
+        description: "Account billing state"
+      - name: billing_city
+        description: "Account billing city"
+      - name: billing_zip
+        description: "Account billing zip code"
+      - name: billing_country
+        description: "Account billing country"
+      - name: region
+        description: "Region owner of the account (NA, EMEA, APAC)"
+      - name: industry
+        description: "Industry the account operates in"
+      - name: annual_revenue
+        description: "The account's annual operating revenue"
+      - name: number_of_employees
+        description: "The number of employees at an account.  Used for segmentation"
+      - name: segment
+        description: "Segment the account belongs to. Enterprise, Commercial or SMB."
+      - name: owner_id 
+        description: "Unique identifier for the account owner"
+      - name: created_date
+        description: "SFDC account created date"
+  
+  - name: int_saas__contacts
+    description: "Intermidiate table of the contacts records at the accounts for the company Data Blobby"
+    columns:
+      - name: id
+        description: "Unique identifier for each contact"
+      - name: account_id
+        description: "Account identifier for each contact"
+      - name: first_name
+        description: "The given first name of the contact"
+      - name: last_name
+        description: "The given surname of the contact"
+      - name: email
+        description: "The contact's company email address"
+      - name: phone
+        description: "The contact's phone number if one is given"
+      - name: title
+        description: "The contacts role at the account"
+      - name: created_date
+        description: "The date the contact record was created"
+
+  - name: int_saas__jira_issues
+    description: "Intermidiate table to make the Jira issues seem live in the data"
+    columns:
+      - name: id
+        description: "Unique Identifier in the data for the jira issue"
+      - name: account_id
+        description: "Account identifier for the account who opened the jira issue"
+      - name: issue_key
+        description: "Unique Jira issue key"
+      - name: issue_type
+        description: "Type of issue, bug, feature request, task or story"
+      - name: summary
+        description: "Brief summary of issue"
+      - name: description
+        description: "Brief description of the issue"
+      - name: priority
+        description: "Engineering priority of issue"
+      - name: status
+        description: "Most up to date status of issue"
+      - name: assignee
+        description: "Engineering team member assigned to issue"
+      - name: reporter
+        description: "Internal reporter of issue"
+      - name: created_date
+        description: "Date that the issue was created"
+      - name: updated_date
+        description: "Date in which the issue was last updated"
+      - name: resolved_date
+        description: "Date in which the issue was resolved"
+      - name: resolution
+        description: "The final resolution of the issue.  Fixed, won't fix or duplicate issue"
+      - name: component
+        description: "Application component issue pertains to"
+      - name: labels
+        description: "Jira labels or tags assigned to the issue"
+      - name: story_points
+      - name: time_spent_hours
+        description: "Total time in hours spent fixing or debugging the issue"
+      - name: account_segment
+        description: "Account segment for the account who initially reported the issue"
+      - name: sprint
+        description: "Which engineering sprint this issue was part of"
+      - name: epic_link
+        description: "Epic ID for the issue"
+      - name: zendesk_ticket_id
+        description: "Associated Zendesk ticket for issue"
+      - name: resolution_date
+        description: "Date issue was resolved on"
+
+  - name: int_saas__opportunities
+    description: "Intermediary table for Salesforce opportunities"
+    columns:
+      - name: id
+        description: "Unique Identifier for the opportunity.  This should be the salesforce record"
+      - name: account_id
+        description: "Unique identifier for an account"
+      - name: name
+        description: "Opportunity name.  Should be account name + opportunity type"
+      - name: stage_name
+        description: "Current pipeline stage the opportunity is in"
+      - name: amount
+        description: "Contract amount for given opportunity"
+      - name: probability
+        description: "Probability that the given opportunity will be won"
+      - name: close_date
+        description: "Forecasted close date for the opportunity"
+      - name: type
+        description: "Type of opportunity.  New business, upsell/expansion, or renewal"
+      - name: lead_source
+        description: "Channel the opportunity was sourced from"
+      - name: is_won
+        description: "Boolean field to determine if the opportunity is won or not"
+      - name: forecast_category
+        description: "Sales manager's forecast category"
+      - name: owner_id
+        description: "ID of account executive who currently owns the account"
+      - name: sales_engineer_id
+        description: "ID of sales engineer who currently owns the account"
+      - name: created_date
+        description: "Date the opportunity was created"
+      - name: contact_id
+        description: "Identifier for main point of contact at the account"
+      - name: last_stage_change_date
+        description: "Date of last change in opportunity stage"
+      - name: first_demo_date
+        description: "Date of the first demo"
+      - name: trial_start_date
+        description: "Date of the trial start day"
+      - name: competitor
+        description: "Competitors in the sales process"
+      - name: loss_reason
+        description: "Reason for opportunity not winning"
+      - name: segment
+        description: "Account segment of the opportunity"
+  
+  - name: int_saas__sessions
+    description: "Intermediate table for application session data"
+    columns:
+      - name: id
+        description: "Unique session identifier"
+      - name: account_id
+        description: "Account ID associated with the unique session"
+      - name: user_id
+        description: "Unique identifier for the user of a given session"
+      - name: session_start_time
+        description: "Time in which the unique session starts"
+      - name: session_end_time
+        description: "Time in which the unique session ended"
+      - name: session_date
+        description: "Date of unique session"
+      - name: session_duration_seconds
+        description: "Length of session measured in seconds"
+      - name: session_duration_minutes
+        description: "Length of session measured in minutes"
+      - name: product_id
+        description: "Identifier of the product used in the session"
+      - name: pages_visited
+        description: "Pages visited during the session"
+      - name: events_count
+        description: "Count of the number of events that occured during the session"
+      - name: unique_pages
+        description: "The number of unique pages that the session navigated to"
+      - name: bounce_rate
+        description: "Percentage of bounces in the session"
+      - name: exit_page
+        description: "Page the session ended on"
+      - name: entry_page
+        description: "Page the session began on"
+      - name: browser
+        description: "Browser type that was used in the session"
+      - name: os
+        description: "Operation system that the session was on"
+      - name: country
+        description: "Country of origin for the session"
+      - name: region
+        description: "Account region the session belongs to"
+      - name: city
+        description: "City where the session took place"
+      - name: ip_address
+        description: "ip address of where the session takes place"
+      - name: user_agent
+      - name: referrer
+      - name: utm_source
+      - name: utm_medium
+      - name: utm_campaign
+      - name: account_segment
+        description: "Account Segment the session belongs to"
+      - name: product_tier
+        description: "Product tier the user belongs to"
+      - name: user_count
+        description: "User count of the session"
+      - name: user_role
+        description: "Role of the user in the session"
+      - name: session_quality_score
+        description: "Quality score of the unique session"
+      - name: errors_encountered
+        description: "Number of errors encountered within the unique session"
+      - name: conversion_events
+        description: "Number of conversion events to the next page"
+
+  - name: int_saas__usage_events
+    description: "Intermediate table for application event data"
+    columns:
+      - name: id
+        description: "Unique identifier for an event"
+      - name: account_id
+        description: "Account ID associated with the unique event"
+      - name: user_id
+        description: "User ID who performed unique event"
+      - name: event_type
+        description: "Type of event performed"
+      - name: event_name
+        description: "Name of the unique event"
+      - name: event_timestamp
+        description: "Timestamp for when unique event occurred"
+      - name: session_id
+        description: "Unique session each event occurred in"
+      - name: sequence_number
+        description: "Sequence number of a given event within a session"
+      - name: product_id
+        description: "Unique identifier of the product interacted with for an event"
+      - name: page_url
+        description: "url of given event"
+      - name: user_agent
+      - name: ip_address
+        description: "ip address where event occurred"
+      - name: country
+        description: "Country where event occurred"
+      - name: region
+        description: "Account region where event occurred"
+      - name: city
+        description: "City where event occurred"
+      - name: device_type
+        description: "Type of device user used for event"
+      - name: browser
+        description: "Type of browser used for event"
+      - name: os
+        description: "Operating system used for event"
+      - name: screen_resolution
+        description: "Screen resolution setting for browser"
+      - name: referrer
+        description: "The referred page"
+      - name: utm_source
+      - name: utm_campaign
+      - name: account_segment
+        description: "Account segement the user belongs to for event"
+      - name: product_tier
+        description: "Product tier for the account"
+      - name: user_count
+      - name: user_role
+        description: "Role of the user performing the event"
+      - name: feature_name
+        description: "Feature used for the unique event"
+      - name: event_properties
+  
+  - name: int_saas__users
+    description: "Data Blobby sales team table"
+    columns:
+      - name: id
+        description: "Unique identifier of the Data Blobby Employee"
+      - name: first_name
+        description: "First Name of the employee"
+      - name: last_name
+        description: "Last name of the employee"
+      - name: email
+        description: "Employee Data Blobby email address"
+      - name: role
+        description: "Employee role"
+      - name: region
+        description: "Region the employee covers"
+      - name: segment
+        description: "Account segement the employee covers"
+      - name: created_date
+        description: "Date employee started"
+
+  - name: int_saas__zendesk_tickets
+    description: "Intermidiate table for customer support tickets"
+    columns:
+      - name: id
+        description: "Unique identifier of support ticket"
+      - name: account_id
+        description: "Account ID linked to support ticket"
+      - name: ticket_id
+        description: "Unique Zendesk ticket id"
+      - name: type
+        description: "Type of support issue"
+      - name: subject
+        description: "Subject the support ticket is related to"
+      - name: description
+        description: "Brief description of support ticket"
+      - name: priority
+        description: "Priority set on support ticket"
+      - name: status
+        description: "Current status of support ticket"
+      - name: channel
+        description: "Channel in which support ticket was submitted"
+      - name: requester_id
+        description: "ID of requester"
+      - name: assignee_id
+        description: "Support team memeber assiged to ticket"
+      - name: group_id
+      - name: created_date
+        description: "Date which support ticket was created"
+      - name: updated_date
+        description: "Most recent ticket update date"
+      - name: resolved_date
+        description: "Date of ticket resolution"
+      - name: first_response_time_hours
+        description: "Time to first response on ticket"
+      - name: resolution_time_hours
+        description: "Time to resolution of ticket"
+      - name: satisfaction_score
+        description: "CSAT score of unique ticket"
+      - name: satisfaction_comment
+        description: "Comment associated with CSAT score"
+      - name: tags
+        description: "Tags assigned to support ticket"
+      - name: account_segment
+        description: "Account segment the support ticket belongs to"
+      - name: brand_id
+      - name: locale
+      - name: timezone
+        description: "Timezone of reported support ticket"
+      - name: due_date
+        description: "Due date for a support ticket"
+      - name: external_id
+      - name: jira_issue_id
+        description: "Jira issue for a support ticket, if one"

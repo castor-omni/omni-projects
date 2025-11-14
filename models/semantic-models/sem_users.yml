@@ -1,0 +1,38 @@
+semantic_models:
+  - name: sem_uers
+    model: ref('users')
+    defaults:
+      agg_time_dimension: created_at
+    entities:
+      - name: user_id
+        type: primary
+        expr: id
+    dimensions:
+      - name: first_name
+        type: categorical
+      - name: last_name
+        type: categorical
+      - name: email
+        type: categorical
+      - name: age
+        type: categorical
+      - name: city
+        type: categorical
+      - name: state
+        type: categorical
+      - name: country
+        type: categorical
+      - name: zip
+        type: categorical
+      - name: gender
+        type: categorical
+      - name: created_at
+        type: time
+        type_params:
+          time_granularity: day
+      - name: traffic_source
+        type: categorical
+    measures:
+      - name: average_age
+        agg: average
+        expr: age

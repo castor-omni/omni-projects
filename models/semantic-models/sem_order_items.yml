@@ -1,0 +1,56 @@
+semantic_models:
+  - name: sem_order_items
+    model: ref('order_items')
+    defaults:
+      agg_time_dimension: created_at
+    entities:
+      - name: order_item_id
+        type: primary
+        expr: id
+      - name: user_id
+        type: foreign
+        expr: user_id
+      - name: inventory_item_id
+        type: foreign
+        expr: inventory_item_id
+    dimensions:
+      - name: status
+        type: categorical
+      - name: status_complete
+        type: categorical
+        expr: case when status = 'Complete' then true else false end
+      - name: created_at
+        type: time
+        type_params:
+          time_granularity: day
+      - name: returned_at
+        type: time
+        type_params:
+          time_granularity: day
+      - name: delivered_at
+        type: time
+        type_params:
+          time_granularity: day
+      - name: shipped_at
+        type: time
+        type_params:
+          time_granularity: day
+      - name: is_returned
+        type: categorical
+      - name: is_delivered
+        type: categorical
+      - name: is_shipped
+        type: categorical
+    measures:
+      - name: total_sales
+        agg: sum
+        expr: sale_price
+      - name: avg_sale_price
+        agg: average
+        expr: sale_price
+      - name: total_margin
+        agg: sum
+        expr: margin
+      - name: avg_margin
+        agg: average
+        expr: margin

@@ -1,2 +1,43 @@
-select * from {{ ref('stg_saas__usage_events') }}
-WHERE event_timestamp < current_timestamp
+WITH PARAMS AS (
+  SELECT 
+    CURRENT_TIMESTAMP() AS AS_OF_TS,
+    (YEAR(CURRENT_DATE()) - 2025) AS YEAR_OFFSET
+)
+
+SELECT
+    ID
+    , ACCOUNT_ID
+    , USER_ID
+    , EVENT_TYPE
+    , EVENT_NAME
+    -- Shifting the date and timestamp forward to 2026
+    , DATEADD(MONTH, P.YEAR_OFFSET * 12, EVENT_DATE) AS EVENT_DATE
+    , DATEADD(MONTH, P.YEAR_OFFSET * 12, EVENT_TIMESTAMP) AS EVENT_TIMESTAMP
+    , SESSION_ID
+    , SEQUENCE_NUMBER
+    , PRODUCT_ID
+    , PAGE_URL
+    , USER_AGENT
+    , IP_ADDRESS
+    , COUNTRY
+    , REGION
+    , CITY
+    , DEVICE_TYPE
+    , BROWSER
+    , OS
+    , SCREEN_RESOLUTION
+    , REFERRER
+    , UTM_SOURCE
+    , UTM_MEDIUM
+    , UTM_CAMPAIGN
+    , ACCOUNT_SEGMENT
+    , PRODUCT_TIER
+    , USER_COUNT
+    , USER_ROLE
+    , FEATURE_NAME
+    , EVENT_PROPERTIES
+FROM {{ ref('stg_saas__usage_events') }}
+CROSS JOIN PARAMS P
+-- Filter so events "appear" in real-time as the clock ticks today in 2026
+WHERE DATEADD(MONTH, P.YEAR_OFFSET * 12, EVENT_TIMESTAMP) < P.AS_OF_TS
+ORDER BY EVENT_DATE DESC

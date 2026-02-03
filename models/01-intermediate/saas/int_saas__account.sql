@@ -1,53 +1,76 @@
--- don't judge, used chatgpt
+WITH PARAMS AS (
+  SELECT 
+    CURRENT_DATE() AS AS_OF_DATE,
+    (YEAR(CURRENT_DATE()) - 2025) AS YEAR_OFFSET 
+),
 
-WITH params AS (
-  SELECT current_date() AS as_of_date
+BASE_ACCOUNTS AS (
+  SELECT 
+    *,
+    -- Shift CREATED_DATE forward to 2026
+    DATEADD(MONTH, (SELECT YEAR_OFFSET * 12 FROM PARAMS), CREATED_DATE) AS SHIFTED_CREATED_DATE
+  FROM {{ ref('stg_saas__account') }}
 ),
-base_accounts AS (
-  -- Only accounts that exist as of today
+
+FILTERED_ACCOUNTS AS (
   SELECT *
-  FROM {{ ref('stg_saas__account') }} a
-  CROSS JOIN params p
-  WHERE a.created_date <= p.as_of_date
+  FROM BASE_ACCOUNTS
+  CROSS JOIN PARAMS P
+  WHERE SHIFTED_CREATED_DATE <= P.AS_OF_DATE
 ),
-history_asof AS (
-  -- Latest history per account with effective date <= today
+
+HISTORY_ASOF AS (
   SELECT *
   FROM (
     SELECT
-      ah.*,
-      COALESCE(ah.last_modified_date, ah.created_date) AS effective_date,
+      AH.ACCOUNT_ID,
+      AH.TYPE,
+      AH.INDUSTRY,
+      AH.ANNUAL_REVENUE,
+      AH.NUMBER_OF_EMPLOYEES,
+      AH.SEGMENT,
+      AH.OWNER_ID,
+      AH.CSM_ID, 
       ROW_NUMBER() OVER (
-        PARTITION BY ah.account_id
-        ORDER BY COALESCE(ah.last_modified_date, ah.created_date) DESC,
-                 ah.created_date DESC
-      ) AS rn
-    FROM {{ ref('stg_saas__account_history') }} ah
-    CROSS JOIN params p
-    WHERE COALESCE(ah.last_modified_date, ah.created_date) <= p.as_of_date
+        PARTITION BY AH.ACCOUNT_ID
+        ORDER BY COALESCE(AH.LAST_MODIFIED_DATE, AH.CREATED_DATE) DESC,
+                 AH.CREATED_DATE DESC
+      ) AS RN
+    FROM {{ ref('stg_saas__account_history') }} AH
+    CROSS JOIN PARAMS P
+    -- History snapshot must be "as of today" in the shifted timeline
+    WHERE COALESCE(
+        DATEADD(MONTH, P.YEAR_OFFSET * 12, AH.LAST_MODIFIED_DATE), 
+        DATEADD(MONTH, P.YEAR_OFFSET * 12, AH.CREATED_DATE)
+      ) <= P.AS_OF_DATE
   )
-  WHERE rn = 1
+  WHERE RN = 1
 )
+
 SELECT
-  -- Keep the exact original ACCOUNT schema & order
-  a.id,
-  a.name,
-  /* TYPE rule:
-     Prefer the as-of-today history value.
-     Fall back to account.type only when no as-of history exists. */
-  COALESCE(h.type, a.type) AS type,
-  a.billing_street,
-  a.billing_state,
-  a.billing_city,
-  a.billing_zip,
-  a.billing_country,
-  a.region,
-  COALESCE(h.industry, a.industry) AS industry,
-  CAST(COALESCE(h.annual_revenue, a.annual_revenue) AS INT)           AS annual_revenue,
-  CAST(COALESCE(h.number_of_employees, a.number_of_employees) AS INT) AS number_of_employees,
-  COALESCE(h.segment, a.segment) AS segment,
-  COALESCE(h.owner_id, a.owner_id) AS owner_id,
-  a.created_date
-FROM base_accounts a
-LEFT JOIN history_asof h
-  ON h.account_id = a.id
+  A.ID,
+  A.NAME,
+  COALESCE(H.TYPE, A.TYPE) AS TYPE,
+  A.BILLING_STREET,
+  A.BILLING_STATE,
+  A.BILLING_CITY,
+  A.BILLING_ZIP,
+  A.BILLING_COUNTRY,
+  A.REGION,
+  COALESCE(H.INDUSTRY, A.INDUSTRY) AS INDUSTRY,
+  CAST(COALESCE(H.ANNUAL_REVENUE, A.ANNUAL_REVENUE) AS BIGINT) AS ANNUAL_REVENUE,
+  CAST(COALESCE(H.NUMBER_OF_EMPLOYEES, A.NUMBER_OF_EMPLOYEES) AS BIGINT) AS NUMBER_OF_EMPLOYEES,
+  COALESCE(H.SEGMENT, A.SEGMENT) AS SEGMENT,
+  COALESCE(H.OWNER_ID, A.OWNER_ID) AS OWNER_ID,
+  A.SHIFTED_CREATED_DATE AS CREATED_DATE,
+  
+  /* BUSINESS RULE: CSMs only assigned to 'Customer' types */
+  CASE 
+    WHEN COALESCE(H.TYPE, A.TYPE) = 'Customer' THEN COALESCE(H.CSM_ID, A.CSM_ID)
+    ELSE NULL 
+  END AS CSM_ID
+
+FROM FILTERED_ACCOUNTS A
+LEFT JOIN HISTORY_ASOF H
+  ON H.ACCOUNT_ID = A.ID
+ORDER BY CREATED_DATE DESC

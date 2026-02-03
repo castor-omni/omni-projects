@@ -1,2 +1,21 @@
-select * from {{ ref('stg_saas__contacts')}}
-where created_date <= current_date
+WITH PARAMS AS (
+  SELECT 
+    CURRENT_DATE() AS AS_OF_DATE,
+    (YEAR(CURRENT_DATE()) - 2025) AS YEAR_OFFSET 
+)
+
+SELECT 
+    ID,
+    ACCOUNT_ID,
+    FIRST_NAME,
+    LAST_NAME,
+    EMAIL,
+    PHONE,
+    TITLE,
+    -- Apply the shift and standardize name
+    DATEADD(MONTH, P.YEAR_OFFSET * 12, CREATED_DATE) AS CREATED_DATE
+FROM {{ ref('stg_saas__contacts') }}
+CROSS JOIN PARAMS P
+-- Filter using standardized identifiers
+WHERE DATEADD(MONTH, P.YEAR_OFFSET * 12, CREATED_DATE) <= P.AS_OF_DATE
+ORDER BY CREATED_DATE DESC

@@ -1,96 +1,94 @@
+WITH PARAMS AS (
+  SELECT 
+    CURRENT_DATE() AS AS_OF_DATE,
+    (YEAR(CURRENT_DATE()) - 2025) AS YEAR_OFFSET 
+),
 
-WITH params AS (
-  SELECT current_date() AS as_of_date
+BASE_OPPS AS (
+  SELECT 
+    O.*,
+    DATEADD(MONTH, P.YEAR_OFFSET * 12, O.CREATED_DATE)            AS SHIFTED_CREATED_DATE,
+    DATEADD(MONTH, P.YEAR_OFFSET * 12, O.CLOSE_DATE)              AS SHIFTED_CLOSE_DATE,
+    DATEADD(MONTH, P.YEAR_OFFSET * 12, O.LAST_STAGE_CHANGE_DATE)  AS SHIFTED_LAST_STAGE_CHANGE_DATE,
+    DATEADD(MONTH, P.YEAR_OFFSET * 12, O.FIRST_DEMO_DATE)         AS SHIFTED_FIRST_DEMO_DATE,
+    DATEADD(MONTH, P.YEAR_OFFSET * 12, O.TRIAL_START_DATE)        AS SHIFTED_TRIAL_START_DATE
+  FROM {{ ref('stg_saas__opportunities')}} O
+  CROSS JOIN PARAMS P
+  WHERE DATEADD(MONTH, P.YEAR_OFFSET * 12, O.CREATED_DATE) <= P.AS_OF_DATE
 ),
-base_opps AS (
-  -- Only opportunities that exist as of today
-  SELECT *
-  FROM {{ ref('stg_saas__opportunities')}} o
-  CROSS JOIN params p
-  WHERE o.created_date <= p.as_of_date
-),
-closed_asof AS (
-  -- Closed before today → keep the base row (explicit columns to match final schema)
-  SELECT
-    o.id,
-    o.account_id,
-    o.name,
-    o.stage_name,
-    o.amount,
-    o.probability,
-    o.close_date,
-    o.type,
-    o.next_steps,
-    o.lead_source,
-    o.is_won,
-    o.forecast_category,
-    o.owner_id,
-    o.sales_engineer_id,
-    o.created_date,
-    o.contact_id,
-    o.last_stage_change_date,
-    o.first_demo_date,
-    o.trial_start_date,
-    o.competitor,
-    o.loss_reason
-  FROM base_opps o
-  CROSS JOIN params p
-  WHERE o.close_date IS NOT NULL
-    AND o.close_date < p.as_of_date
-),
-open_asof AS (
-  -- Not closed before today → candidate for history overlay
-  SELECT *
-  FROM base_opps o
-  CROSS JOIN params p
-  WHERE o.close_date IS NULL OR o.close_date >= p.as_of_date
-),
-latest_hist AS (
-  -- Latest history row per opportunity on/before today
-  -- If you have last_modified_date, prefer COALESCE(last_modified_date, created_date) in ORDER BY/WHERE
-  SELECT *
-  FROM (
+
+LATEST_HIST AS (
+  SELECT * FROM (
     SELECT
-      oh.*,
+      OH.OPPORTUNITY_ID,
+      OH.NAME, OH.STAGE_NAME, OH.AMOUNT, OH.PROBABILITY, OH.TYPE,
+      OH.NEXT_STEPS, OH.LEAD_SOURCE, OH.IS_WON, OH.FORECAST_CATEGORY,
+      OH.OWNER_ID, OH.SALES_ENGINEER_ID, OH.CONTACT_ID, OH.COMPETITOR, OH.LOSS_REASON,
+      DATEADD(MONTH, P.YEAR_OFFSET * 12, OH.CREATED_DATE)            AS SHIFTED_HIST_CREATED_DATE,
+      DATEADD(MONTH, P.YEAR_OFFSET * 12, OH.CLOSE_DATE)              AS SHIFTED_HIST_CLOSE_DATE,
+      DATEADD(MONTH, P.YEAR_OFFSET * 12, OH.LAST_STAGE_CHANGE_DATE)  AS SHIFTED_HIST_LAST_STAGE_CHANGE_DATE,
+      DATEADD(MONTH, P.YEAR_OFFSET * 12, OH.FIRST_DEMO_DATE)         AS SHIFTED_HIST_FIRST_DEMO_DATE,
+      DATEADD(MONTH, P.YEAR_OFFSET * 12, OH.TRIAL_START_DATE)        AS SHIFTED_HIST_TRIAL_START_DATE,
       ROW_NUMBER() OVER (
-        PARTITION BY oh.opportunity_id
-        ORDER BY oh.created_date DESC
-      ) AS rn
-    FROM {{ ref('stg_saas__opportunity_history') }} oh
-    CROSS JOIN params p
-    WHERE oh.created_date <= p.as_of_date
-  )
-  WHERE rn = 1
+        PARTITION BY OH.OPPORTUNITY_ID
+        ORDER BY OH.CREATED_DATE DESC 
+      ) AS RN
+    FROM {{ ref('stg_saas__opportunity_history') }} OH
+    CROSS JOIN PARAMS P
+    WHERE DATEADD(MONTH, P.YEAR_OFFSET * 12, OH.CREATED_DATE) <= P.AS_OF_DATE
+  ) WHERE RN = 1
 ),
-open_asof_overlay AS (
-  -- Overlay history values where available; keep schema identical to `opportunities`
+
+CLOSED_ASOF AS (
   SELECT
-    o.id,
-    o.account_id,
-    COALESCE(h.name,               o.name)               AS name,
-    COALESCE(h.stage_name,         o.stage_name)         AS stage_name,
-    COALESCE(h.amount,             o.amount)             AS amount,
-    COALESCE(h.probability,        o.probability)        AS probability,
-    COALESCE(h.close_date,         o.close_date)         AS close_date,
-    COALESCE(h.type,               o.type)               AS type,
-    COALESCE(h.next_steps,         o.next_steps)         AS next_steps,
-    COALESCE(h.lead_source,        o.lead_source)        AS lead_source,
-    COALESCE(h.is_won,             o.is_won)             AS is_won,
-    COALESCE(h.forecast_category,  o.forecast_category)  AS forecast_category,
-    COALESCE(h.owner_id,           o.owner_id)           AS owner_id,
-    COALESCE(h.sales_engineer_id,  o.sales_engineer_id)  AS sales_engineer_id,
-    o.created_date,  -- creation gate already enforced (<= today)
-    COALESCE(h.contact_id,         o.contact_id)         AS contact_id,
-    COALESCE(h.last_stage_change_date, o.last_stage_change_date) AS last_stage_change_date,
-    COALESCE(h.first_demo_date,    o.first_demo_date)    AS first_demo_date,
-    COALESCE(h.trial_start_date,   o.trial_start_date)   AS trial_start_date,
-    COALESCE(h.competitor,         o.competitor)         AS competitor,
-    COALESCE(h.loss_reason,        o.loss_reason)        AS loss_reason
-  FROM open_asof o
-  LEFT JOIN latest_hist h
-    ON h.opportunity_id = o.id
+    ID, ACCOUNT_ID, NAME, STAGE_NAME, AMOUNT, 
+    ARR, ACV, TCV, CONTRACT_TERM_MONTHS,
+    PROBABILITY,
+    SHIFTED_CLOSE_DATE AS CLOSE_DATE,
+    TYPE, NEXT_STEPS, LEAD_SOURCE, IS_WON, FORECAST_CATEGORY,
+    OWNER_ID, SALES_ENGINEER_ID, 
+    SHIFTED_CREATED_DATE AS CREATED_DATE,
+    CONTACT_ID, 
+    SHIFTED_LAST_STAGE_CHANGE_DATE AS LAST_STAGE_CHANGE_DATE,
+    SHIFTED_FIRST_DEMO_DATE AS FIRST_DEMO_DATE,
+    SHIFTED_TRIAL_START_DATE AS TRIAL_START_DATE,
+    COMPETITOR, LOSS_REASON
+  FROM BASE_OPPS
+  CROSS JOIN PARAMS P
+  WHERE SHIFTED_CLOSE_DATE IS NOT NULL AND SHIFTED_CLOSE_DATE < P.AS_OF_DATE
+),
+
+OPEN_ASOF_OVERLAY AS (
+  SELECT
+    O.ID,
+    O.ACCOUNT_ID,
+    COALESCE(H.NAME,               O.NAME)               AS NAME,
+    COALESCE(H.STAGE_NAME,         O.STAGE_NAME)         AS STAGE_NAME,
+    COALESCE(H.AMOUNT,             O.AMOUNT)             AS AMOUNT,
+    O.ARR, O.ACV, O.TCV, O.CONTRACT_TERM_MONTHS,
+    COALESCE(H.PROBABILITY,        O.PROBABILITY)        AS PROBABILITY,
+    COALESCE(H.SHIFTED_HIST_CLOSE_DATE, O.SHIFTED_CLOSE_DATE) AS CLOSE_DATE,
+    COALESCE(H.TYPE,               O.TYPE)               AS TYPE,
+    COALESCE(H.NEXT_STEPS,         O.NEXT_STEPS)         AS NEXT_STEPS,
+    COALESCE(H.LEAD_SOURCE,        O.LEAD_SOURCE)        AS LEAD_SOURCE,
+    COALESCE(H.IS_WON,             O.IS_WON)             AS IS_WON,
+    COALESCE(H.FORECAST_CATEGORY,  O.FORECAST_CATEGORY)  AS FORECAST_CATEGORY,
+    COALESCE(H.OWNER_ID,           O.OWNER_ID)           AS OWNER_ID,
+    COALESCE(H.SALES_ENGINEER_ID,  O.SALES_ENGINEER_ID)  AS SALES_ENGINEER_ID,
+    O.SHIFTED_CREATED_DATE                                 AS CREATED_DATE,
+    COALESCE(H.CONTACT_ID,         O.CONTACT_ID)         AS CONTACT_ID,
+    COALESCE(H.SHIFTED_HIST_LAST_STAGE_CHANGE_DATE, O.SHIFTED_LAST_STAGE_CHANGE_DATE) AS LAST_STAGE_CHANGE_DATE,
+    COALESCE(H.SHIFTED_HIST_FIRST_DEMO_DATE,        O.SHIFTED_FIRST_DEMO_DATE)        AS FIRST_DEMO_DATE,
+    COALESCE(H.SHIFTED_HIST_TRIAL_START_DATE,       O.SHIFTED_TRIAL_START_DATE)       AS TRIAL_START_DATE,
+    COALESCE(H.COMPETITOR,         O.COMPETITOR)         AS COMPETITOR,
+    COALESCE(H.LOSS_REASON,        O.LOSS_REASON)        AS LOSS_REASON
+  FROM BASE_OPPS O
+  CROSS JOIN PARAMS P
+  LEFT JOIN LATEST_HIST H ON H.OPPORTUNITY_ID = O.ID
+  WHERE (O.SHIFTED_CLOSE_DATE IS NULL OR O.SHIFTED_CLOSE_DATE >= P.AS_OF_DATE)
 )
--- Same columns in the same order on both sides → no mismatch
-SELECT * FROM closed_asof
+
+SELECT * FROM CLOSED_ASOF
 UNION ALL
-SELECT * FROM open_asof_overlay
+SELECT * FROM OPEN_ASOF_OVERLAY
+ORDER BY CREATED_DATE DESC

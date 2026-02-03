@@ -2,61 +2,160 @@ WITH PARAMS AS (
   SELECT 
     CURRENT_DATE() AS AS_OF_DATE,
     (YEAR(CURRENT_DATE()) - 2025) AS YEAR_OFFSET 
+),
+
+BASE_OPPS AS (
+  /* Retrieve the base opportunity records and calculate shifted dates 
+     to align historical data with the current reporting year.
+  */
+  SELECT 
+    O.*,
+    DATEADD(MONTH, P.YEAR_OFFSET * 12, O.CREATED_DATE)            AS SHIFTED_CREATED_DATE,
+    DATEADD(MONTH, P.YEAR_OFFSET * 12, O.CLOSE_DATE)              AS SHIFTED_CLOSE_DATE,
+    DATEADD(MONTH, P.YEAR_OFFSET * 12, O.LAST_STAGE_CHANGE_DATE)  AS SHIFTED_LAST_STAGE_CHANGE_DATE,
+    DATEADD(MONTH, P.YEAR_OFFSET * 12, O.FIRST_DEMO_DATE)         AS SHIFTED_FIRST_DEMO_DATE,
+    DATEADD(MONTH, P.YEAR_OFFSET * 12, O.TRIAL_START_DATE)        AS SHIFTED_TRIAL_START_DATE
+  FROM {{ ref('stg_saas__opportunities')}} O
+  CROSS JOIN PARAMS P
+  WHERE DATEADD(MONTH, P.YEAR_OFFSET * 12, O.CREATED_DATE) <= P.AS_OF_DATE
+),
+
+LATEST_HIST AS (
+  /* Find the most recent historical record for each opportunity 
+     that existed on or before the AS_OF_DATE.
+  */
+  SELECT * FROM (
+    SELECT
+      OH.OPPORTUNITY_ID,
+      OH.NAME, 
+      OH.STAGE_NAME, 
+      OH.AMOUNT, 
+      OH.ARR,
+      OH.ACV,
+      OH.TCV,
+      OH.CONTRACT_TERM_MONTHS,
+      OH.PROBABILITY, 
+      OH.TYPE,
+      OH.NEXT_STEPS, 
+      OH.LEAD_SOURCE, 
+      OH.IS_WON, 
+      OH.FORECAST_CATEGORY,
+      OH.OWNER_ID, 
+      OH.SALES_ENGINEER_ID, 
+      OH.CONTACT_ID, 
+      OH.COMPETITOR, 
+      OH.LOSS_REASON,
+      OH.WIN_REASON,
+      OH.RISK_SCORE,
+      OH.RISK_FLAGS,
+      DATEADD(MONTH, P.YEAR_OFFSET * 12, OH.CREATED_DATE)            AS SHIFTED_HIST_CREATED_DATE,
+      -- Close Date Logic: Cap at current date if the shifted date is in the future
+      IFF(
+        DATEADD(MONTH, P.YEAR_OFFSET * 12, OH.CLOSE_DATE) > P.AS_OF_DATE,
+        P.AS_OF_DATE,
+        DATEADD(MONTH, P.YEAR_OFFSET * 12, OH.CLOSE_DATE)
+      ) AS SHIFTED_HIST_CLOSE_DATE,
+      DATEADD(MONTH, P.YEAR_OFFSET * 12, OH.LAST_STAGE_CHANGE_DATE)  AS SHIFTED_HIST_LAST_STAGE_CHANGE_DATE,
+      DATEADD(MONTH, P.YEAR_OFFSET * 12, OH.FIRST_DEMO_DATE)         AS SHIFTED_HIST_FIRST_DEMO_DATE,
+      DATEADD(MONTH, P.YEAR_OFFSET * 12, OH.TRIAL_START_DATE)        AS SHIFTED_HIST_TRIAL_START_DATE,
+      ROW_NUMBER() OVER (
+        PARTITION BY OH.OPPORTUNITY_ID
+        ORDER BY OH.CREATED_DATE DESC 
+      ) AS RN
+    FROM {{ ref('stg_saas__opportunity_history') }} OH
+    CROSS JOIN PARAMS P
+    WHERE 
+      -- Snapshot must have been created by today in our shifted timeline
+      DATEADD(MONTH, P.YEAR_OFFSET * 12, OH.CREATED_DATE) <= P.AS_OF_DATE 
+      AND (
+        -- AND the stage change must have logically happened by today
+        OH.LAST_STAGE_CHANGE_DATE IS NULL 
+        OR DATEADD(MONTH, P.YEAR_OFFSET * 12, OH.LAST_STAGE_CHANGE_DATE) <= P.AS_OF_DATE
+      )
+  ) WHERE RN = 1
+),
+
+CLOSED_ASOF AS (
+  /* Records that were already closed as of the point-in-time date.
+     We take the data as it exists in the base table.
+  */
+  SELECT
+    ID, 
+    ACCOUNT_ID, 
+    NAME, 
+    STAGE_NAME, 
+    AMOUNT, 
+    ARR, 
+    ACV, 
+    TCV, 
+    CONTRACT_TERM_MONTHS,
+    PROBABILITY,
+    SHIFTED_CLOSE_DATE AS CLOSE_DATE,
+    TYPE, 
+    NEXT_STEPS, 
+    LEAD_SOURCE, 
+    IS_WON, 
+    FORECAST_CATEGORY,
+    OWNER_ID, 
+    SALES_ENGINEER_ID, 
+    SHIFTED_CREATED_DATE AS CREATED_DATE,
+    CONTACT_ID, 
+    SHIFTED_LAST_STAGE_CHANGE_DATE AS LAST_STAGE_CHANGE_DATE,
+    SHIFTED_FIRST_DEMO_DATE AS FIRST_DEMO_DATE,
+    SHIFTED_TRIAL_START_DATE AS TRIAL_START_DATE,
+    COMPETITOR, 
+    LOSS_REASON,
+    WIN_REASON,
+    RISK_SCORE,
+    RISK_FLAGS,
+    SEGMENT
+  FROM BASE_OPPS
+  CROSS JOIN PARAMS P
+  WHERE SHIFTED_CLOSE_DATE IS NOT NULL AND SHIFTED_CLOSE_DATE < P.AS_OF_DATE
+),
+
+OPEN_ASOF_OVERLAY AS (
+  /* Records that were open (or not yet closed) as of the point-in-time date.
+     We overlay historical values onto the base opportunity to see 
+     what the record looked like back then.
+  */
+  SELECT
+    O.ID,
+    O.ACCOUNT_ID,
+    COALESCE(H.NAME,               O.NAME)               AS NAME,
+    COALESCE(H.STAGE_NAME,         O.STAGE_NAME)         AS STAGE_NAME,
+    COALESCE(H.AMOUNT,             O.AMOUNT)             AS AMOUNT,
+    COALESCE(H.ARR,                O.ARR)                AS ARR, 
+    COALESCE(H.ACV,                O.ACV)                AS ACV, 
+    COALESCE(H.TCV,                O.TCV)                AS TCV, 
+    COALESCE(H.CONTRACT_TERM_MONTHS, O.CONTRACT_TERM_MONTHS) AS CONTRACT_TERM_MONTHS,
+    COALESCE(H.PROBABILITY,        O.PROBABILITY)        AS PROBABILITY,
+    COALESCE(H.SHIFTED_HIST_CLOSE_DATE, O.SHIFTED_CLOSE_DATE) AS CLOSE_DATE,
+    COALESCE(H.TYPE,               O.TYPE)               AS TYPE,
+    COALESCE(H.NEXT_STEPS,         O.NEXT_STEPS)         AS NEXT_STEPS,
+    COALESCE(H.LEAD_SOURCE,        O.LEAD_SOURCE)        AS LEAD_SOURCE,
+    COALESCE(H.IS_WON,             O.IS_WON)             AS IS_WON,
+    COALESCE(H.FORECAST_CATEGORY,  O.FORECAST_CATEGORY)  AS FORECAST_CATEGORY,
+    COALESCE(H.OWNER_ID,           O.OWNER_ID)           AS OWNER_ID,
+    COALESCE(H.SALES_ENGINEER_ID,  O.SALES_ENGINEER_ID)  AS SALES_ENGINEER_ID,
+    O.SHIFTED_CREATED_DATE                                 AS CREATED_DATE,
+    COALESCE(H.CONTACT_ID,         O.CONTACT_ID)         AS CONTACT_ID,
+    COALESCE(H.SHIFTED_HIST_LAST_STAGE_CHANGE_DATE, O.SHIFTED_LAST_STAGE_CHANGE_DATE) AS LAST_STAGE_CHANGE_DATE,
+    COALESCE(H.SHIFTED_HIST_FIRST_DEMO_DATE,        O.SHIFTED_FIRST_DEMO_DATE)        AS FIRST_DEMO_DATE,
+    COALESCE(H.SHIFTED_HIST_TRIAL_START_DATE,       O.SHIFTED_TRIAL_START_DATE)       AS TRIAL_START_DATE,
+    COALESCE(H.COMPETITOR,         O.COMPETITOR)         AS COMPETITOR,
+    COALESCE(H.LOSS_REASON,        O.LOSS_REASON)        AS LOSS_REASON,
+    COALESCE(H.WIN_REASON,         O.WIN_REASON)         AS WIN_REASON,
+    COALESCE(H.RISK_SCORE,         O.RISK_SCORE)         AS RISK_SCORE,
+    COALESCE(H.RISK_FLAGS,         O.RISK_FLAGS)         AS RISK_FLAGS,
+    O.SEGMENT                                              AS SEGMENT
+  FROM BASE_OPPS O
+  CROSS JOIN PARAMS P
+  LEFT JOIN LATEST_HIST H ON H.OPPORTUNITY_ID = O.ID
+  WHERE (O.SHIFTED_CLOSE_DATE IS NULL OR O.SHIFTED_CLOSE_DATE >= P.AS_OF_DATE)
 )
 
-SELECT
-  -- Identifiers
-  ID,
-  OPPORTUNITY_ID,
-  ACCOUNT_ID,
-  NAME,
-  STAGE_NAME,
-  AMOUNT,
-  ARR,
-  ACV,
-  TCV,
-  CONTRACT_TERM_MONTHS,
-  PROBABILITY,
-
-  -- When this snapshot was captured (Shifted to 2026)
-  DATEADD(MONTH, P.YEAR_OFFSET * 12, CREATED_DATE) AS CREATED_DATE,
-
-  -- When the stage actually changed (Shifted)
-  DATEADD(MONTH, P.YEAR_OFFSET * 12, LAST_STAGE_CHANGE_DATE) AS LAST_STAGE_CHANGE_DATE,
-
-  -- Close Date Logic: Cap at current date if the shifted date is in the future
-  IFF(
-    DATEADD(MONTH, P.YEAR_OFFSET * 12, CLOSE_DATE) > P.AS_OF_DATE,
-    P.AS_OF_DATE,
-    DATEADD(MONTH, P.YEAR_OFFSET * 12, CLOSE_DATE)
-  ) AS CLOSE_DATE,
-
-  -- Lifecycle milestones
-  DATEADD(MONTH, P.YEAR_OFFSET * 12, FIRST_DEMO_DATE)  AS FIRST_DEMO_DATE,
-  DATEADD(MONTH, P.YEAR_OFFSET * 12, TRIAL_START_DATE) AS TRIAL_START_DATE,
-
-  TYPE,
-  IS_WON,
-  FORECAST_CATEGORY,
-  NEXT_STEPS,
-  LEAD_SOURCE,
-  OWNER_ID,
-  SALES_ENGINEER_ID,
-  CONTACT_ID,
-  COMPETITOR,
-  LOSS_REASON,
-  WIN_REASON,
-  RISK_SCORE,
-  RISK_FLAGS
-
-FROM {{ ref('stg_saas__opportunity_history') }}
-CROSS JOIN PARAMS P
-WHERE 
-  -- Snapshot must have been created by today in our 2026 timeline
-  DATEADD(MONTH, P.YEAR_OFFSET * 12, CREATED_DATE) <= P.AS_OF_DATE 
-  AND (
-    -- AND the stage change must have logically happened by today
-    LAST_STAGE_CHANGE_DATE IS NULL 
-    OR DATEADD(MONTH, P.YEAR_OFFSET * 12, LAST_STAGE_CHANGE_DATE) <= P.AS_OF_DATE
-  )
-ORDER BY CREATED_DATE DESC, ID ASC
+SELECT * FROM CLOSED_ASOF
+UNION ALL
+SELECT * FROM OPEN_ASOF_OVERLAY
+ORDER BY CREATED_DATE DESC

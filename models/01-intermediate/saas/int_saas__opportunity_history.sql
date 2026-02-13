@@ -48,10 +48,9 @@ LATEST_HIST AS (
       OH.WIN_REASON,
       OH.RISK_SCORE,
       OH.RISK_FLAGS,
-      -- New Fields (Segment removed)
+      -- Updated Fields
       OH.IDENTIFIED_PAIN,
-      OH.PRIMARY_RISK,
-      OH.SECONDARY_RISK,
+      OH.RISK_DETAILS,
       OH.AE_NOTES,
       DATEADD(MONTH, P.YEAR_OFFSET * 12, OH.CREATED_DATE)            AS SHIFTED_HIST_CREATED_DATE,
       -- Close Date Logic: Cap at current date if the shifted date is in the future
@@ -111,10 +110,9 @@ CLOSED_ASOF AS (
     WIN_REASON,
     RISK_SCORE,
     RISK_FLAGS,
-    -- New Fields (Segment removed)
+    -- Updated Fields
     IDENTIFIED_PAIN,
-    PRIMARY_RISK,
-    SECONDARY_RISK,
+    RISK_DETAILS,
     AE_NOTES
   FROM BASE_OPPS
   CROSS JOIN PARAMS P
@@ -152,10 +150,9 @@ OPEN_ASOF_OVERLAY AS (
     COALESCE(H.WIN_REASON,         O.WIN_REASON)         AS WIN_REASON,
     COALESCE(H.RISK_SCORE,         O.RISK_SCORE)         AS RISK_SCORE,
     COALESCE(H.RISK_FLAGS,         O.RISK_FLAGS)         AS RISK_FLAGS,
-    -- New Fields with Historical Overlay logic (Segment removed)
+    -- Updated Fields with Historical Overlay logic
     COALESCE(H.IDENTIFIED_PAIN,    O.IDENTIFIED_PAIN)    AS IDENTIFIED_PAIN,
-    COALESCE(H.PRIMARY_RISK,       O.PRIMARY_RISK)       AS PRIMARY_RISK,
-    COALESCE(H.SECONDARY_RISK,     O.SECONDARY_RISK)     AS SECONDARY_RISK,
+    COALESCE(H.RISK_DETAILS,       O.RISK_DETAILS)       AS RISK_DETAILS,
     COALESCE(H.AE_NOTES,           O.AE_NOTES)           AS AE_NOTES
   FROM BASE_OPPS O
   CROSS JOIN PARAMS P

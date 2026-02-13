@@ -5,9 +5,7 @@ WITH PARAMS AS (
 ),
 
 BASE_OPPS AS (
-  /* Retrieve the base opportunity records and calculate shifted dates 
-     to align historical data with the current reporting year.
-  */
+  /* Retrieve the base opportunity records and calculate shifted dates */
   SELECT 
     O.*,
     DATEADD(MONTH, P.YEAR_OFFSET * 12, O.CREATED_DATE)            AS SHIFTED_CREATED_DATE,
@@ -21,9 +19,7 @@ BASE_OPPS AS (
 ),
 
 LATEST_HIST AS (
-  /* Find the most recent historical record for each opportunity 
-     that existed on or before the AS_OF_DATE.
-  */
+  /* Find the most recent historical record for each opportunity */
   SELECT * FROM (
     SELECT
       OH.OPPORTUNITY_ID,
@@ -44,6 +40,12 @@ LATEST_HIST AS (
       OH.WIN_REASON,
       OH.RISK_SCORE,
       OH.RISK_FLAGS,
+      -- Added New Columns Here
+      OH.SEGMENT,
+      OH.IDENTIFIED_PAIN,
+      OH.PRIMARY_RISK,
+      OH.SECONDARY_RISK,
+      OH.AE_NOTES,
       DATEADD(MONTH, P.YEAR_OFFSET * 12, OH.CREATED_DATE)            AS SHIFTED_HIST_CREATED_DATE,
       DATEADD(MONTH, P.YEAR_OFFSET * 12, OH.CLOSE_DATE)              AS SHIFTED_HIST_CLOSE_DATE,
       DATEADD(MONTH, P.YEAR_OFFSET * 12, OH.LAST_STAGE_CHANGE_DATE)  AS SHIFTED_HIST_LAST_STAGE_CHANGE_DATE,
@@ -60,9 +62,7 @@ LATEST_HIST AS (
 ),
 
 CLOSED_ASOF AS (
-  /* Records that were already closed as of the point-in-time date.
-     We take the data as it exists in the base table.
-  */
+  /* Records that were already closed as of the point-in-time date */
   SELECT
     ID, 
     ACCOUNT_ID, 
@@ -91,17 +91,20 @@ CLOSED_ASOF AS (
     LOSS_REASON,
     WIN_REASON,
     RISK_SCORE,
-    RISK_FLAGS
+    RISK_FLAGS,
+    -- Added New Columns Here
+    SEGMENT,
+    IDENTIFIED_PAIN,
+    PRIMARY_RISK,
+    SECONDARY_RISK,
+    AE_NOTES
   FROM BASE_OPPS
   CROSS JOIN PARAMS P
   WHERE SHIFTED_CLOSE_DATE IS NOT NULL AND SHIFTED_CLOSE_DATE < P.AS_OF_DATE
 ),
 
 OPEN_ASOF_OVERLAY AS (
-  /* Records that were open (or not yet closed) as of the point-in-time date.
-     We overlay historical values onto the base opportunity to see 
-     what the record looked like back then.
-  */
+  /* Records that were open as of the point-in-time date (with historical overlay) */
   SELECT
     O.ID,
     O.ACCOUNT_ID,
@@ -130,7 +133,13 @@ OPEN_ASOF_OVERLAY AS (
     COALESCE(H.LOSS_REASON,        O.LOSS_REASON)        AS LOSS_REASON,
     COALESCE(H.WIN_REASON,         O.WIN_REASON)         AS WIN_REASON,
     COALESCE(H.RISK_SCORE,         O.RISK_SCORE)         AS RISK_SCORE,
-    COALESCE(H.RISK_FLAGS,         O.RISK_FLAGS)         AS RISK_FLAGS
+    COALESCE(H.RISK_FLAGS,         O.RISK_FLAGS)         AS RISK_FLAGS,
+    -- Added New Columns with COALESCE Logic
+    COALESCE(H.SEGMENT,            O.SEGMENT)            AS SEGMENT,
+    COALESCE(H.IDENTIFIED_PAIN,    O.IDENTIFIED_PAIN)    AS IDENTIFIED_PAIN,
+    COALESCE(H.PRIMARY_RISK,       O.PRIMARY_RISK)       AS PRIMARY_RISK,
+    COALESCE(H.SECONDARY_RISK,     O.SECONDARY_RISK)     AS SECONDARY_RISK,
+    COALESCE(H.AE_NOTES,           O.AE_NOTES)           AS AE_NOTES
   FROM BASE_OPPS O
   CROSS JOIN PARAMS P
   LEFT JOIN LATEST_HIST H ON H.OPPORTUNITY_ID = O.ID

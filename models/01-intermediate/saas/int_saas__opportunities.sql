@@ -40,8 +40,7 @@ LATEST_HIST AS (
       OH.WIN_REASON,
       OH.RISK_SCORE,
       OH.RISK_FLAGS,
-      -- Added New Columns Here
-      OH.SEGMENT,
+      -- New Fields (Segment Removed)
       OH.IDENTIFIED_PAIN,
       OH.PRIMARY_RISK,
       OH.SECONDARY_RISK,
@@ -92,8 +91,7 @@ CLOSED_ASOF AS (
     WIN_REASON,
     RISK_SCORE,
     RISK_FLAGS,
-    -- Added New Columns Here
-    SEGMENT,
+    -- New Fields (Segment Removed)
     IDENTIFIED_PAIN,
     PRIMARY_RISK,
     SECONDARY_RISK,
@@ -134,8 +132,7 @@ OPEN_ASOF_OVERLAY AS (
     COALESCE(H.WIN_REASON,         O.WIN_REASON)         AS WIN_REASON,
     COALESCE(H.RISK_SCORE,         O.RISK_SCORE)         AS RISK_SCORE,
     COALESCE(H.RISK_FLAGS,         O.RISK_FLAGS)         AS RISK_FLAGS,
-    -- Added New Columns with COALESCE Logic
-    COALESCE(H.SEGMENT,            O.SEGMENT)            AS SEGMENT,
+    -- New Fields with Historical Overlay logic (Segment Removed)
     COALESCE(H.IDENTIFIED_PAIN,    O.IDENTIFIED_PAIN)    AS IDENTIFIED_PAIN,
     COALESCE(H.PRIMARY_RISK,       O.PRIMARY_RISK)       AS PRIMARY_RISK,
     COALESCE(H.SECONDARY_RISK,     O.SECONDARY_RISK)     AS SECONDARY_RISK,

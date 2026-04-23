@@ -22,10 +22,9 @@ SELECT
   , QUOTA_ATTAINMENT_PCT
   , PERFORMANCE_TIER
   -- Shift the creation date forward to 2026
-  , DATEADD(MONTH, P.YEAR_OFFSET * 12, CREATED_DATE) AS CREATED_DATE
-  -- Shift the ramp end date forward to stay logically consistent
-  , DATEADD(MONTH, P.YEAR_OFFSET * 12, RAMP_END_DATE) AS RAMP_END_DATE
+  , DATEADD(MONTH, 12, CREATED_DATE) AS CREATED_DATE
+  , DATEADD(MONTH, 12, RAMP_END_DATE) AS RAMP_END_DATE
 FROM {{ ref('stg_saas__users') }}
-CROSS JOIN PARAMS P
+-- CROSS JOIN PARAMS P
 -- Only show users who have "been hired" by today in our new timeline
-WHERE DATEADD(MONTH, P.YEAR_OFFSET * 12, CREATED_DATE) <= P.AS_OF_DATE
+-- WHERE DATEADD(MONTH, P.YEAR_OFFSET * 12, CREATED_DATE) <= P.AS_OF_DATE

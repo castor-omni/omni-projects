@@ -1,0 +1,19 @@
+version: 2
+
+sources:
+  - name: pharma
+    schema: public
+    database: pharma_source
+    tables:
+    - name: bridge_territory_physician
+    - name: dim_affiliation
+    - name: dim_channel
+    - name: dim_geography
+    - name: dim_market
+    - name: dim_payer_formulary
+    - name: dim_physician
+    - name: dim_product
+    - name: dim_sales_rep
+    - name: fact_claim
+    - name: fact_prescription
+    - name: fact_sales_activity

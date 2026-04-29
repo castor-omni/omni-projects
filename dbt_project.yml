@@ -40,6 +40,8 @@ models:
         +schema: finance
       saas:
         +schema: saas
+      pharma:
+        +schema: pharma
     01-intermediate:
       +materialized: table
       fhir:
@@ -48,6 +50,8 @@ models:
         +schema: ecomm
       saas:
         +schema: saas
+      pharma:
+        +schema: pharma
     02-mart:
       +materialized: table
       fhir:
@@ -58,3 +62,5 @@ models:
         +schema: finance
       saas:
         +schema: saas
+      pharma:
+        +schema: pharma

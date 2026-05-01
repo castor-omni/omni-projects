@@ -1,3 +1,16 @@
 select
-  {{ dbt_utils.star(ref('int_pharma__bridge_territory_physician')) }}
-from {{ ref('int_pharma__bridge_territory_physician') }}
+  FORMULARYID,
+  PAYER,
+  PLANNAME,
+  PRODUCTID,
+  MARKETID,
+  COVERAGESTATUS,
+  FORMULARYTIER,
+  PRIORAUTHREQUIRED,
+  STEPTHERAPYREQUIRED,
+  COPAY,
+  EFFECTIVEDATE,
+  EXPIRATIONDATE,
+  LASTUPDATED,
+  SOURCESYSTEM
+from {{ ref('int_pharma__dim_payer_formulary') }}

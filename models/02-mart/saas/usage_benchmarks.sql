@@ -21,7 +21,7 @@
 with snapshots as (
 
     select *
-    from {{ ref('fct_benchmark_company_snapshots') }}
+    from {{ ref('company_usage') }}
 
     {% if is_incremental() %}
     where snapshot_month

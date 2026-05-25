@@ -14,6 +14,9 @@ sources:
       - name: opportunity_line_items
       - name: products
       - name: sessions
+      - name: sessions_focus
       - name: usage_events
+      - name: usage_events_focus
       - name: users
+      - name: users_detailed
       - name: zendesk_tickets

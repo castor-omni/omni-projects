@@ -1,0 +1,29 @@
+version: 2
+
+sources:
+  - name: demo
+    database: other_demo_data
+    schema: demo
+    tables: 
+      - name: account_history
+      - name: account
+      - name: acct_js
+      - name: contact
+      - name: contact_js
+      - name: customer_health
+      - name: nba_career_stats
+      - name: nba_game_stats
+      - name: nba_players
+      - name: opportunity
+      - name: opportunity_line_item
+      - name: opp_js
+      - name: product
+      - name: product_images
+      - name: product_images_staging
+      - name: product_usage
+      - name: product_users_js
+      - name: shipped_order_items
+      - name: usage_js
+      - name: users
+      - name: user_js
+      

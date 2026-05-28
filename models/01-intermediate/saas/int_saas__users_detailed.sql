@@ -31,14 +31,10 @@ SELECT
     "user_id" AS USER_ID,
   -- Shift the creation date forward to 2026
     DATEADD(MONTH, P.YEAR_OFFSET * 12, "created_date") AS CREATED_DATE,
-  -- Shift the update  date forward to stay logically consistent
+  -- Shift the other  dates forward to stay logically consistent
     DATEADD(MONTH, P.YEAR_OFFSET * 12, "updated_date") AS UPDATED_DATE,
     DATEADD(MONTH, P.YEAR_OFFSET * 12, "activated_date") AS ACTIVATED_DATE,
     DATEADD(MONTH, P.YEAR_OFFSET * 12, "last_event_date") AS LAST_EVENT_DATE
-    -- "created_date" as CREATED_DATE,
-    -- "updated_date" as UPDATED_DATE,
-    -- "activated_date" as ACTIVATED_DATE,
-    -- "last_event_date" as LAST_EVENT_DATE
 FROM {{ ref('stg_saas__users_detailed') }}
 CROSS JOIN PARAMS P
 -- Only show users who have "been hired" by today in our new timeline

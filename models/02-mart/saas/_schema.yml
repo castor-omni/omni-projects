@@ -731,3 +731,213 @@ models:
         description: Number of companies contributing to this peer group / month.
         tests:
           - not_null
+
+  # ──────────────────────────────────────────────────────────────────────────
+  - name: dim_metric
+    description: >
+      Metric catalog. One row per metric. Lifts metric metadata (display name,
+      category, denominator semantics, directionality, format) out of column
+      names so the fact tables can stay long and narrow. Referenced by all
+      three fact tables via metric_id.
+    columns:
+      - name: metric_id
+        description: Canonical metric key. Matches metric_id in all fact tables.
+        data_tests:
+          - not_null
+          - unique
+      - name: name
+        description: Human-readable metric name for display in the BI layer.
+        data_tests:
+          - not_null
+      - name: category
+        description: "Coarse grouping of the metric: a count of users, a count of events, or a per-user rate."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['users', 'events', 'rate']
+      - name: denominator_type
+        description: >
+          For rate metrics, which user population the metric is divided by
+          (e.g. total_users, admin_users, creator_users, viewer_users). NULL
+          for raw count metrics that have no denominator.
+      - name: higher_is_better
+        description: >
+          Whether a larger value is the favorable direction. Drives conditional
+          coloring in the dashboard. Review per metric — not all rates are
+          unambiguously "higher is better".
+        data_tests:
+          - not_null
+      - name: format
+        description: Display format hint for the BI layer (e.g. integer, decimal_2).
+ 
+  # ──────────────────────────────────────────────────────────────────────────
+  - name: fact_company_usage_metrics
+    description: >
+      Per-company metric values in long form. GRAIN: one row per
+      (account_id, snapshot_month, metric_id). The value is the company's own
+      measurement and is independent of any peer group — do not confuse with
+      the peer-relative ranks in fact_company_percentile_rank, which sit at a
+      finer grain. segment / region / product_tier are the company's OWN
+      attributes (not a peer-group definition).
+    columns:
+      - name: account_id
+        description: Company identifier.
+        data_tests:
+          - not_null
+      - name: snapshot_month
+        description: Month of the snapshot (truncated to month start).
+        data_tests:
+          - not_null
+      - name: segment
+        description: The company's own segment.
+      - name: region
+        description: The company's own region.
+      - name: product_tier
+        description: The company's own product tier.
+      - name: metric_id
+        description: Metric key. Foreign key to dim_metric.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_metric')
+                field: metric_id
+      - name: value
+        description: >
+          The company's value for this metric in this month. Nullable: per-
+          active-user-of-type rate metrics are NULL when the company had no
+          active users of that type during the month.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - account_id
+              - snapshot_month
+              - metric_id
+ 
+  # ──────────────────────────────────────────────────────────────────────────
+  - name: fact_benchmark_stats
+    description: >
+      Peer-group distribution statistics in long form. GRAIN: one row per
+      (snapshot_month, peer_group_segment, peer_group_region,
+      peer_group_product_tier, metric_id, statistic). Contains NO company-level
+      rows or identifiers — safe to expose across tenants. The sentinel
+      '__ALL__' in a peer_group_* column means that dimension is rolled up
+      (not restricted). Pair with a company's own value to produce
+      "my company vs. peer distribution" comparisons.
+    columns:
+      - name: snapshot_month
+        description: Month of the snapshot.
+        data_tests:
+          - not_null
+      - name: peer_group_segment
+        description: Segment the peer group is restricted to, or '__ALL__' if not restricted.
+        data_tests:
+          - not_null
+      - name: peer_group_region
+        description: Region the peer group is restricted to, or '__ALL__' if not restricted.
+        data_tests:
+          - not_null
+      - name: peer_group_product_tier
+        description: Product tier the peer group is restricted to, or '__ALL__' if not restricted.
+        data_tests:
+          - not_null
+      - name: metric_id
+        description: Metric key. Foreign key to dim_metric.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_metric')
+                field: metric_id
+      - name: statistic
+        description: "Which distribution statistic this row holds: mean, p25, p50 (median), p75, or p90."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['mean', 'p25', 'p50', 'p75', 'p90']
+      - name: value
+        description: >
+          The statistic's value for this peer group and metric. Nullable: rate
+          metrics yield NULL stats for peer groups with no adopters of the
+          relevant user type (AVG / PERCENTILE_CONT ignore NULL inputs).
+      - name: company_count
+        description: >
+          Number of companies in this peer group for this month. Use to suppress
+          thin cohorts (k-anonymity). No suppression is applied in the model
+          itself — enforce a minimum before exposing to customers.
+        data_tests:
+          - not_null
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - snapshot_month
+              - peer_group_segment
+              - peer_group_region
+              - peer_group_product_tier
+              - metric_id
+              - statistic
+ 
+  # ──────────────────────────────────────────────────────────────────────────
+  - name: fact_company_percentile_rank
+    description: >
+      Where each company ranks within a chosen peer group, in long form.
+      GRAIN: one row per (account_id, snapshot_month, metric_id,
+      peer_group_segment, peer_group_region, peer_group_product_tier). Each
+      company-month-metric gets one row per peer-group combination (8 combos
+      for 3 dimensions). The sentinel '__ALL__' means that dimension is rolled
+      up. Currently only the five event-count metrics are ranked here; rate
+      metrics are intentionally excluded because percent_rank() does not share
+      the NULL-excluding semantics of the benchmark distribution.
+    columns:
+      - name: account_id
+        description: Company identifier.
+        data_tests:
+          - not_null
+      - name: snapshot_month
+        description: Month of the snapshot.
+        data_tests:
+          - not_null
+      - name: metric_id
+        description: Metric key. Foreign key to dim_metric.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_metric')
+                field: metric_id
+      - name: peer_group_segment
+        description: Segment the ranking peer group is restricted to, or '__ALL__'.
+        data_tests:
+          - not_null
+      - name: peer_group_region
+        description: Region the ranking peer group is restricted to, or '__ALL__'.
+        data_tests:
+          - not_null
+      - name: peer_group_product_tier
+        description: Product tier the ranking peer group is restricted to, or '__ALL__'.
+        data_tests:
+          - not_null
+      - name: percentile_rank
+        description: >
+          Fraction of the peer group at or below this company's value (0–1,
+          via percent_rank). 0.50 is the median; higher is a better rank for
+          these event-count metrics.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - account_id
+              - snapshot_month
+              - metric_id
+              - peer_group_segment
+              - peer_group_region
+              - peer_group_product_tier

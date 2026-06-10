@@ -2,7 +2,7 @@
 
 {{ config(materialized='incremental', unique_key=[
     'snapshot_month','peer_group_segment','peer_group_region','peer_group_product_tier','metric_id','statistic'
-) }}
+]) }}
 
 {# (canonical metric_id, suffix as it appears in usage_benchmarks) #}
 {% set metrics = [

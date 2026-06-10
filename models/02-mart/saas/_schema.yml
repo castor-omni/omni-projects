@@ -719,7 +719,7 @@ models:
       than treated as zero.
     columns:
       - name: snapshot_month
-        tests:
+        data_tests:
           - not_null
       - name: peer_group_segment
         description: NULL means "all segments".
@@ -729,7 +729,7 @@ models:
         description: NULL means "all product tiers".
       - name: company_count
         description: Number of companies contributing to this peer group / month.
-        tests:
+        data_tests:
           - not_null
 
   # ──────────────────────────────────────────────────────────────────────────

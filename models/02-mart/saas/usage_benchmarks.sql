@@ -20,9 +20,6 @@
 */
 
 
-{{ config(
-  enabled=false
-) }}
 
 with snapshots as (
 

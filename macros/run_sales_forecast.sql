@@ -14,7 +14,7 @@
     SELECT 
         TO_TIMESTAMP_NTZ(month) AS MONTH_v1,
         SUM(total_sale_price) AS TOTAL_SALE_PRICE
-    FROM {{ source_table }}   <-- CHANGED THIS LINE
+    FROM {{ source_table }}
     WHERE TO_TIMESTAMP_NTZ(month) < DATE_TRUNC('MONTH', CURRENT_DATE())
     GROUP BY 1;
 

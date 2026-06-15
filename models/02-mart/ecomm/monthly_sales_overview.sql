@@ -1,9 +1,3 @@
-{{ config(
-    materialized='table',
-    schema='ECOMM',
-    post_hook="{{ run_sales_forecast() }}"
-) }}
-
 select
     date(date_trunc('MONTH', created_at)) as month,
     status,

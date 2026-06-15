@@ -1,4 +1,4 @@
-{% macro run_sales_forecast() %}
+{% macro run_sales_forecast(source_table) %}
 
   -- If we are running in the production database, force the ECOMM schema.
   -- Otherwise, fall back to your personal dev schema.
@@ -8,32 +8,40 @@
     {% set output_schema = target.schema %}
   {% endif %}
 
-  {% set forecast_query %}
-    -- Create clean training view using native dbt ref() lookup
+  -- Step 1: Create clean training view
+  {% set view_query %}
     CREATE OR REPLACE TEMPORARY VIEW {{ target.database }}.{{ output_schema }}.sales_forecast_training_set AS
     SELECT 
         TO_TIMESTAMP_NTZ(month) AS MONTH_v1,
         SUM(total_sale_price) AS TOTAL_SALE_PRICE
-    FROM {{ ref('monthly_sales_overview') }}
+    FROM {{ source_table }}
     WHERE TO_TIMESTAMP_NTZ(month) < DATE_TRUNC('MONTH', CURRENT_DATE())
-    GROUP BY 1;
+    GROUP BY 1
+  {% endset %}
+  {% do run_query(view_query) %}
 
-    -- Train the ML Model
+
+  -- Step 2: Train the ML Model
+  {% set model_query %}
     CREATE OR REPLACE SNOWFLAKE.ML.FORECAST {{ target.database }}.{{ output_schema }}.sales_forecast(
         INPUT_DATA => TABLE({{ target.database }}.{{ output_schema }}.sales_forecast_training_set),
         TIMESTAMP_COLNAME => 'MONTH_v1',
         TARGET_COLNAME => 'TOTAL_SALE_PRICE'
-    );
+    )
+  {% endset %}
+  {% do run_query(model_query) %}
 
-    -- Generate predictions directly into the verified schema
+
+  -- Step 3: Generate predictions directly into the verified schema
+  {% set forecast_query %}
     CREATE OR REPLACE TABLE {{ target.database }}.{{ output_schema }}.TOTAL_SALES_FORECAST AS 
     SELECT * FROM TABLE({{ target.database }}.{{ output_schema }}.sales_forecast!FORECAST(
         FORECASTING_PERIODS => 15,
         CONFIG_OBJECT => {'prediction_interval': 0.80}
     ))
   {% endset %}
-
   {% do run_query(forecast_query) %}
+
   {% do log("Cortex sales forecast updated successfully.", info=True) %}
 
 {% endmacro %}

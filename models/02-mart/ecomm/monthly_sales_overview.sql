@@ -1,7 +1,7 @@
 {{ config(
     materialized='table',
     schema='ECOMM',
-    post_hook="{{ run_sales_forecast() }}"
+    post_hook="{{ run_sales_forecast(this) }}"
 ) }}
 
 select

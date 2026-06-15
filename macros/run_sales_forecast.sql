@@ -1,4 +1,4 @@
-{% macro run_sales_forecast() %}
+{% macro run_sales_forecast(source_table) %}
 
   -- If we are running in the production database, force the ECOMM schema.
   -- Otherwise, fall back to your personal dev schema.
@@ -9,12 +9,12 @@
   {% endif %}
 
   {% set forecast_query %}
-    -- Create clean training view using native dbt ref() lookup
+    -- Create clean training view using the passed-in model relation
     CREATE OR REPLACE TEMPORARY VIEW {{ target.database }}.{{ output_schema }}.sales_forecast_training_set AS
     SELECT 
         TO_TIMESTAMP_NTZ(month) AS MONTH_v1,
         SUM(total_sale_price) AS TOTAL_SALE_PRICE
-    FROM {{ ref('monthly_sales_overview') }}
+    FROM {{ source_table }}   <-- CHANGED THIS LINE
     WHERE TO_TIMESTAMP_NTZ(month) < DATE_TRUNC('MONTH', CURRENT_DATE())
     GROUP BY 1;
 

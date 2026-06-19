@@ -44,7 +44,7 @@ with events as (
             else 'Other'
         end                                      as event_type
 
-    from {{ ref('usage_events') }}
+    from {{ ref('int_saas__usage_events') }}
 
     where event_timestamp is not null
       and date_trunc('month', event_timestamp) < date_trunc('month', current_date)
@@ -69,7 +69,7 @@ sessions as (
             else 'Other'
         end as user_type
 
-    from {{ ref('user_sessions') }}
+    from {{ ref('int_saas__sessions') }}
 
 ),
 
@@ -168,65 +168,6 @@ aggregated as (
     from events_with_user_type
     group by 1, 2
 
-),
-
-with_ranks as (
-
-    select
-        *,
-
-        -- ── total events ─────────────────────────────────────────────────────
-        percent_rank() over (partition by snapshot_month                                    order by total_events) as pct_rank_total_events_all,
-        percent_rank() over (partition by snapshot_month, segment                           order by total_events) as pct_rank_total_events_within_segment,
-        percent_rank() over (partition by snapshot_month, region                            order by total_events) as pct_rank_total_events_within_region,
-        percent_rank() over (partition by snapshot_month, product_tier                      order by total_events) as pct_rank_total_events_within_product_tier,
-        percent_rank() over (partition by snapshot_month, segment, region                   order by total_events) as pct_rank_total_events_within_segment_region,
-        percent_rank() over (partition by snapshot_month, segment, product_tier             order by total_events) as pct_rank_total_events_within_segment_product_tier,
-        percent_rank() over (partition by snapshot_month, region, product_tier              order by total_events) as pct_rank_total_events_within_region_product_tier,
-        percent_rank() over (partition by snapshot_month, segment, region, product_tier     order by total_events) as pct_rank_total_events_within_all,
-
-        -- ── agentic events ───────────────────────────────────────────────────
-        percent_rank() over (partition by snapshot_month                                    order by total_agentic_events) as pct_rank_agentic_events_all,
-        percent_rank() over (partition by snapshot_month, segment                           order by total_agentic_events) as pct_rank_agentic_events_within_segment,
-        percent_rank() over (partition by snapshot_month, region                            order by total_agentic_events) as pct_rank_agentic_events_within_region,
-        percent_rank() over (partition by snapshot_month, product_tier                      order by total_agentic_events) as pct_rank_agentic_events_within_product_tier,
-        percent_rank() over (partition by snapshot_month, segment, region                   order by total_agentic_events) as pct_rank_agentic_events_within_segment_region,
-        percent_rank() over (partition by snapshot_month, segment, product_tier             order by total_agentic_events) as pct_rank_agentic_events_within_segment_product_tier,
-        percent_rank() over (partition by snapshot_month, region, product_tier              order by total_agentic_events) as pct_rank_agentic_events_within_region_product_tier,
-        percent_rank() over (partition by snapshot_month, segment, region, product_tier     order by total_agentic_events) as pct_rank_agentic_events_within_all,
-
-        -- ── api events ───────────────────────────────────────────────────────
-        percent_rank() over (partition by snapshot_month                                    order by total_api_events) as pct_rank_api_events_all,
-        percent_rank() over (partition by snapshot_month, segment                           order by total_api_events) as pct_rank_api_events_within_segment,
-        percent_rank() over (partition by snapshot_month, region                            order by total_api_events) as pct_rank_api_events_within_region,
-        percent_rank() over (partition by snapshot_month, product_tier                      order by total_api_events) as pct_rank_api_events_within_product_tier,
-        percent_rank() over (partition by snapshot_month, segment, region                   order by total_api_events) as pct_rank_api_events_within_segment_region,
-        percent_rank() over (partition by snapshot_month, segment, product_tier             order by total_api_events) as pct_rank_api_events_within_segment_product_tier,
-        percent_rank() over (partition by snapshot_month, region, product_tier              order by total_api_events) as pct_rank_api_events_within_region_product_tier,
-        percent_rank() over (partition by snapshot_month, segment, region, product_tier     order by total_api_events) as pct_rank_api_events_within_all,
-
-        -- ── ui events ────────────────────────────────────────────────────────
-        percent_rank() over (partition by snapshot_month                                    order by total_ui_events) as pct_rank_ui_events_all,
-        percent_rank() over (partition by snapshot_month, segment                           order by total_ui_events) as pct_rank_ui_events_within_segment,
-        percent_rank() over (partition by snapshot_month, region                            order by total_ui_events) as pct_rank_ui_events_within_region,
-        percent_rank() over (partition by snapshot_month, product_tier                      order by total_ui_events) as pct_rank_ui_events_within_product_tier,
-        percent_rank() over (partition by snapshot_month, segment, region                   order by total_ui_events) as pct_rank_ui_events_within_segment_region,
-        percent_rank() over (partition by snapshot_month, segment, product_tier             order by total_ui_events) as pct_rank_ui_events_within_segment_product_tier,
-        percent_rank() over (partition by snapshot_month, region, product_tier              order by total_ui_events) as pct_rank_ui_events_within_region_product_tier,
-        percent_rank() over (partition by snapshot_month, segment, region, product_tier     order by total_ui_events) as pct_rank_ui_events_within_all,
-
-        -- ── admin/other events ───────────────────────────────────────────────
-        percent_rank() over (partition by snapshot_month                                    order by total_admin_other_events) as pct_rank_admin_other_events_all,
-        percent_rank() over (partition by snapshot_month, segment                           order by total_admin_other_events) as pct_rank_admin_other_events_within_segment,
-        percent_rank() over (partition by snapshot_month, region                            order by total_admin_other_events) as pct_rank_admin_other_events_within_region,
-        percent_rank() over (partition by snapshot_month, product_tier                      order by total_admin_other_events) as pct_rank_admin_other_events_within_product_tier,
-        percent_rank() over (partition by snapshot_month, segment, region                   order by total_admin_other_events) as pct_rank_admin_other_events_within_segment_region,
-        percent_rank() over (partition by snapshot_month, segment, product_tier             order by total_admin_other_events) as pct_rank_admin_other_events_within_segment_product_tier,
-        percent_rank() over (partition by snapshot_month, region, product_tier              order by total_admin_other_events) as pct_rank_admin_other_events_within_region_product_tier,
-        percent_rank() over (partition by snapshot_month, segment, region, product_tier     order by total_admin_other_events) as pct_rank_admin_other_events_within_all
-
-    from aggregated
-
 )
 
-select * from with_ranks
+select * from aggregated

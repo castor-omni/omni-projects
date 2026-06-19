@@ -266,71 +266,6 @@ models:
       - name: product_code
         description: "Internal product code or SKU"
   
-  - name: user_sessions
-    description: "Table for application session data"
-    columns:
-      - name: id
-        description: "Unique session identifier"
-      - name: account_id
-        description: "Account ID associated with the unique session"
-      - name: user_id
-        description: "Unique identifier for the user of a given session"
-      - name: session_start_time
-        description: "Time in which the unique session starts"
-      - name: session_end_time
-        description: "Time in which the unique session ended"
-      - name: session_date
-        description: "Date of unique session"
-      - name: session_duration_seconds
-        description: "Length of session measured in seconds"
-      - name: session_duration_minutes
-        description: "Length of session measured in minutes"
-      - name: product_id
-        description: "Identifier of the product used in the session"
-      - name: pages_visited
-        description: "Pages visited during the session"
-      - name: events_count
-        description: "Count of the number of events that occured during the session"
-      - name: unique_pages
-        description: "The number of unique pages that the session navigated to"
-      - name: bounce_rate
-        description: "Percentage of bounces in the session"
-      - name: exit_page
-        description: "Page the session ended on"
-      - name: entry_page
-        description: "Page the session began on"
-      - name: browser
-        description: "Browser type that was used in the session"
-      - name: os
-        description: "Operation system that the session was on"
-      - name: country
-        description: "Country of origin for the session"
-      - name: region
-        description: "Account region the session belongs to"
-      - name: city
-        description: "City where the session took place"
-      - name: ip_address
-        description: "ip address of where the session takes place"
-      - name: user_agent
-      - name: referrer
-      - name: utm_source
-      - name: utm_medium
-      - name: utm_campaign
-      - name: account_segment
-        description: "Account Segment the session belongs to"
-      - name: product_tier
-        description: "Product tier the user belongs to"
-      - name: user_count
-        description: "User count of the session"
-      - name: user_role
-        description: "Role of the user in the session"
-      - name: session_quality_score
-        description: "Quality score of the unique session"
-      - name: errors_encountered
-        description: "Number of errors encountered within the unique session"
-      - name: conversion_events
-        description: "Number of conversion events to the next page"
-  
   - name: user_sessions_focus
     description: "Table for application session data"
     columns:
@@ -395,61 +330,6 @@ models:
         description: "Number of errors encountered within the unique session"
       - name: conversion_events
         description: "Number of conversion events to the next page"
-
-  - name: usage_events
-    description: "Table for application event data"
-    columns:
-      - name: id
-        description: "Unique identifier for an event"
-      - name: account_id
-        description: "Account ID associated with the unique event"
-      - name: user_id
-        description: "User ID who performed unique event"
-      - name: event_type
-        description: "Type of event performed"
-      - name: event_name
-        description: "Name of the unique event"
-      - name: event_timestamp
-        description: "Timestamp for when unique event occurred"
-      - name: session_id
-        description: "Unique session each event occurred in"
-      - name: sequence_number
-        description: "Sequence number of a given event within a session"
-      - name: product_id
-        description: "Unique identifier of the product interacted with for an event"
-      - name: page_url
-        description: "url of given event"
-      - name: user_agent
-      - name: ip_address
-        description: "ip address where event occurred"
-      - name: country
-        description: "Country where event occurred"
-      - name: region
-        description: "Account region where event occurred"
-      - name: city
-        description: "City where event occurred"
-      - name: device_type
-        description: "Type of device user used for event"
-      - name: browser
-        description: "Type of browser used for event"
-      - name: os
-        description: "Operating system used for event"
-      - name: screen_resolution
-        description: "Screen resolution setting for browser"
-      - name: referrer
-        description: "The referred page"
-      - name: utm_source
-      - name: utm_campaign
-      - name: account_segment
-        description: "Account segement the user belongs to for event"
-      - name: product_tier
-        description: "Product tier for the account"
-      - name: user_count
-      - name: user_role
-        description: "Role of the user performing the event"
-      - name: feature_name
-        description: "Feature used for the unique event"
-      - name: event_properties
 
   - name: usage_events_focus
     description: "Table for application event data"
@@ -640,8 +520,8 @@ models:
   - name: company_usage
     description: >
       One row per (account_id, snapshot_month) with monthly usage metrics
-      per company. Sourced from omni_dbt_saas__usage_events joined to
-      omni_dbt_saas__user_sessions for user_role -> user_type derivation.
+      per company. Sourced from int_saas__usage_events joined to
+      int_saas__sessions for user_role -> user_type derivation.
  
       Pair this in the semantic layer with fct_benchmark_distribution to
       surface "my company vs. peer distribution" comparisons. Filter to a

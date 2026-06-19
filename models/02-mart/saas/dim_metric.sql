@@ -24,7 +24,7 @@ from values
     ('api_events_per_user',               'API Events / User',         'rate',    'total_users',   true, 'decimal_2'),
     ('ui_events_per_user',                'UI Events / User',          'rate',    'total_users',   true, 'decimal_2'),
     ('admin_other_events_per_user',       'Admin Events / User',       'rate',    'total_users',   true, 'decimal_2'),
-    ('admin_other_events_per_admin_user', 'Admin Events / Admin User', 'rate',    'admin_users',   true, 'decimal_2'),
-    ('agentic_events_per_creator_user',   'AI Events / Creator User',  'rate',    'creator_users', true, 'decimal_2'),
-    ('ui_events_per_creator_user',        'UI Events / Creator User',  'rate',    'creator_users', true, 'decimal_2'),
-    ('ui_events_per_viewer_user',         'UI Events / Viewer User',   'rate',    'viewer_users',  true, 'decimal_2')
+    ('admin_other_events_per_admin_user', 'Admin Events / Admin User', 'rate',    'total_admin_users',   true, 'decimal_2'),
+    ('agentic_events_per_creator_user',   'AI Events / Creator User',  'rate',    'total_creator_users', true, 'decimal_2'),
+    ('ui_events_per_creator_user',        'UI Events / Creator User',  'rate',    'total_creator_users', true, 'decimal_2'),
+    ('ui_events_per_viewer_user',         'UI Events / Viewer User',   'rate',    'total_viewer_users',  true, 'decimal_2')

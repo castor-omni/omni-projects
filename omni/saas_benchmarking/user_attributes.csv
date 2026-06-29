@@ -1,0 +1,8 @@
+user_email,account_id
+# TEMPLATE — replace with real personas + real account_id values from the data.
+# `user_email` is the join key Omni uses to look up the logged-in user.
+# `account_id` must match values in fact_company_*.account_id.
+# Use the sentinel __ALL__ (matches values_for_unfiltered) for an admin who sees everything.
+demo.persona-a@example.com,REPLACE_WITH_REAL_ACCOUNT_ID
+demo.persona-b@example.com,REPLACE_WITH_REAL_ACCOUNT_ID
+demo.admin@example.com,__ALL__

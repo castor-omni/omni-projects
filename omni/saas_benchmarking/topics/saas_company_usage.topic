@@ -1,0 +1,12 @@
+# RESTRICTED topic: a company's own usage metrics over time.
+label: "SaaS — My Usage"
+description: >
+  A company's own monthly usage metrics (counts and per-user rates) over time.
+  Pick a metric via dim_metric.name. RESTRICTED to the viewing company.
+base_view: fact_company_usage_metrics
+joins:
+  dim_metric: {}
+access_filters:
+  - field: fact_company_usage_metrics.account_id
+    user_attribute: account_id
+    values_for_unfiltered: ['__ALL__']

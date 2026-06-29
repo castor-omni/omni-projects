@@ -1,0 +1,37 @@
+# Extension view: where a company ranks within a chosen peer group, long form.
+# Grain: one row per (account_id, snapshot_month, metric_id,
+#                     peer_group_segment, peer_group_region, peer_group_product_tier).
+# RLS: RESTRICTED by account_id. Base view of the hero topic.
+dimensions:
+  rank_pk:
+    primary_key: true
+    hidden: true
+    sql: >
+      ${account_id} || '-' || ${snapshot_month} || '-' || ${metric_id} || '-' ||
+      ${peer_group_segment} || '-' || ${peer_group_region} || '-' ||
+      ${peer_group_product_tier}
+  account_id:
+    hidden: true
+  metric_id:
+    hidden: true
+  snapshot_month:
+    label: Month
+    timeframes: [month, quarter, year]
+  peer_group_segment:
+    label: "Peer Group: Segment"
+  peer_group_region:
+    label: "Peer Group: Region"
+  peer_group_product_tier:
+    label: "Peer Group: Product Tier"
+  percentile_rank:
+    hidden: true
+
+measures:
+  my_percentile:
+    label: My Percentile
+    description: >
+      Where this company falls within the chosen peer group (cume_dist, 0-1).
+      0.50 ~ median; higher is better for the event-count metrics ranked here.
+    sql: ${percentile_rank}
+    aggregate_type: max
+    format: percent_1

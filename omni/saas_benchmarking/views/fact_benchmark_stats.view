@@ -1,0 +1,70 @@
+# Extension view: anonymized peer-group distribution statistics, long form.
+# Grain: one row per (snapshot_month, peer_group_segment, peer_group_region,
+#                      peer_group_product_tier, metric_id, statistic).
+# NO company identifiers — OPEN to all users (no access_filter).
+# Pre-computed stats stored as rows -> surfaced as filtered max() measures.
+dimensions:
+  benchmark_pk:
+    primary_key: true
+    hidden: true
+    sql: >
+      ${snapshot_month} || '-' || ${peer_group_segment} || '-' ||
+      ${peer_group_region} || '-' || ${peer_group_product_tier} || '-' ||
+      ${metric_id} || '-' || ${statistic}
+  metric_id:
+    hidden: true
+  snapshot_month:
+    label: Month
+    timeframes: [month, quarter, year]
+  peer_group_segment:
+    label: "Peer Group: Segment"
+    description: "Segment the peer group is restricted to, or '__ALL__' if rolled up."
+  peer_group_region:
+    label: "Peer Group: Region"
+  peer_group_product_tier:
+    label: "Peer Group: Product Tier"
+  statistic:
+    hidden: true
+  value:
+    hidden: true
+  company_count:
+    hidden: true
+
+measures:
+  peer_mean:
+    label: Peer Mean
+    sql: ${value}
+    aggregate_type: max
+    filters:
+      statistic: { is: mean }
+  peer_p25:
+    label: Peer P25
+    sql: ${value}
+    aggregate_type: max
+    filters:
+      statistic: { is: p25 }
+  peer_p50:
+    label: Peer Median
+    sql: ${value}
+    aggregate_type: max
+    filters:
+      statistic: { is: p50 }
+  peer_p75:
+    label: Peer P75
+    sql: ${value}
+    aggregate_type: max
+    filters:
+      statistic: { is: p75 }
+  peer_p90:
+    label: Peer P90
+    sql: ${value}
+    aggregate_type: max
+    filters:
+      statistic: { is: p90 }
+  peer_company_count:
+    label: Peers in Cohort
+    description: >
+      Number of companies in this peer group/month. Use to suppress thin
+      cohorts (k-anonymity) — a cohort of 1 effectively exposes that company.
+    sql: ${company_count}
+    aggregate_type: max

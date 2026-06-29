@@ -1,0 +1,98 @@
+# Workbook/branch-scoped Omni semantic layer for the SaaS benchmarking demo.
+# View names are the live auto-generated names in the "Extension Models" model
+# (ANALYTICS_PROD.SAAS): saas__dim_metric, saas__fact_company_usage_metrics,
+# saas__fact_benchmark_stats, saas__fact_company_percentile_rank.
+#
+# The base views already exist (schema refresh). These are ADDITIONS:
+#  - merge the dimensions:/measures: blocks into each existing view file
+#  - append the joins to the relationships file
+#  - add the topic as a new file
+#
+# Paste in the Omni IDE on a NON-MAIN BRANCH (don't merge), or translate the
+# measures/joins into the workbook field-browser dialogs (Add measure / New join).
+
+# ─────────────────────────────────────────────────────────────────────────────
+# VIEW: saas__fact_company_usage_metrics   (company's own values; RESTRICT by account_id)
+dimensions:
+  pk:
+    sql: ${account_id} || '-' || ${snapshot_month} || '-' || ${metric_id}
+    primary_key: true
+measures:
+  company_value:
+    label: My Value
+    sql: ${value}
+    aggregate_type: sum
+
+# ─────────────────────────────────────────────────────────────────────────────
+# VIEW: saas__fact_company_percentile_rank  (rank within peer group; RESTRICT by account_id)
+dimensions:
+  pk:
+    sql: ${account_id} || '-' || ${snapshot_month} || '-' || ${metric_id} || '-' || ${peer_group_segment} || '-' || ${peer_group_region} || '-' || ${peer_group_product_tier}
+    primary_key: true
+measures:
+  my_percentile:
+    label: My Percentile
+    sql: ${percentile_rank}
+    aggregate_type: max
+    format: percent_1
+
+# ─────────────────────────────────────────────────────────────────────────────
+# VIEW: saas__fact_benchmark_stats   (anonymized peer distribution; OPEN, no RLS)
+dimensions:
+  pk:
+    sql: ${snapshot_month} || '-' || ${peer_group_segment} || '-' || ${peer_group_region} || '-' || ${peer_group_product_tier} || '-' || ${metric_id} || '-' || ${statistic}
+    primary_key: true
+measures:
+  peer_mean: { label: Peer Mean,   sql: ${value}, aggregate_type: max, filters: { statistic: { is: mean } } }
+  peer_p25:  { label: Peer P25,    sql: ${value}, aggregate_type: max, filters: { statistic: { is: p25 } } }
+  peer_p50:  { label: Peer Median, sql: ${value}, aggregate_type: max, filters: { statistic: { is: p50 } } }
+  peer_p75:  { label: Peer P75,    sql: ${value}, aggregate_type: max, filters: { statistic: { is: p75 } } }
+  peer_p90:  { label: Peer P90,    sql: ${value}, aggregate_type: max, filters: { statistic: { is: p90 } } }
+  peer_company_count: { label: Peers in Cohort, sql: ${company_count}, aggregate_type: max }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# VIEW: saas__dim_metric   (catalog; OPEN). Just mark the PK on the existing dimension:
+#   metric_id:
+#     primary_key: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# RELATIONSHIPS  (append to the relationships file; bare list, no wrapper key)
+- join_from_view: saas__fact_company_percentile_rank
+  join_to_view: saas__dim_metric
+  on_sql: ${saas__fact_company_percentile_rank.metric_id} = ${saas__dim_metric.metric_id}
+  relationship_type: many_to_one
+  join_type: always_left
+
+- join_from_view: saas__fact_company_percentile_rank
+  join_to_view: saas__fact_company_usage_metrics
+  on_sql: >
+    ${saas__fact_company_percentile_rank.account_id} = ${saas__fact_company_usage_metrics.account_id}
+    AND ${saas__fact_company_percentile_rank.snapshot_month} = ${saas__fact_company_usage_metrics.snapshot_month}
+    AND ${saas__fact_company_percentile_rank.metric_id} = ${saas__fact_company_usage_metrics.metric_id}
+  relationship_type: many_to_one
+  join_type: always_left
+
+- join_from_view: saas__fact_company_percentile_rank
+  join_to_view: saas__fact_benchmark_stats
+  on_sql: >
+    ${saas__fact_company_percentile_rank.snapshot_month} = ${saas__fact_benchmark_stats.snapshot_month}
+    AND ${saas__fact_company_percentile_rank.metric_id} = ${saas__fact_benchmark_stats.metric_id}
+    AND ${saas__fact_company_percentile_rank.peer_group_segment} = ${saas__fact_benchmark_stats.peer_group_segment}
+    AND ${saas__fact_company_percentile_rank.peer_group_region} = ${saas__fact_benchmark_stats.peer_group_region}
+    AND ${saas__fact_company_percentile_rank.peer_group_product_tier} = ${saas__fact_benchmark_stats.peer_group_product_tier}
+  relationship_type: one_to_many
+  join_type: always_left
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TOPIC: new file saas_company_benchmark.topic  (topic name = filename; no `name:` key)
+# label: "SaaS — Company vs Peer Benchmark"
+# base_view: saas__fact_company_percentile_rank
+# joins:
+#   saas__dim_metric: {}
+#   saas__fact_company_usage_metrics: {}
+#   saas__fact_benchmark_stats: {}
+# # RLS (only valid on the shared model / branch, not raw-SQL): restrict the company views
+# access_filters:
+#   - field: saas__fact_company_percentile_rank.account_id
+#     user_attribute: account_id
+#     values_for_unfiltered: ['__ALL__']

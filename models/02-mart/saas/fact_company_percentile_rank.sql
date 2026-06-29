@@ -5,14 +5,18 @@
     'peer_group_segment','peer_group_region','peer_group_product_tier'
 ]) }}
 
-{# Metrics your original company_usage computed percent_rank for. #}
-{# Extend this list to rank more metrics — but read the NULL note below first. #}
+{# All 18 metrics from dim_metric (same list as fact_company_usage_metrics).       #}
+{# NULL handling: per-active-user-of-type rate metrics are NULL when a company     #}
+{# had no active users of that type that month. Each metric's select below filters #}
+{# `where <metric> is not null`, so cume_dist() ranks a company only among peers   #}
+{# WITH adoption of that metric — matching the NULL-excluding stats in             #}
+{# fact_benchmark_stats. Count metrics are never NULL, so the filter is a no-op    #}
+{# for them (a genuine 0 still ranks at the bottom, as it should).                 #}
 {% set metrics = [
-    'total_events',
-    'total_agentic_events',
-    'total_api_events',
-    'total_ui_events',
-    'total_admin_other_events'
+    'total_users', 'total_admin_users', 'total_creator_users', 'total_viewer_users',
+    'total_events', 'total_agentic_events', 'total_api_events', 'total_ui_events', 'total_admin_other_events',
+    'events_per_user', 'agentic_events_per_user', 'api_events_per_user', 'ui_events_per_user', 'admin_other_events_per_user',
+    'admin_other_events_per_admin_user', 'agentic_events_per_creator_user', 'ui_events_per_creator_user', 'ui_events_per_viewer_user'
 ] %}
 
 {# Each cohort: (segment_expr, region_expr, product_tier_expr, partition_cols)        #}
@@ -69,5 +73,6 @@ select
         order by {{ m }}
     )                           as percentile_rank
 from src
+where {{ m }} is not null
 {% if not loop.last %}union all{% endif %}
 {% endfor %}

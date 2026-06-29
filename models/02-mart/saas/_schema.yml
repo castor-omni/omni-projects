@@ -517,103 +517,8 @@ models:
       - name: jira_issue_id
         description: "Jira issue for a support ticket, if one"
 
-  - name: company_usage
-    description: >
-      One row per (account_id, snapshot_month) with monthly usage metrics
-      per company. Sourced from int_saas__usage_events joined to
-      int_saas__sessions for user_role -> user_type derivation.
- 
-      Pair this in the semantic layer with fct_benchmark_distribution to
-      surface "my company vs. peer distribution" comparisons. Filter to a
-      single account_id (typically via user attribute) to identify the
-      logged-in user's company.
- 
-      Semantics:
-      - Active-in-role: a user counted in admin/creator/viewer reflects
-        whether they were active in that role during the month. Buckets can
-        sum to MORE than total_users for multi-role users.
-      - Per-active-user-of-type rates are NULL when that user type had no
-        active users that month. Downstream AVG and PERCENTILE_CONT ignore
-        nulls, giving "among adopters" semantics.
-      - Current in-progress month is excluded.
-    columns:
-      - name: account_id
-        description: Source account identifier.
-        tests:
-          - not_null
-      - name: snapshot_month
-        description: First day of the calendar month. Current month excluded.
-        tests:
-          - not_null
-      - name: segment
-        description: SMB / Mid-Market / Enterprise
-      - name: region
-        description: North America / EMEA / APAC
-      - name: product_tier
-        description: Product tier / plan
-      - name: total_users
-        description: Distinct users with at least one event in the month.
-      - name: total_admin_users
-        description: Distinct users active as user_role = Admin.
-      - name: total_creator_users
-        description: Distinct users active as user_role in (Builder, Data Engineer).
-      - name: total_viewer_users
-        description: Distinct users active as user_role in (Analyst, Viewer).
-      - name: total_events
-        description: Distinct events in the month.
-      - name: total_agentic_events
-        description: Distinct events of type AI/Agentic.
-      - name: total_api_events
-        description: Distinct events of type API.
-      - name: total_ui_events
-        description: Distinct events of type UI Feature.
-      - name: total_admin_other_events
-        description: Distinct events of type Admin/Other.
-      - name: events_per_user
-      - name: agentic_events_per_user
-      - name: api_events_per_user
-      - name: ui_events_per_user
-      - name: admin_other_events_per_user
-      - name: admin_other_events_per_admin_user
-        description: Admin/Other events divided by total_admin_users. NULL if no admin users active.
-      - name: agentic_events_per_creator_user
-        description: AI/Agentic events divided by total_creator_users. NULL if no creators active.
-      - name: ui_events_per_creator_user
-        description: UI Feature events divided by total_creator_users. NULL if no creators active.
-      - name: ui_events_per_viewer_user
-        description: UI Feature events divided by total_viewer_users. NULL if no viewers active.
- 
-  - name: usage_benchmarks
-    description: >
-      Benchmark distribution statistics (mean, median, p25, p75, p90) for
-      every combination of (segment, region, product_tier) via GROUPING SETS.
-      NULL in a peer_group dimension column means "all values" for that
-      dimension.
- 
-      Contains no company identifiers. Pair with fct_benchmark_company_snapshots
-      in the semantic layer to compare an individual company's values against
-      the relevant peer distribution.
- 
-      Per-active-user-of-type stats use "among adopters" semantics: companies
-      with zero users of a given type are excluded from the calculation rather
-      than treated as zero.
-    columns:
-      - name: snapshot_month
-        data_tests:
-          - not_null
-      - name: peer_group_segment
-        description: NULL means "all segments".
-      - name: peer_group_region
-        description: NULL means "all regions".
-      - name: peer_group_product_tier
-        description: NULL means "all product tiers".
-      - name: company_count
-        description: Number of companies contributing to this peer group / month.
-        data_tests:
-          - not_null
-
   # ──────────────────────────────────────────────────────────────────────────
-  - name: dim_metric
+  - name: benchmark_metric
     description: >
       Metric catalog. One row per metric. Lifts metric metadata (display name,
       category, denominator semantics, directionality, format) out of column
@@ -651,12 +556,12 @@ models:
         description: Display format hint for the BI layer (e.g. integer, decimal_2).
  
   # ──────────────────────────────────────────────────────────────────────────
-  - name: fact_company_usage_metrics
+  - name: company_usage_metrics
     description: >
       Per-company metric values in long form. GRAIN: one row per
       (account_id, snapshot_month, metric_id). The value is the company's own
       measurement and is independent of any peer group — do not confuse with
-      the peer-relative ranks in fact_company_percentile_rank, which sit at a
+      the peer-relative ranks in company_percentile_rank, which sit at a
       finer grain. segment / region / product_tier are the company's OWN
       attributes (not a peer-group definition).
     columns:
@@ -675,12 +580,12 @@ models:
       - name: product_tier
         description: The company's own product tier.
       - name: metric_id
-        description: Metric key. Foreign key to dim_metric.
+        description: Metric key. Foreign key to benchmark_metric.
         data_tests:
           - not_null
           - relationships:
               arguments:
-                to: ref('dim_metric')
+                to: ref('benchmark_metric')
                 field: metric_id
       - name: value
         description: >
@@ -696,7 +601,7 @@ models:
               - metric_id
  
   # ──────────────────────────────────────────────────────────────────────────
-  - name: fact_benchmark_stats
+  - name: benchmark_stats
     description: >
       Peer-group distribution statistics in long form. GRAIN: one row per
       (snapshot_month, peer_group_segment, peer_group_region,
@@ -723,12 +628,12 @@ models:
         data_tests:
           - not_null
       - name: metric_id
-        description: Metric key. Foreign key to dim_metric.
+        description: Metric key. Foreign key to benchmark_metric.
         data_tests:
           - not_null
           - relationships:
               arguments:
-                to: ref('dim_metric')
+                to: ref('benchmark_metric')
                 field: metric_id
       - name: statistic
         description: "Which distribution statistic this row holds: mean, p25, p50 (median), p75, or p90."
@@ -761,7 +666,7 @@ models:
               - statistic
  
   # ──────────────────────────────────────────────────────────────────────────
-  - name: fact_company_percentile_rank
+  - name: company_percentile_rank
     description: >
       Where each company ranks within a chosen peer group, in long form.
       GRAIN: one row per (account_id, snapshot_month, metric_id,
@@ -772,7 +677,7 @@ models:
       NULL (a company with no active users of a given type) are filtered out
       per metric before ranking, so a company is ranked only among peers WITH
       adoption of that metric — matching the NULL-excluding stats in
-      fact_benchmark_stats. Count metrics are never NULL (a genuine 0 ranks at
+      benchmark_stats. Count metrics are never NULL (a genuine 0 ranks at
       the bottom).
     columns:
       - name: account_id
@@ -784,12 +689,12 @@ models:
         data_tests:
           - not_null
       - name: metric_id
-        description: Metric key. Foreign key to dim_metric.
+        description: Metric key. Foreign key to benchmark_metric.
         data_tests:
           - not_null
           - relationships:
               arguments:
-                to: ref('dim_metric')
+                to: ref('benchmark_metric')
                 field: metric_id
       - name: peer_group_segment
         description: Segment the ranking peer group is restricted to, or '__ALL__'.

@@ -7,7 +7,7 @@
   combinations × up to 27 dimension combinations).
 
   No company-level rows or identifiers exist in this table. Pair it with
-  fact_benchmark_stats to expose benchmark statistics in long form, or with a
+  benchmark_stats to expose benchmark statistics in long form, or with a
   company-level metric fact to support "my company vs. peer distribution"
   comparisons.
 
@@ -24,7 +24,7 @@
 with snapshots as (
 
     select *
-    from {{ ref('company_usage') }}
+    from {{ ref('int_saas__company_usage') }}
 
     {% if is_incremental() %}
     where snapshot_month >= dateadd('month', -1, date_trunc('month', current_date))

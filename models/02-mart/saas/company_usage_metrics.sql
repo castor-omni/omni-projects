@@ -1,4 +1,4 @@
--- models/marts/benchmarking/fact_company_usage_metrics.sql
+-- models/02-mart/saas/company_usage_metrics.sql
 
 {{ config(materialized='incremental', unique_key=['account_id','snapshot_month','metric_id']) }}
 
@@ -11,7 +11,7 @@
 ] %}
 
 with src as (
-    select * from {{ ref('company_usage') }}
+    select * from {{ ref('int_saas__company_usage') }}
 
     {% if is_incremental() %}
         where snapshot_month >= dateadd('month', -1, date_trunc('month', current_date))

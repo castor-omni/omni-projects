@@ -495,4 +495,98 @@ models:
       - name: total_sessions_lifetime
       - name: updated_date
       - name: user_id
-      
+
+  - name: int_saas__company_usage
+    description: >
+      One row per (account_id, snapshot_month) with monthly usage metrics
+      per company. Sourced from int_saas__usage_events joined to
+      int_saas__sessions for user_role -> user_type derivation.
+
+      Pair this in the semantic layer with fct_benchmark_distribution to
+      surface "my company vs. peer distribution" comparisons. Filter to a
+      single account_id (typically via user attribute) to identify the
+      logged-in user's company.
+
+      Semantics:
+      - Active-in-role: a user counted in admin/creator/viewer reflects
+        whether they were active in that role during the month. Buckets can
+        sum to MORE than total_users for multi-role users.
+      - Per-active-user-of-type rates are NULL when that user type had no
+        active users that month. Downstream AVG and PERCENTILE_CONT ignore
+        nulls, giving "among adopters" semantics.
+      - Current in-progress month is excluded.
+    columns:
+      - name: account_id
+        description: Source account identifier.
+        tests:
+          - not_null
+      - name: snapshot_month
+        description: First day of the calendar month. Current month excluded.
+        tests:
+          - not_null
+      - name: segment
+        description: SMB / Mid-Market / Enterprise
+      - name: region
+        description: North America / EMEA / APAC
+      - name: product_tier
+        description: Product tier / plan
+      - name: total_users
+        description: Distinct users with at least one event in the month.
+      - name: total_admin_users
+        description: Distinct users active as user_role = Admin.
+      - name: total_creator_users
+        description: Distinct users active as user_role in (Builder, Data Engineer).
+      - name: total_viewer_users
+        description: Distinct users active as user_role in (Analyst, Viewer).
+      - name: total_events
+        description: Distinct events in the month.
+      - name: total_agentic_events
+        description: Distinct events of type AI/Agentic.
+      - name: total_api_events
+        description: Distinct events of type API.
+      - name: total_ui_events
+        description: Distinct events of type UI Feature.
+      - name: total_admin_other_events
+        description: Distinct events of type Admin/Other.
+      - name: events_per_user
+      - name: agentic_events_per_user
+      - name: api_events_per_user
+      - name: ui_events_per_user
+      - name: admin_other_events_per_user
+      - name: admin_other_events_per_admin_user
+        description: Admin/Other events divided by total_admin_users. NULL if no admin users active.
+      - name: agentic_events_per_creator_user
+        description: AI/Agentic events divided by total_creator_users. NULL if no creators active.
+      - name: ui_events_per_creator_user
+        description: UI Feature events divided by total_creator_users. NULL if no creators active.
+      - name: ui_events_per_viewer_user
+        description: UI Feature events divided by total_viewer_users. NULL if no viewers active.
+
+  - name: int_saas__usage_benchmarks
+    description: >
+      Benchmark distribution statistics (mean, median, p25, p75, p90) for
+      every combination of (segment, region, product_tier) via GROUPING SETS.
+      NULL in a peer_group dimension column means "all values" for that
+      dimension.
+
+      Contains no company identifiers. Pair with fct_benchmark_company_snapshots
+      in the semantic layer to compare an individual company's values against
+      the relevant peer distribution.
+
+      Per-active-user-of-type stats use "among adopters" semantics: companies
+      with zero users of a given type are excluded from the calculation rather
+      than treated as zero.
+    columns:
+      - name: snapshot_month
+        data_tests:
+          - not_null
+      - name: peer_group_segment
+        description: NULL means "all segments".
+      - name: peer_group_region
+        description: NULL means "all regions".
+      - name: peer_group_product_tier
+        description: NULL means "all product tiers".
+      - name: company_count
+        description: Number of companies contributing to this peer group / month.
+        data_tests:
+          - not_null

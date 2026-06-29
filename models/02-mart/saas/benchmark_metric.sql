@@ -1,4 +1,4 @@
--- models/02-mart/saas/dim_metric.sql
+-- models/02-mart/saas/benchmark_metric.sql
 
 {{ config(materialized='table') }}
 

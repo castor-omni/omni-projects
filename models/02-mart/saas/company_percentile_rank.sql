@@ -1,16 +1,16 @@
--- models/02-mart/saas/fact_company_percentile_rank.sql
+-- models/02-mart/saas/company_percentile_rank.sql
 
 {{ config(materialized='incremental', unique_key=[
     'account_id','snapshot_month','metric_id',
     'peer_group_segment','peer_group_region','peer_group_product_tier'
 ]) }}
 
-{# All 18 metrics from dim_metric (same list as fact_company_usage_metrics).       #}
+{# All 18 metrics from benchmark_metric (same list as company_usage_metrics).      #}
 {# NULL handling: per-active-user-of-type rate metrics are NULL when a company     #}
 {# had no active users of that type that month. Each metric's select below filters #}
 {# `where <metric> is not null`, so cume_dist() ranks a company only among peers   #}
 {# WITH adoption of that metric — matching the NULL-excluding stats in             #}
-{# fact_benchmark_stats. Count metrics are never NULL, so the filter is a no-op    #}
+{# benchmark_stats. Count metrics are never NULL, so the filter is a no-op         #}
 {# for them (a genuine 0 still ranks at the bottom, as it should).                 #}
 {% set metrics = [
     'total_users', 'total_admin_users', 'total_creator_users', 'total_viewer_users',
@@ -52,7 +52,7 @@ with src as (
         {{ m }}{% if not loop.last %},{% endif %}
         {% endfor %}
 
-    from {{ ref('company_usage') }}
+    from {{ ref('int_saas__company_usage') }}
 
     {% if is_incremental() %}
         where snapshot_month >= dateadd('month', -1, date_trunc('month', current_date))

@@ -768,9 +768,12 @@ models:
       peer_group_segment, peer_group_region, peer_group_product_tier). Each
       company-month-metric gets one row per peer-group combination (8 combos
       for 3 dimensions). The sentinel '__ALL__' means that dimension is rolled
-      up. Currently only the five event-count metrics are ranked here; rate
-      metrics are intentionally excluded because percent_rank() does not share
-      the NULL-excluding semantics of the benchmark distribution.
+      up. All 18 metrics are ranked via cume_dist(). Rate metrics that can be
+      NULL (a company with no active users of a given type) are filtered out
+      per metric before ranking, so a company is ranked only among peers WITH
+      adoption of that metric — matching the NULL-excluding stats in
+      fact_benchmark_stats. Count metrics are never NULL (a genuine 0 ranks at
+      the bottom).
     columns:
       - name: account_id
         description: Company identifier.

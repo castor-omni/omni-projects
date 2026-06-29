@@ -64,7 +64,7 @@ select
     {{ seg_expr }}::varchar     as peer_group_segment,
     {{ reg_expr }}::varchar     as peer_group_region,
     {{ tier_expr }}::varchar    as peer_group_product_tier,
-    percent_rank() over (
+    cume_dist() over (
         partition by {{ partition_cols }}
         order by {{ m }}
     )                           as percentile_rank

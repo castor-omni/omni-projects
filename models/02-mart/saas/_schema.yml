@@ -803,8 +803,9 @@ models:
       - name: percentile_rank
         description: >
           Fraction of the peer group at or below this company's value (0–1,
-          via percent_rank). 0.50 is the median; higher is a better rank for
-          these event-count metrics.
+          via cume_dist). Roughly 0.50 is the median; higher is a better rank
+          for these event-count metrics. Note the lowest company in a peer
+          group reads 1/n (never exactly 0); the highest reads 1.0.
         data_tests:
           - not_null
           - dbt_utils.accepted_range:

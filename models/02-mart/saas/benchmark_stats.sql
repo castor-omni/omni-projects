@@ -1,4 +1,4 @@
--- models/02-mart/saas/fact_benchmark_stats.sql
+-- models/02-mart/saas/benchmark_stats.sql
 
 {{ config(materialized='incremental', unique_key=[
     'snapshot_month','peer_group_segment','peer_group_region','peer_group_product_tier','metric_id','statistic'
@@ -43,7 +43,7 @@
 {% endfor %}
 
 with src as (
-    select * from {{ ref('usage_benchmarks') }}
+    select * from {{ ref('int_saas__usage_benchmarks') }}
 
     {% if is_incremental() %}
         where snapshot_month >= dateadd('month', -1, date_trunc('month', current_date))

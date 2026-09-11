@@ -1,0 +1,39 @@
+# Reference this view as analytics_dev_ecomm__int_fhir__care_plans
+catalog: ANALYTICS_DEV
+schema: ECOMM
+table_name: INT_FHIR__CARE_PLANS
+
+dimensions:
+  start_ts:
+    sql: '"START_TS"'
+
+  end_ts:
+    sql: '"END_TS"'
+
+  patient_id:
+    sql: '"PATIENT_ID"'
+    format: ID
+
+  service_provider_id:
+    sql: '"SERVICE_PROVIDER_ID"'
+    format: ID
+
+  condition_id:
+    sql: '"CONDITION_ID"'
+    format: ID
+
+  status:
+    sql: '"STATUS"'
+
+  category:
+    sql: '"CATEGORY"'
+
+  activity:
+    sql: '"ACTIVITY"'
+
+  resource_raw:
+    sql: '"RESOURCE_RAW"'
+
+measures:
+  count:
+    aggregate_type: count

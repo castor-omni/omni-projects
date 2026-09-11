@@ -1,0 +1,45 @@
+# Reference this view as analytics_dev_ecomm__int_fhir__procedures
+catalog: ANALYTICS_DEV
+schema: ECOMM
+table_name: INT_FHIR__PROCEDURES
+
+dimensions:
+  patient_id:
+    sql: '"PATIENT_ID"'
+    format: ID
+
+  condition_id:
+    sql: '"CONDITION_ID"'
+    format: ID
+
+  encounter_id:
+    sql: '"ENCOUNTER_ID"'
+    format: ID
+
+  status:
+    sql: '"STATUS"'
+
+  code:
+    sql: '"CODE"'
+
+  name:
+    sql: '"NAME"'
+
+  reason_reference:
+    sql: '"REASON_REFERENCE"'
+
+  resource_raw:
+    sql: '"RESOURCE_RAW"'
+
+  is_quick_procedure:
+    sql: '"IS_QUICK_PROCEDURE"'
+
+  performed_start_ts:
+    sql: '"PERFORMED_START_TS"'
+
+  performed_end_ts:
+    sql: '"PERFORMED_END_TS"'
+
+measures:
+  count:
+    aggregate_type: count

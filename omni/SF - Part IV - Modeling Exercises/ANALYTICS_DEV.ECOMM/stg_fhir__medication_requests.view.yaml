@@ -1,0 +1,33 @@
+# Reference this view as analytics_dev_ecomm__stg_fhir__medication_requests
+catalog: ANALYTICS_DEV
+schema: ECOMM
+table_name: STG_FHIR__MEDICATION_REQUESTS
+
+dimensions:
+  authored_on:
+    sql: '"AUTHORED_ON"'
+
+  patient_id:
+    sql: '"PATIENT_ID"'
+    format: ID
+
+  encounter_id:
+    sql: '"ENCOUNTER_ID"'
+    format: ID
+
+  condition_id:
+    sql: '"CONDITION_ID"'
+    format: ID
+
+  status:
+    sql: '"STATUS"'
+
+  dosage_instructions_as_needed:
+    sql: '"DOSAGE_INSTRUCTIONS_AS_NEEDED"'
+
+  resource_raw:
+    sql: '"RESOURCE_RAW"'
+
+measures:
+  count:
+    aggregate_type: count

@@ -1,0 +1,37 @@
+# Reference this view as analytics_dev_ecomm__int_fhir__allergies
+catalog: ANALYTICS_DEV
+schema: ECOMM
+table_name: INT_FHIR__ALLERGIES
+
+dimensions:
+  asserted_ts:
+    sql: '"ASSERTED_TS"'
+
+  patient_id:
+    sql: '"PATIENT_ID"'
+    format: ID
+
+  code:
+    sql: '"CODE"'
+
+  category:
+    sql: '"CATEGORY"'
+
+  description:
+    sql: '"DESCRIPTION"'
+
+  type:
+    sql: '"TYPE"'
+
+  criticality:
+    sql: '"CRITICALITY"'
+
+  clinical_status:
+    sql: '"CLINICAL_STATUS"'
+
+  resource_raw:
+    sql: '"RESOURCE_RAW"'
+
+measures:
+  count:
+    aggregate_type: count

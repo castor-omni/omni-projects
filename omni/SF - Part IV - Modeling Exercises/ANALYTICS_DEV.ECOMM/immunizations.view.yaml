@@ -1,0 +1,38 @@
+# Reference this view as analytics_dev_ecomm__immunizations
+catalog: ANALYTICS_DEV
+schema: ECOMM
+table_name: IMMUNIZATIONS
+
+dimensions:
+  patient_id:
+    sql: '"PATIENT_ID"'
+    format: ID
+
+  encounter_id:
+    sql: '"ENCOUNTER_ID"'
+    format: ID
+
+  status:
+    sql: '"STATUS"'
+
+  code:
+    sql: '"CODE"'
+
+  name:
+    sql: '"NAME"'
+
+  date_ts:
+    sql: '"DATE_TS"'
+
+  primary_source:
+    sql: '"PRIMARY_SOURCE"'
+
+  not_given:
+    sql: '"NOT_GIVEN"'
+
+  resource_raw:
+    sql: '"RESOURCE_RAW"'
+
+measures:
+  count:
+    aggregate_type: count

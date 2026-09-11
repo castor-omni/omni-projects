@@ -1,0 +1,29 @@
+# Reference this view as analytics_dev_ecomm__int_fhir__organizations
+catalog: ANALYTICS_DEV
+schema: ECOMM
+table_name: INT_FHIR__ORGANIZATIONS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  name:
+    sql: '"NAME"'
+
+  type:
+    sql: '"TYPE"'
+
+  profile:
+    sql: '"PROFILE"'
+
+  revenue:
+    sql: '"REVENUE"'
+
+  resource_raw:
+    sql: '"RESOURCE_RAW"'
+
+measures:
+  count:
+    aggregate_type: count

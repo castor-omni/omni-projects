@@ -1,0 +1,47 @@
+# Reference this view as analytics_dev_ecomm__products
+catalog: ANALYTICS_DEV
+schema: ECOMM
+table_name: PRODUCTS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  cost:
+    sql: '"COST"'
+
+  category:
+    sql: '"CATEGORY"'
+
+  name:
+    sql: '"NAME"'
+
+  brand:
+    sql: '"BRAND"'
+    order_by_field: brand_sort_order
+
+  brand_sort_order:
+    sql: case when ${brand} = 'Levi''s' Then 0 else 1 end
+    hidden: true
+
+  retail_price:
+    sql: '"RETAIL_PRICE"'
+
+  department:
+    sql: '"DEPARTMENT"'
+
+  sku:
+    sql: '"SKU"'
+
+  distribution_center_id:
+    sql: '"DISTRIBUTION_CENTER_ID"'
+    format: ID
+
+measures:
+  count:
+    links:
+      - url: https://castor.playground.exploreomni.dev/e/1:YfB2_Cow/1?fieldType=group&field=analytics_dev_ecomm__products.brand_groups
+        label: Top 10 Brands by Sales
+    aggregate_type: count

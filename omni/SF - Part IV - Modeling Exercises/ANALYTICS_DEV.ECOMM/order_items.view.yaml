@@ -1,0 +1,73 @@
+# Reference this view as analytics_dev_ecomm__order_items
+catalog: ANALYTICS_DEV
+schema: ECOMM
+table_name: ORDER_ITEMS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  order_id:
+    sql: '"ORDER_ID"'
+    format: ID
+
+  user_id:
+    sql: '"USER_ID"'
+    format: ID
+
+  inventory_item_id:
+    sql: '"INVENTORY_ITEM_ID"'
+    format: ID
+
+  sale_price:
+    sql: '"SALE_PRICE"'
+
+  status:
+    sql: '"STATUS"'
+    order_by_field: status_sort_order
+
+  status_sort_order:
+    sql: CASE WHEN ${status} = 'Processing' then 0 else 1 end
+    hidden: true
+
+  created_at:
+    sql: '"CREATED_AT"'
+
+  returned_at:
+    sql: '"RETURNED_AT"'
+
+  shipped_at:
+    sql: '"SHIPPED_AT"'
+
+  delivered_at:
+    sql: '"DELIVERED_AT"'
+
+  is_returned:
+    sql: '"IS_RETURNED"'
+    group_label: Is Fields
+
+  is_delivered:
+    sql: '"IS_DELIVERED"'
+    group_label: Is Fields
+
+  is_shipped:
+    sql: '"IS_SHIPPED"'
+    group_label: Is Fields
+
+  margin:
+    sql: '"MARGIN"'
+
+  months_since_signup:
+    sql: '"MONTHS_SINCE_SIGNUP"'
+
+  time_to_ship:
+    sql: '"TIME_TO_SHIP"'
+
+  upper_case_status:
+    sql: '"UPPER_CASE_STATUS"'
+
+measures:
+  count:
+    aggregate_type: count

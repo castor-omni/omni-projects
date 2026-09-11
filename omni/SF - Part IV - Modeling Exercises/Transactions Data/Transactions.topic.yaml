@@ -1,0 +1,29 @@
+base_view: analytics_dev_ecomm__order_items
+base_view_label: Orders
+label: Transactions
+group_label: Transactions Data
+
+default_filters:
+  analytics_dev_ecomm__order_items.created_at:
+    time_for_duration: [ 12 complete months ago, 12 months ]
+
+joins:
+  analytics_dev_ecomm__users: {}
+  analytics_dev_ecomm__inventory_items:
+    analytics_dev_ecomm__products:
+      analytics_dev_ecomm__distribution_centers: {}
+
+views:
+  analytics_dev_ecomm__users:
+    label: Customer
+
+  analytics_dev_ecomm__order_items:
+    display_order: 1
+
+relationships:
+  - join_from_view: analytics_dev_ecomm__order_items
+    join_to_view: analytics_dev_ecomm__users
+    join_to_view_as: opp_owner
+    join_type: always_left
+    on_sql: ${user_id} = ${opp_owner.id}
+    relationship_type: many_to_one

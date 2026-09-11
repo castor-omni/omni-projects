@@ -1,0 +1,8 @@
+ai_settings:
+  query_all_views_and_fields: enabled
+
+fiscal_month_offset: 11
+
+included_schemas: [ ANALYTICS_DEV.ECOMM ]
+
+ai_chat_topics: [ Transactions ]

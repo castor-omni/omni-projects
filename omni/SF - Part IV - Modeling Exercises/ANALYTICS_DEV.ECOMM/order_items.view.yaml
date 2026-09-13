@@ -71,3 +71,9 @@ dimensions:
 measures:
   count:
     aggregate_type: count
+
+  margin_sum:
+    sql: ${analytics_dev_ecomm__order_items.margin}
+    aggregate_type: sum
+    synonyms: [ total margin ]
+    ai_context: Sum of margin

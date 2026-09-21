@@ -1,0 +1,233 @@
+# Reference this view as analytics_prod_demo__opportunities
+label: Opportunity
+description: Salesforce sales opportunities (deals), one row per opportunity,
+  with pipeline stage, amounts (ARR/ACV/TCV), forecast category, and win/loss
+  context.
+
+catalog: ANALYTICS_PROD
+schema: DEMO
+table_name: OPPORTUNITIES
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  account_id:
+    sql: '"ACCOUNT_ID"'
+    format: ID
+
+  name:
+    sql: '"NAME"'
+
+  stage_name:
+    sql: '"STAGE_NAME"'
+    description: "Pipeline stage: Pre-Qualified, Qualified, Trial, Trial Positive,
+      Negotiate, Closed Won, Closed Lost"
+    sample_values:
+      [
+        Pre-Qualified,
+        Qualified,
+        Trial,
+        Trial Positive,
+        Negotiate,
+        Closed Won,
+        Closed Lost
+      ]
+    synonyms: [ stage ]
+
+  amount:
+    sql: '"AMOUNT"'
+    format: usdcurrency_0
+    description: Incremental ARR value of the deal
+    synonyms: [ deal size, deal value, iarr ]
+
+  arr:
+    sql: '"ARR"'
+    format: usdcurrency_0
+    description: Annual recurring revenue on the deal
+
+  acv:
+    sql: '"ACV"'
+    format: usdcurrency_0
+    description: Annual contract value
+
+  tcv:
+    sql: '"TCV"'
+    format: usdcurrency_0
+    description: Total contract value across the contract term
+
+  contract_term_months:
+    sql: '"CONTRACT_TERM_MONTHS"'
+
+  probability:
+    sql: '"PROBABILITY"'
+    format: number_0
+    description: Likelihood of closing, 0-100
+
+  close_date:
+    sql: '"CLOSE_DATE"'
+
+  type:
+    sql: '"TYPE"'
+    description: "Opportunity type: New Business, Expansion, or Renewal"
+    sample_values: [ New Business, Expansion, Renewal ]
+
+  next_steps:
+    sql: '"NEXT_STEPS"'
+
+  lead_source:
+    sql: '"LEAD_SOURCE"'
+
+  is_won:
+    sql: '"IS_WON"'
+
+  forecast_category:
+    sql: '"FORECAST_CATEGORY"'
+
+  owner_id:
+    sql: '"OWNER_ID"'
+    format: ID
+
+  sales_engineer_id:
+    sql: '"SALES_ENGINEER_ID"'
+    format: ID
+
+  created_date:
+    sql: '"CREATED_DATE"'
+
+  contact_id:
+    sql: '"CONTACT_ID"'
+    format: ID
+
+  last_stage_change_date:
+    sql: '"LAST_STAGE_CHANGE_DATE"'
+
+  first_demo_date:
+    sql: '"FIRST_DEMO_DATE"'
+
+  trial_start_date:
+    sql: '"TRIAL_START_DATE"'
+
+  competitor:
+    sql: '"COMPETITOR"'
+
+  loss_reason:
+    sql: '"LOSS_REASON"'
+
+  win_reason:
+    sql: '"WIN_REASON"'
+
+  risk_score:
+    sql: '"RISK_SCORE"'
+    format: number_0
+    description: Model-scored risk of the deal not closing
+
+  risk_flags:
+    sql: '"RISK_FLAGS"'
+
+  status:
+    sql: CASE WHEN ${stage_name} IN ('Closed Won','Closed Lost') THEN 'Closed' ELSE
+      'Open Pipeline' END
+    description: Whether the deal is still in the pipeline (Open Pipeline) or Closed
+    sample_values: [ Open Pipeline, Closed ]
+
+  is_iqcc:
+    sql: CASE WHEN ${type} = 'New Business' AND ${is_won} AND DATE_TRUNC('quarter',
+      ${close_date}) = DATE_TRUNC('quarter', ${created_date}) THEN TRUE ELSE
+      FALSE END
+    label: Is IQCC
+    description: "In-quarter create close: New Business closed won in the same
+      quarter it was created"
+    synonyms: [ iqcc, in quarter create close ]
+
+  sales_cycle_days:
+    sql: DATEDIFF('day', ${created_date}, ${close_date})
+    format: number_0
+    description: Days from opportunity creation to close date
+
+  days_since_last_stage_change:
+    sql: DATEDIFF('day', ${last_stage_change_date}, CURRENT_TIMESTAMP())
+    format: number_0
+    description: Days since the deal last moved stages; high values on open deals
+      signal stalled deals
+
+measures:
+  count:
+    aggregate_type: count
+
+  amount_sum:
+    sql: ${amount}
+    label: Total Amount
+    format: usdcurrency_0
+    description: Sum of opportunity amount (iARR). Use this for total sales or revenue.
+    aggregate_type: sum
+    synonyms: [ revenue, sales, total revenue, iarr ]
+
+  amount_sum_won:
+    sql: ${amount}
+    label: Won Amount
+    format: usdcurrency_0
+    description: Sum of amount for closed won deals
+    aggregate_type: sum
+    filters:
+      stage_name:
+        is: Closed Won
+
+  amount_sum_open_pipeline:
+    sql: ${amount}
+    label: Open Pipeline Amount
+    format: usdcurrency_0
+    description: Sum of amount for deals not yet closed won or closed lost
+    aggregate_type: sum
+    filters:
+      stage_name:
+        not: [ Closed Won, Closed Lost ]
+
+  weighted_pipeline_amount:
+    sql: SUM(${amount} * ${probability} / 100)
+    label: Weighted Pipeline Amount
+    format: usdcurrency_0
+    description: Open and closed amount weighted by probability, for forecasting
+
+  arr_sum:
+    sql: ${arr}
+    label: Total ARR
+    format: usdcurrency_0
+    aggregate_type: sum
+
+  won_opps_count:
+    label: Won Opportunities
+    description: Count of closed won opportunities
+    aggregate_type: count
+    filters:
+      stage_name:
+        is: Closed Won
+
+  lost_opps_count:
+    label: Lost Opportunities
+    description: Count of closed lost opportunities
+    aggregate_type: count
+    filters:
+      stage_name:
+        is: Closed Lost
+
+  conversion_rate:
+    sql: ${won_opps_count} / NULLIF(${count}, 0)
+    label: Win Rate
+    format: percent_1
+    description: Won opportunities divided by all opportunities in scope
+    synonyms: [ win rate, close rate ]
+
+  average_deal_size:
+    sql: ${amount}
+    label: Average Deal Size
+    format: usdcurrency_0
+    aggregate_type: average
+
+  average_sales_cycle_days:
+    sql: ${sales_cycle_days}
+    label: Avg Sales Cycle (Days)
+    format: number_1
+    aggregate_type: average

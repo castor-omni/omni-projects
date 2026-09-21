@@ -1,0 +1,2 @@
+#included_schemas: [ ANALYTICS_PROD.DEMO, ANALYTICS_PROD.ECOMM ]
+{}

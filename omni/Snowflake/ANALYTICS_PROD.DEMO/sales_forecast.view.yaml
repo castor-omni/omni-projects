@@ -1,0 +1,15 @@
+# Reference this view as analytics_prod_demo__sales_forecast
+catalog: ANALYTICS_PROD
+schema: DEMO
+table_name: SALES_FORECAST
+
+dimensions:
+  close_month:
+    sql: '"CLOSE_MONTH"'
+
+  forecast:
+    sql: '"FORECAST"'
+
+measures:
+  count:
+    aggregate_type: count

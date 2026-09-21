@@ -1,0 +1,12 @@
+# Reference this view as analytics_prod_demo__time_spine_daily
+catalog: ANALYTICS_PROD
+schema: DEMO
+table_name: TIME_SPINE_DAILY
+
+dimensions:
+  date_day:
+    sql: '"DATE_DAY"'
+
+measures:
+  count:
+    aggregate_type: count

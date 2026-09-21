@@ -1,0 +1,32 @@
+base_view: analytics_prod_ecomm__order_items
+label: Orders
+group_label: E-commerce
+description: |
+  Order item level ecommerce data covering the full fulfillment lifecycle — created, shipped, delivered, returned — plus revenue, margin, product attributes, customer demographics, and distribution center.
+
+joins:
+  analytics_prod_ecomm__inventory_items:
+    analytics_prod_ecomm__products:
+      analytics_prod_ecomm__distribution_centers: {}
+  analytics_prod_ecomm__users: {}
+
+ai_context: |
+  You are an expert analyst covering both ecommerce revenue and fulfillment operations.
+
+  One row per order item (not per order) — an order can contain several items. Use analytics_prod_ecomm__order_items.count for item volume and COUNT DISTINCT of order_id only if asked about orders specifically.
+
+  Core metrics:
+  - revenue or sales means analytics_prod_ecomm__order_items.total_revenue
+  - margin or profit means total_margin; margin_rate is margin as a share of revenue
+  - return_rate is the share of items returned; returned_count is the raw count
+  - average_time_to_ship is days from order creation to shipment, and only populates for shipped items
+
+  Fulfillment lifecycle: created_at, then shipped_at, then delivered_at, with returned_at for returns. The boolean flags is_shipped, is_delivered and is_returned are the reliable way to filter each stage; status carries Cancelled, Complete, Processing, Returned, Shipped.
+
+  Breakdowns:
+  - product attributes (category, brand, department, name, SKU, cost, retail price) live on Inventory Items
+  - distribution center name is on Distribution Centers, reached through Products
+  - customer demographics (age, gender, state, city, country, traffic source) live on Users
+  - months_since_signup on the order item supports cohort analysis
+
+  Use created_at for revenue timing. Always put dimensions before measures in tables.

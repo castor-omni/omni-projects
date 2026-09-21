@@ -1,0 +1,166 @@
+base_view: analytics_prod_demo__opportunities
+label: Opportunities
+group_label: Sales & Revenue
+display_order: 5
+description: |
+  Sales pipeline and revenue data from Salesforce. This topic enables comprehensive sales analysis including pipeline management, revenue forecasting, sales performance tracking, win/loss analysis, and sales cycle analysis. Use this to understand sales trends, track deals through the pipeline, analyze sales rep performance, and forecast revenue.
+
+joins:
+  analytics_prod_demo__account: {}
+  opportunity_owner: {}
+  analytics_prod_demo__contacts: {}
+  analytics_prod_demo__opportunity_line_items:
+    analytics_prod_demo__product: {}
+
+ai_context: |
+  You are an expert data analyst, who has a vast amount of experience analyzing sales data to find useful insights and trends.
+
+  This topic is focused on Salesforce opportunity data, used to understand trends and insights around sales performance for the company. The main concepts are opportunities (sales deals), their progression through stages (Pre-Qualified → Qualified → Trial → Trial Positive → Negotiate → Closed Won/Lost), deal values (amount), opportunity types (New Business, Expansion, Renewal), and associated deal information.
+
+  Only respond with accurate answers based on the data that you're aware of.
+  Don't pivot unless there is more than one dimension included in the query.
+
+  Typical questions will be focused on sales performance and pipeline, with breakdowns across reps, stages, accounts, products, and more:
+  - if asked about total sales or revenue, always use this field: analytics_prod_demo__opportunities.amount_sum
+  - if asked about which reps or sales reps, use opportunity_owner.name (which combines first_name and last_name). Never return an ID unless explicitly asked. If only given the first name, use a contains filter.
+  - if asked about lost deals or losses, filter on stage_name = Closed Lost
+  - pipeline means open new opportunities (status = Open Pipeline, type = New Business); more generally pipeline is all stages that are not Closed Won or Closed Lost
+  - if asked about won deals, filter on stage_name = Closed Won
+  - if asked about active trials, filter on stage_name = [Trial, Trial Positive]
+  - if asked about early stage deals, filter on stage_name = [Pre-Qualified, Qualified]
+  - if asked about late stage deals, filter on stage_name = [Trial Positive, Negotiate]
+  - in general, you should always filter on analytics_prod_demo__opportunities.type: usually to New Business for pipeline and any value for closed business
+  - if asked about new customers or new business, filter on type = New Business
+  - if asked about expansion or upsell, filter on type = Expansion
+  - if asked about renewals, filter on type = Renewal
+  - if asked about IQCC, that refers to "in-quarter create close": New Business opportunities closed won in the same quarter they were created. Use the is_iqcc field. Common drill-downs include IQCC by segment, region, industry, sales rep, % of total revenue, etc.
+  - if asked about territory planning, forecasting, or segmentation, use account.segment, account.region and relevant deal metrics (ARR, opportunity count, etc.). Sales planning is oriented around ARR.
+  - if asked about competitors or competitive deals, use the competitor field
+  - if asked about loss reasons, use the loss_reason field
+  - if asked about lead sources or where deals came from, use the lead_source field
+  - always make dimensions the first columns in the table, and measures after
+  - use close_date for revenue timing and sales cycle analysis
+  - use probability for weighted pipeline calculation and forecasting accuracy (weighted_pipeline_amount already applies it)
+  - use forecast_category for sales forecasting (Commit and Forecast categories are more likely to close)
+  - if asked about risks, show competitor, risk_score, risk_flags, days_since_last_stage_change and anything else relevant to a deal being at risk
+
+sample_queries:
+  Active Trials:
+    query:
+      fields:
+        [
+          "analytics_prod_demo__opportunities.close_date[date]",
+          analytics_prod_demo__opportunities.name,
+          opportunity_owner.name,
+          analytics_prod_demo__opportunities.stage_name,
+          analytics_prod_demo__opportunities.amount_sum
+        ]
+      base_view: analytics_prod_demo__opportunities
+      filters:
+        analytics_prod_demo__opportunities.type:
+          is: New Business
+        analytics_prod_demo__opportunities.stage_name:
+          is: [ Trial, Trial Positive, Negotiate ]
+      limit: 1000
+      sorts:
+        - field: analytics_prod_demo__opportunities.close_date[date]
+      topic: opportunity
+    description: Show a list of all active trials
+    prompt: Show me all active trials
+    ai_context: This is a list of all active trials. If anyone asks about current
+      active trials this is the list.
+  Deals Won this Quarter:
+    query:
+      fields:
+        [
+          analytics_prod_demo__opportunities.name,
+          opportunity_owner.name,
+          "analytics_prod_demo__opportunities.close_date[date]",
+          analytics_prod_demo__opportunities.competitor,
+          analytics_prod_demo__opportunities.stage_name,
+          analytics_prod_demo__opportunities.amount_sum
+        ]
+      base_view: analytics_prod_demo__opportunities
+      filters:
+        analytics_prod_demo__opportunities.type:
+          is: [ New Business, Expansion ]
+        analytics_prod_demo__opportunities.close_date:
+          time_for_duration: [ 1 quarters ago, 1 quarters ]
+        analytics_prod_demo__opportunities.stage_name:
+          is: Closed Won
+      limit: 1000
+      sorts:
+        - field: analytics_prod_demo__opportunities.close_date[date]
+      topic: opportunity
+    description: List of deals won in this quarter
+    ai_context: All the deals that have closed this quarter. This includes new
+      business and expansions.
+  Won iARR:
+    query:
+      fields: [ analytics_prod_demo__opportunities.amount_sum ]
+      base_view: analytics_prod_demo__opportunities
+      filters:
+        analytics_prod_demo__opportunities.type:
+          is: [ New Business, Expansion ]
+        analytics_prod_demo__opportunities.is_won:
+          is: true
+      limit: 1000
+      topic: opportunity
+    description: How much iARR we've won across all time
+    prompt: What is our total won iARR?
+    ai_context: Use this when asked about our total iARR.
+  Quarterly IQCC ARR by Segment:
+    query:
+      fields:
+        [
+          "analytics_prod_demo__opportunities.created_date[fiscal_quarter]",
+          analytics_prod_demo__account.segment,
+          analytics_prod_demo__opportunities.amount_sum
+        ]
+      base_view: analytics_prod_demo__opportunities
+      filters:
+        analytics_prod_demo__opportunities.type:
+          is: New Business
+        analytics_prod_demo__opportunities.is_iqcc:
+          is: true
+        analytics_prod_demo__opportunities.stage_name:
+          is: Closed Won
+        analytics_prod_demo__opportunities.created_date:
+          time_for_duration: [ 3 years ago, 3 years ]
+      limit: 1000
+      sorts:
+        - field: analytics_prod_demo__opportunities.created_date[fiscal_quarter]
+          desc: true
+      topic: opportunity
+      pivots: [ analytics_prod_demo__account.segment ]
+      column_limit: 50
+    description: Revenue from deals closed in the same quarter they were created, by
+      customer segment across fiscal quarters
+    prompt: How has same-quarter close revenue (IQCC) trended across quarters for
+      each customer segment over the past 3 years?
+  Quarterly Segment and Region Sales Analysis:
+    query:
+      fields:
+        [
+          analytics_prod_demo__account.segment,
+          analytics_prod_demo__account.region,
+          analytics_prod_demo__opportunities.count,
+          analytics_prod_demo__opportunities.won_opps_count,
+          analytics_prod_demo__opportunities.conversion_rate,
+          analytics_prod_demo__opportunities.amount_sum_won
+        ]
+      base_view: analytics_prod_demo__opportunities
+      filters:
+        analytics_prod_demo__opportunities.close_date:
+          time_for_duration: [ 1 complete fiscal quarters ago, 1 quarters ]
+      limit: 1000
+      sorts:
+        - field: analytics_prod_demo__opportunities.amount_sum_won
+          desc: true
+      topic: opportunity
+      pivots: [ analytics_prod_demo__account.segment ]
+      column_limit: 50
+    description: Opportunity count, win rate, and won revenue by customer segment
+      and region for the past complete fiscal quarter
+    prompt: How did each customer segment and region perform in terms of win rate
+      and revenue in the last fiscal quarter?

@@ -1,0 +1,27 @@
+base_view: analytics_prod_demo__zendesk_tickets
+label: Customer Support
+group_label: Customer Success
+description: |
+  Zendesk support tickets joined to Salesforce accounts. Supports support-load analysis, response and resolution SLA tracking, satisfaction scoring, and ticket volume by account segment, region and industry.
+
+joins:
+  analytics_prod_demo__account: {}
+
+ai_context: |
+  You are an expert support and customer success analyst.
+
+  One row per Zendesk ticket. Every ticket resolves to a Salesforce account, across roughly 318 accounts.
+
+  Core metrics:
+  - ticket volume is analytics_prod_demo__zendesk_tickets.count
+  - open_tickets counts unsolved tickets (status open or pending); solved_tickets counts solved
+  - average_first_response_hours and average_resolution_hours are the SLA measures
+  - average_satisfaction_score is CSAT
+
+  Ticket status values are open, pending and solved. Other useful ticket dimensions are priority, channel, type, tags, and account_segment (denormalized onto the ticket).
+
+  Account attributes for breakdowns — segment, region, industry, type, number_of_employees, annual_revenue — live on the Account view. Prefer account.name over account IDs, and prefer account.segment over the ticket's denormalized account_segment when joining anyway.
+
+  Use created_date for ticket volume over time and resolved_date for throughput. Always put dimensions before measures in tables.
+
+  Note: the jira_issue_id column on tickets is entirely empty, so do not attempt to analyze linked Jira issues from this topic.

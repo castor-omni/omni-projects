@@ -156,3 +156,10 @@ dimensions:
 measures:
   count:
     aggregate_type: count
+
+  margin_sum:
+    sql: ${analytics_prod_ecomm__order_items.margin}
+    label: Total Margin
+    format: USDCURRENCY_2
+    aggregate_type: sum
+    synonyms: [ margin sum, total margin ]

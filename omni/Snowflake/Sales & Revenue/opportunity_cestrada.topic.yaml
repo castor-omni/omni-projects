@@ -4,6 +4,8 @@ group_label: Sales & Revenue
 description: |
   Sales pipeline and revenue data from the DBT_CESTRADA development schema. Mirrors the Opportunities topic: pipeline management, revenue forecasting, sales performance tracking, win/loss analysis, and sales cycle analysis.
 
+cache_policy: "0"
+
 joins:
   analytics_prod_dbt_cestrada__account: {}
   cestrada_opportunity_owner: {}

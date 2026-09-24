@@ -25,28 +25,6 @@ dimensions:
     description: Pre-counted opportunities for this stage/account combination.
     hidden: true
 
-measures:
-  # Raw row count of the agg table (one row per stage/account), not an opportunity count
-  count:
-    description: Row count of the aggregate table. Use opportunity_count for
-      opportunity volume.
-    hidden: true
-    aggregate_type: count
-
-  amount_total:
-    sql: ${amount}
-    label: Amount
-    format: usdcurrency_0
-    description: Total iARR, re-summed from the pre-aggregated AMOUNT column.
-    aggregate_type: sum
-
-  opportunity_count:
-    sql: ${total_opps}
-    label: Opportunity Count
-    format: number_0
-    description: Total opportunities, re-summed from the pre-aggregated TOTAL_OPPS column.
-    aggregate_type: sum
-
 materialized_query:
   fields:
     analytics_prod_dbt_cestrada__opportunities.account_id: ACCOUNT_ID

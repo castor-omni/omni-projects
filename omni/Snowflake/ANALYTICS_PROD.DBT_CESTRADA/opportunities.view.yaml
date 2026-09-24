@@ -155,6 +155,8 @@ dimensions:
 
 measures:
   count:
+    label: Opportunities Count
+    format: NUMBER_0
     aggregate_type: count
 
   amount_sum:

@@ -20,3 +20,11 @@ dimensions:
 measures:
   count:
     aggregate_type: count
+
+materialized_query:
+  fields:
+    analytics_prod_dbt_cestrada__opportunities.account_id: ACCOUNT_ID
+    analytics_prod_dbt_cestrada__opportunities.stage_name: STAGE_NAME
+    analytics_prod_dbt_cestrada__opportunities.amount: AMOUNT
+    analytics_prod_dbt_cestrada__opportunities.count: TOTAL_OPPS
+  base_view: analytics_prod_dbt_cestrada__opportunities

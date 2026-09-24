@@ -97,3 +97,7 @@ dimensions:
 measures:
   count:
     aggregate_type: count
+
+  total_amount:
+    sql: '"AMOUNT"'
+    aggregate_type: sum

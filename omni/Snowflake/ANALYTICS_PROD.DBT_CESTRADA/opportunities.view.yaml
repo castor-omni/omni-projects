@@ -157,10 +157,6 @@ measures:
   count:
     aggregate_type: count
 
-  total_amount:
-    sql: '"AMOUNT"'
-    aggregate_type: sum
-
   amount_sum:
     sql: ${amount}
     label: Total Amount

@@ -1,1 +1,3 @@
-{}
+cache_policies:
+  daily_cache_policy:
+    max_cache_age: 0 hours

@@ -20,7 +20,7 @@ dimensions:
     description: Pre-summed iARR for this stage/account combination. Not a per-deal amount.
     hidden: true
 
-  total_opps:
+  ttl:
     sql: '"TOTAL_OPPS"'
     description: Pre-counted opportunities for this stage/account combination.
     hidden: true

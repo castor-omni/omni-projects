@@ -29,6 +29,6 @@ materialized_query:
   fields:
     analytics_prod_dbt_cestrada__opportunities.account_id: ACCOUNT_ID
     analytics_prod_dbt_cestrada__opportunities.stage_name: STAGE_NAME
-    analytics_prod_dbt_cestrada__opportunities.count: analytics_prod_dbt_cestrada__opportunities_agg.sdfdsfsds
+    analytics_prod_dbt_cestrada__opportunities.count: analytics_prod_dbt_cestrada__opportunities_agg.total_opps
     analytics_prod_dbt_cestrada__opportunities.amount_sum: AMOUNT
   base_view: analytics_prod_dbt_cestrada__opportunities

@@ -1,0 +1,14 @@
+# Reference this view as analytics_prod_dbt_cestrada__my_second_dbt_model
+catalog: ANALYTICS_PROD
+schema: DBT_CESTRADA
+table_name: MY_SECOND_DBT_MODEL
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+measures:
+  count:
+    aggregate_type: count

@@ -4,8 +4,25 @@ description: Salesforce sales opportunities (deals) from the DBT_CESTRADA
   schema, one row per opportunity, with pipeline stage, amounts (ARR/ACV/TCV),
   forecast category, and win/loss context.
 
+catalog: ANALYTICS_PROD
+schema: DBT_CESTRADA
+table_name: OPPORTUNITIES
+
 dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  account_id:
+    sql: '"ACCOUNT_ID"'
+    format: ID
+
+  name:
+    sql: '"NAME"'
+
   stage_name:
+    sql: '"STAGE_NAME"'
     description: "Pipeline stage: Pre-Qualified, Qualified, Trial, Trial Positive,
       Negotiate, Closed Won, Closed Lost"
     sample_values:
@@ -21,33 +38,94 @@ dimensions:
     synonyms: [ stage ]
 
   amount:
+    sql: '"AMOUNT"'
     format: usdcurrency_0
     description: Incremental ARR value of the deal
     synonyms: [ deal size, deal value, iarr ]
 
   arr:
+    sql: '"ARR"'
     format: usdcurrency_0
     description: Annual recurring revenue on the deal
 
   acv:
+    sql: '"ACV"'
     format: usdcurrency_0
     description: Annual contract value
 
   tcv:
+    sql: '"TCV"'
     format: usdcurrency_0
     description: Total contract value across the contract term
 
+  contract_term_months:
+    sql: '"CONTRACT_TERM_MONTHS"'
+
   probability:
+    sql: '"PROBABILITY"'
     format: number_0
     description: Likelihood of closing, 0-100
 
+  close_date:
+    sql: '"CLOSE_DATE"'
+
   type:
+    sql: '"TYPE"'
     description: "Opportunity type: New Business, Expansion, or Renewal"
     sample_values: [ New Business, Expansion, Renewal ]
 
+  next_steps:
+    sql: '"NEXT_STEPS"'
+
+  lead_source:
+    sql: '"LEAD_SOURCE"'
+
+  is_won:
+    sql: '"IS_WON"'
+
+  forecast_category:
+    sql: '"FORECAST_CATEGORY"'
+
+  owner_id:
+    sql: '"OWNER_ID"'
+    format: ID
+
+  sales_engineer_id:
+    sql: '"SALES_ENGINEER_ID"'
+    format: ID
+
+  created_date:
+    sql: '"CREATED_DATE"'
+
+  contact_id:
+    sql: '"CONTACT_ID"'
+    format: ID
+
+  last_stage_change_date:
+    sql: '"LAST_STAGE_CHANGE_DATE"'
+
+  first_demo_date:
+    sql: '"FIRST_DEMO_DATE"'
+
+  trial_start_date:
+    sql: '"TRIAL_START_DATE"'
+
+  competitor:
+    sql: '"COMPETITOR"'
+
+  loss_reason:
+    sql: '"LOSS_REASON"'
+
+  win_reason:
+    sql: '"WIN_REASON"'
+
   risk_score:
+    sql: '"RISK_SCORE"'
     format: number_0
     description: Model-scored risk of the deal not closing
+
+  risk_flags:
+    sql: '"RISK_FLAGS"'
 
   status:
     sql: CASE WHEN ${stage_name} IN ('Closed Won','Closed Lost') THEN 'Closed' ELSE
@@ -79,6 +157,7 @@ measures:
   count:
     label: Opportunities Count
     format: NUMBER_0
+    aggregate_type: count
 
   amount_sum:
     sql: ${amount}

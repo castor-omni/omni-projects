@@ -1,7 +1,0 @@
-# Reference this view as analytics_prod_dbt_cestrada__int_saas__users
-dimensions:
-  name:
-    sql: CONCAT(${first_name}, ' ', ${last_name})
-    label: Name
-    description: Full name of the user (sales rep)
-    synonyms: [ rep, sales rep, full name ]

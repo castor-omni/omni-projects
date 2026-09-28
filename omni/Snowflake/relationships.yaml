@@ -2591,9 +2591,9 @@
 
 - join_from_view: analytics_prod_demo__opportunities
   join_to_view: analytics_prod_demo__int_saas__users
-  join_to_view_as: opportunity_owner
+  join_to_view_as: opportunity_owner_old
   join_type: always_left
-  on_sql: ${analytics_prod_demo__opportunities.owner_id} = ${opportunity_owner.id}
+  on_sql: ${analytics_prod_demo__opportunities.owner_id} = ${opportunity_owner_old.id}
   relationship_type: many_to_one
   reversible: true
   join_to_view_as_label: Opportunity Owner

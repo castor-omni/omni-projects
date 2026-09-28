@@ -5,6 +5,8 @@ display_order: 5
 description: |
   Sales pipeline and revenue data from Salesforce. This topic enables comprehensive sales analysis including pipeline management, revenue forecasting, sales performance tracking, win/loss analysis, and sales cycle analysis. Use this to understand sales trends, track deals through the pipeline, analyze sales rep performance, and forecast revenue.
 
+cache_policy: daily_cache_policy
+
 joins:
   opportunity_owner: {}
   analytics_dev_dbt_cestrada_prod_saas__account: {}

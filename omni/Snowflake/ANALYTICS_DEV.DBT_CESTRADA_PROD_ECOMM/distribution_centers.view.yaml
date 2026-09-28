@@ -1,0 +1,23 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_ecomm__distribution_centers
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_ECOMM
+table_name: DISTRIBUTION_CENTERS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  name:
+    sql: '"NAME"'
+
+  latitude:
+    sql: '"LATITUDE"'
+
+  longitude:
+    sql: '"LONGITUDE"'
+
+measures:
+  count:
+    aggregate_type: count

@@ -1,37 +1,37 @@
-base_view: analytics_prod_ecomm__order_items
+base_view: analytics_dev_dbt_cestrada_prod_ecomm__order_items
 label: Orders
 group_label: E-commerce
 description: |
   Order item level ecommerce data covering the full fulfillment lifecycle — created, shipped, delivered, returned — plus revenue, margin, product attributes, customer demographics, and distribution center.
 
 joins:
-  analytics_prod_ecomm__inventory_items:
-    analytics_prod_ecomm__products:
-      analytics_prod_ecomm__distribution_centers: {}
-  analytics_prod_ecomm__users: {}
+  analytics_dev_dbt_cestrada_prod_ecomm__inventory_items:
+    analytics_dev_dbt_cestrada_prod_ecomm__products:
+      analytics_dev_dbt_cestrada_prod_ecomm__distribution_centers: {}
+  analytics_dev_dbt_cestrada_prod_ecomm__users: {}
 
 relationships:
-  - join_from_view: analytics_prod_ecomm__order_items
-    join_to_view: analytics_prod_ecomm__users
+  - join_from_view: analytics_dev_dbt_cestrada_prod_ecomm__order_items
+    join_to_view: analytics_dev_dbt_cestrada_prod_ecomm__users
     join_type: always_left
-    on_sql: ${analytics_prod_ecomm__order_items.user_id} =
-      ${analytics_prod_ecomm__users.id}
+    on_sql: ${analytics_dev_dbt_cestrada_prod_ecomm__order_items.user_id} =
+      ${analytics_dev_dbt_cestrada_prod_ecomm__users.id}
     relationship_type: many_to_one
 
-  - join_from_view: analytics_prod_ecomm__order_items
-    join_to_view: analytics_prod_ecomm__inventory_items
+  - join_from_view: analytics_dev_dbt_cestrada_prod_ecomm__order_items
+    join_to_view: analytics_dev_dbt_cestrada_prod_ecomm__inventory_items
     join_type: always_left
-    on_sql: ${analytics_prod_ecomm__order_items.inventory_item_id} =
-      ${analytics_prod_ecomm__inventory_items.id}
+    on_sql: ${analytics_dev_dbt_cestrada_prod_ecomm__order_items.inventory_item_id}
+      = ${analytics_dev_dbt_cestrada_prod_ecomm__inventory_items.id}
     relationship_type: many_to_one
 
 ai_context: |
   You are an expert analyst covering both ecommerce revenue and fulfillment operations.
 
-  One row per order item (not per order) — an order can contain several items. Use analytics_prod_ecomm__order_items.count for item volume and COUNT DISTINCT of order_id only if asked about orders specifically.
+  One row per order item (not per order) — an order can contain several items. Use analytics_dev_dbt_cestrada_prod_ecomm__order_items.count for item volume and COUNT DISTINCT of order_id only if asked about orders specifically.
 
   Core metrics:
-  - revenue or sales means analytics_prod_ecomm__order_items.total_revenue
+  - revenue or sales means analytics_dev_dbt_cestrada_prod_ecomm__order_items.total_revenue
   - margin or profit means total_margin; margin_rate is margin as a share of revenue
   - return_rate is the share of items returned; returned_count is the raw count
   - average_time_to_ship is days from order creation to shipment, and only populates for shipped items

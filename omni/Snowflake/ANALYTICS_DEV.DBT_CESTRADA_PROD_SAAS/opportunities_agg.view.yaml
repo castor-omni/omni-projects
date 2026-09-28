@@ -1,0 +1,22 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_saas__opportunities_agg
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_SAAS
+table_name: OPPORTUNITIES_AGG
+
+dimensions:
+  stage_name:
+    sql: '"STAGE_NAME"'
+
+  account_id:
+    sql: '"ACCOUNT_ID"'
+    format: ID
+
+  amount:
+    sql: '"AMOUNT"'
+
+  total_opps:
+    sql: '"TOTAL_OPPS"'
+
+measures:
+  count:
+    aggregate_type: count

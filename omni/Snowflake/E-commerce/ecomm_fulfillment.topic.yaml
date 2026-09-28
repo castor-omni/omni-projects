@@ -10,6 +10,21 @@ joins:
       analytics_prod_ecomm__distribution_centers: {}
   analytics_prod_ecomm__users: {}
 
+relationships:
+  - join_from_view: analytics_prod_ecomm__order_items
+    join_to_view: analytics_prod_ecomm__users
+    join_type: always_left
+    on_sql: ${analytics_prod_ecomm__order_items.user_id} =
+      ${analytics_prod_ecomm__users.id}
+    relationship_type: many_to_one
+
+  - join_from_view: analytics_prod_ecomm__order_items
+    join_to_view: analytics_prod_ecomm__inventory_items
+    join_type: always_left
+    on_sql: ${analytics_prod_ecomm__order_items.inventory_item_id} =
+      ${analytics_prod_ecomm__inventory_items.id}
+    relationship_type: many_to_one
+
 ai_context: |
   You are an expert analyst covering both ecommerce revenue and fulfillment operations.
 

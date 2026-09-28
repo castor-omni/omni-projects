@@ -1,8 +1,6 @@
-# Reference this view as analytics_prod_demo__int_saas__users
-label: Sales Rep
-
-catalog: ANALYTICS_PROD
-schema: DEMO
+# Reference this view as analytics_prod_dbt_cestrada__int_saas__users
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_SAAS
 table_name: INT_SAAS__USERS
 
 dimensions:
@@ -64,9 +62,8 @@ dimensions:
   name:
     sql: CONCAT(${first_name}, ' ', ${last_name})
     label: Name
-    description: Full name of the sales rep (first and last name)
-    display_order: 1
-    synonyms: [ rep, sales rep, owner, account executive ]
+    description: Full name of the user (sales rep)
+    synonyms: [ rep, sales rep, full name ]
 
 measures:
   count:

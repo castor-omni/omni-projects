@@ -1,6 +1,6 @@
 # Reference this view as analytics_prod_demo__product
-catalog: ANALYTICS_PROD
-schema: DEMO
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_SAAS
 table_name: PRODUCT
 
 dimensions:

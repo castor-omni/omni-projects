@@ -2611,3 +2611,10 @@
   on_sql: ${analytics_prod_demo__opportunities.contact_id} =
     ${analytics_prod_demo__contacts.id}
   relationship_type: many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__opportunities
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__opportunity_line_items
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__opportunities.id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__opportunity_line_items.opportunity_id}
+  relationship_type: one_to_one

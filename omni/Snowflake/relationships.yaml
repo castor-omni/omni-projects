@@ -721,6 +721,16 @@
   relationship_type: assumed_many_to_one
 
 - join_from_view: analytics_dev_dbt_cestrada_prod_saas__opportunities
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__users
+  join_to_view_as: opportunity_owner
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__opportunities.owner_id} =
+    ${opportunity_owner.id}
+  relationship_type: many_to_one
+  reversible: true
+  join_to_view_as_label: Opportunity Owner
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__opportunities
   join_to_view: analytics_dev_dbt_cestrada_prod_saas__contacts
   join_type: always_left
   on_sql: ${analytics_dev_dbt_cestrada_prod_saas__opportunities.contact_id} =

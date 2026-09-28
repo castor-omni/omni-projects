@@ -2,21 +2,9 @@
 description: Pre-aggregated opportunities rollup at the grain of stage_name x
   account_id. Used for aggregate awareness against the Opportunities base view.
 
-catalog: ANALYTICS_PROD
-schema: DBT_CESTRADA
-table_name: OPPORTUNITIES_AGG
-
 dimensions:
-  stage_name:
-    sql: '"STAGE_NAME"'
-
-  account_id:
-    sql: '"ACCOUNT_ID"'
-    format: ID
-
   # Pre-aggregated column; exposed as the amount_total measure rather than a dimension
   amount:
-    sql: '"AMOUNT"'
     description: Pre-summed iARR for this stage/account combination. Not a per-deal amount.
     hidden: true
 

@@ -1031,41 +1031,6 @@
     ${analytics_dev_dbt_cestrada_prod_saas__account.id}
   relationship_type: assumed_many_to_one
 
-- join_from_view: analytics_prod_dbt_cestrada__contacts
-  join_to_view: analytics_prod_dbt_cestrada__account
-  join_type: always_left
-  on_sql: ${analytics_prod_dbt_cestrada__contacts.account_id} =
-    ${analytics_prod_dbt_cestrada__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_dbt_cestrada__opportunities
-  join_to_view: analytics_prod_dbt_cestrada__account
-  join_type: always_left
-  on_sql: ${analytics_prod_dbt_cestrada__opportunities.account_id} =
-    ${analytics_prod_dbt_cestrada__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_dbt_cestrada__opportunities
-  join_to_view: analytics_prod_dbt_cestrada__contacts
-  join_type: always_left
-  on_sql: ${analytics_prod_dbt_cestrada__opportunities.contact_id} =
-    ${analytics_prod_dbt_cestrada__contacts.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_dbt_cestrada__opportunities_agg
-  join_to_view: analytics_prod_dbt_cestrada__account
-  join_type: always_left
-  on_sql: ${analytics_prod_dbt_cestrada__opportunities_agg.account_id} =
-    ${analytics_prod_dbt_cestrada__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_dbt_cestrada__opportunity_line_items
-  join_to_view: analytics_prod_dbt_cestrada__product
-  join_type: always_left
-  on_sql: ${analytics_prod_dbt_cestrada__opportunity_line_items.product_id} =
-    ${analytics_prod_dbt_cestrada__product.id}
-  relationship_type: assumed_many_to_one
-
 - join_from_view: omni_dbt_ecomm__products
   join_to_view: omni_dbt_ecomm__distribution_centers
   join_type: always_left
@@ -2154,46 +2119,11 @@
     ${analytics_prod_ecomm__distribution_centers.id}
   relationship_type: assumed_many_to_one
 
-- join_from_view: analytics_prod_demo__account_history
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__account_history.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__contacts
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__contacts.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__contact_js
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__contact_js.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__events_interactive
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__events_interactive.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
 - join_from_view: analytics_prod_demo__events_interactive
   join_to_view: analytics_prod_demo__user
   join_type: always_left
   on_sql: ${analytics_prod_demo__events_interactive.user_id} =
     ${analytics_prod_demo__user.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__events_interactive
-  join_to_view: analytics_prod_demo__product
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__events_interactive.product_id} =
-    ${analytics_prod_demo__product.id}
   relationship_type: assumed_many_to_one
 
 - join_from_view: analytics_prod_demo__gaming_events
@@ -2203,81 +2133,11 @@
     ${analytics_prod_demo__user.id}
   relationship_type: assumed_many_to_one
 
-- join_from_view: analytics_prod_demo__int_saas__account_history
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__int_saas__account_history.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__int_saas__contacts
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__int_saas__contacts.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__int_saas__jira_issues
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__int_saas__jira_issues.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__int_saas__jira_issues
-  join_to_view: analytics_prod_demo__zendesk_tickets
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__int_saas__jira_issues.zendesk_ticket_id} =
-    ${analytics_prod_demo__zendesk_tickets.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__int_saas__opportunities
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__int_saas__opportunities.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__int_saas__opportunity_history
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__int_saas__opportunity_history.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__int_saas__opportunity_line_items
-  join_to_view: analytics_prod_demo__product
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__int_saas__opportunity_line_items.product_id} =
-    ${analytics_prod_demo__product.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__int_saas__sessions
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__int_saas__sessions.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
 - join_from_view: analytics_prod_demo__int_saas__sessions
   join_to_view: analytics_prod_demo__user
   join_type: always_left
   on_sql: ${analytics_prod_demo__int_saas__sessions.user_id} =
     ${analytics_prod_demo__user.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__int_saas__sessions
-  join_to_view: analytics_prod_demo__product
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__int_saas__sessions.product_id} =
-    ${analytics_prod_demo__product.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__int_saas__usage_events
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__int_saas__usage_events.account_id} =
-    ${analytics_prod_demo__account.id}
   relationship_type: assumed_many_to_one
 
 - join_from_view: analytics_prod_demo__int_saas__usage_events
@@ -2287,20 +2147,6 @@
     ${analytics_prod_demo__user.id}
   relationship_type: assumed_many_to_one
 
-- join_from_view: analytics_prod_demo__int_saas__usage_events
-  join_to_view: analytics_prod_demo__product
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__int_saas__usage_events.product_id} =
-    ${analytics_prod_demo__product.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__int_saas__zendesk_tickets
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__int_saas__zendesk_tickets.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
 - join_from_view: analytics_prod_demo__int_saas__zendesk_tickets
   join_to_view: analytics_prod_demo__jira_issues
   join_type: always_left
@@ -2308,48 +2154,11 @@
     ${analytics_prod_demo__jira_issues.id}
   relationship_type: assumed_many_to_one
 
-- join_from_view: analytics_prod_demo__jira_issues
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__jira_issues.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__jira_issues
-  join_to_view: analytics_prod_demo__zendesk_tickets
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__jira_issues.zendesk_ticket_id} =
-    ${analytics_prod_demo__zendesk_tickets.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__zendesk_tickets
-  join_to_view: analytics_prod_demo__jira_issues
-  join_to_view_as: analytics_prod_demo__jira_issues_2
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__zendesk_tickets.jira_issue_id} =
-    ${analytics_prod_demo__jira_issues.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__opportunities
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__opportunities.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: many_to_one
-  reversible: true
-
 - join_from_view: analytics_prod_demo__opportunity
   join_to_view: analytics_prod_demo__contact
   join_type: always_left
   on_sql: ${analytics_prod_demo__opportunity.contact_id} =
     ${analytics_prod_demo__contact.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__opportunity_history
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__opportunity_history.account_id} =
-    ${analytics_prod_demo__account.id}
   relationship_type: assumed_many_to_one
 
 - join_from_view: analytics_prod_demo__opportunity_line_item
@@ -2359,48 +2168,6 @@
     ${analytics_prod_demo__opportunity.id}
   relationship_type: assumed_many_to_one
 
-- join_from_view: analytics_prod_demo__opportunity_line_items
-  join_to_view: analytics_prod_demo__product
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__opportunity_line_items.product_id} =
-    ${analytics_prod_demo__product.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__opp_js
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__opp_js.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__product_usage
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__product_usage.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__product_usage
-  join_to_view: analytics_prod_demo__product
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__product_usage.product_id} =
-    ${analytics_prod_demo__product.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__product_users_js
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__product_users_js.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__sessions_interactive
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__sessions_interactive.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
 - join_from_view: analytics_prod_demo__sessions_interactive
   join_to_view: analytics_prod_demo__user
   join_type: always_left
@@ -2408,95 +2175,11 @@
     ${analytics_prod_demo__user.id}
   relationship_type: assumed_many_to_one
 
-- join_from_view: analytics_prod_demo__sessions_interactive
-  join_to_view: analytics_prod_demo__product
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__sessions_interactive.product_id} =
-    ${analytics_prod_demo__product.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__stg_saas__account_history
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__stg_saas__account_history.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__stg_saas__contacts
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__stg_saas__contacts.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__stg_saas__jira_issues
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__stg_saas__jira_issues.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__stg_saas__jira_issues
-  join_to_view: analytics_prod_demo__zendesk_tickets
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__stg_saas__jira_issues.zendesk_ticket_id} =
-    ${analytics_prod_demo__zendesk_tickets.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__stg_saas__opportunities
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__stg_saas__opportunities.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__stg_saas__opportunity_history
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__stg_saas__opportunity_history.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__stg_saas__opportunity_line_items
-  join_to_view: analytics_prod_demo__product
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__stg_saas__opportunity_line_items.product_id} =
-    ${analytics_prod_demo__product.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__stg_saas__sessions
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__stg_saas__sessions.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
 - join_from_view: analytics_prod_demo__stg_saas__sessions
   join_to_view: analytics_prod_demo__user
   join_type: always_left
   on_sql: ${analytics_prod_demo__stg_saas__sessions.user_id} =
     ${analytics_prod_demo__user.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__stg_saas__sessions
-  join_to_view: analytics_prod_demo__product
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__stg_saas__sessions.product_id} =
-    ${analytics_prod_demo__product.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__stg_saas__usage_events
-  join_to_view: analytics_prod_demo__product
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__stg_saas__usage_events.product_id} =
-    ${analytics_prod_demo__product.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__stg_saas__usage_events
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__stg_saas__usage_events.account_id} =
-    ${analytics_prod_demo__account.id}
   relationship_type: assumed_many_to_one
 
 - join_from_view: analytics_prod_demo__stg_saas__usage_events
@@ -2507,24 +2190,10 @@
   relationship_type: assumed_many_to_one
 
 - join_from_view: analytics_prod_demo__stg_saas__zendesk_tickets
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__stg_saas__zendesk_tickets.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__stg_saas__zendesk_tickets
   join_to_view: analytics_prod_demo__jira_issues
   join_type: always_left
   on_sql: ${analytics_prod_demo__stg_saas__zendesk_tickets.jira_issue_id} =
     ${analytics_prod_demo__jira_issues.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__usage_events
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__usage_events.account_id} =
-    ${analytics_prod_demo__account.id}
   relationship_type: assumed_many_to_one
 
 - join_from_view: analytics_prod_demo__usage_events
@@ -2534,38 +2203,10 @@
     ${analytics_prod_demo__user.id}
   relationship_type: assumed_many_to_one
 
-- join_from_view: analytics_prod_demo__usage_events
-  join_to_view: analytics_prod_demo__product
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__usage_events.product_id} =
-    ${analytics_prod_demo__product.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__usage_js
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__usage_js.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
 - join_from_view: analytics_prod_demo__usage_js
   join_to_view: analytics_prod_demo__user
   join_type: always_left
   on_sql: ${analytics_prod_demo__usage_js.user_id} = ${analytics_prod_demo__user.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__usage_js
-  join_to_view: analytics_prod_demo__product
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__usage_js.product_id} =
-    ${analytics_prod_demo__product.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__user_sessions
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__user_sessions.account_id} =
-    ${analytics_prod_demo__account.id}
   relationship_type: assumed_many_to_one
 
 - join_from_view: analytics_prod_demo__user_sessions
@@ -2574,43 +2215,6 @@
   on_sql: ${analytics_prod_demo__user_sessions.user_id} =
     ${analytics_prod_demo__user.id}
   relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__user_sessions
-  join_to_view: analytics_prod_demo__product
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__user_sessions.product_id} =
-    ${analytics_prod_demo__product.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__zendesk_tickets
-  join_to_view: analytics_prod_demo__account
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__zendesk_tickets.account_id} =
-    ${analytics_prod_demo__account.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: analytics_prod_demo__opportunities
-  join_to_view: analytics_prod_demo__int_saas__users
-  join_to_view_as: opportunity_owner_old
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__opportunities.owner_id} = ${opportunity_owner_old.id}
-  relationship_type: many_to_one
-  reversible: true
-  join_to_view_as_label: Opportunity Owner
-
-- join_from_view: analytics_prod_demo__opportunities
-  join_to_view: analytics_prod_demo__opportunity_line_items
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__opportunities.id} =
-    ${analytics_prod_demo__opportunity_line_items.opportunity_id}
-  relationship_type: one_to_many
-
-- join_from_view: analytics_prod_demo__opportunities
-  join_to_view: analytics_prod_demo__contacts
-  join_type: always_left
-  on_sql: ${analytics_prod_demo__opportunities.contact_id} =
-    ${analytics_prod_demo__contacts.id}
-  relationship_type: many_to_one
 
 - join_from_view: analytics_dev_dbt_cestrada_prod_saas__opportunities
   join_to_view: analytics_dev_dbt_cestrada_prod_saas__opportunity_line_items

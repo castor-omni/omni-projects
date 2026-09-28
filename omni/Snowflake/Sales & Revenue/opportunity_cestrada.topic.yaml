@@ -11,7 +11,7 @@ joins:
   cestrada_opportunity_owner: {}
   analytics_prod_dbt_cestrada__contacts: {}
   analytics_prod_dbt_cestrada__opportunity_line_items:
-    analytics_prod_dbt_cestrada__product: {}
+    analytics_prod_demo__product: {}
 
 relationships:
   - join_from_view: analytics_prod_dbt_cestrada__opportunities
@@ -30,6 +30,27 @@ relationships:
     on_sql: ${analytics_prod_dbt_cestrada__opportunities.id} =
       ${analytics_prod_dbt_cestrada__opportunity_line_items.opportunity_id}
     relationship_type: one_to_many
+
+  - join_from_view: analytics_prod_dbt_cestrada__opportunities
+    join_to_view: analytics_prod_dbt_cestrada__account
+    join_type: always_left
+    on_sql: ${analytics_prod_dbt_cestrada__opportunities.account_id} =
+      ${analytics_prod_dbt_cestrada__account.id}
+    relationship_type: many_to_one
+
+  - join_from_view: analytics_prod_dbt_cestrada__opportunities
+    join_to_view: analytics_prod_dbt_cestrada__contacts
+    join_type: always_left
+    on_sql: ${analytics_prod_dbt_cestrada__opportunities.contact_id} =
+      ${analytics_prod_dbt_cestrada__contacts.id}
+    relationship_type: many_to_one
+
+  - join_from_view: analytics_prod_dbt_cestrada__opportunity_line_items
+    join_to_view: analytics_prod_demo__product
+    join_type: always_left
+    on_sql: ${analytics_prod_dbt_cestrada__opportunity_line_items.product_id} =
+      ${analytics_prod_demo__product.id}
+    relationship_type: many_to_one
 
 ai_context: |
   You are an expert data analyst, who has a vast amount of experience analyzing sales data to find useful insights and trends.

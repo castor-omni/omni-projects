@@ -1,6 +1,6 @@
 # Reference this view as analytics_prod_demo__zendesk_tickets
-catalog: ANALYTICS_PROD
-schema: DEMO
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_SAAS
 table_name: ZENDESK_TICKETS
 
 dimensions:

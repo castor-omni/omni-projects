@@ -1,6 +1,6 @@
-# Reference this view as analytics_prod_demo__opportunity_line_items
-catalog: ANALYTICS_PROD
-schema: DEMO
+# Reference this view as analytics_prod_dbt_cestrada__opportunity_line_items
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_SAAS
 table_name: OPPORTUNITY_LINE_ITEMS
 
 dimensions:

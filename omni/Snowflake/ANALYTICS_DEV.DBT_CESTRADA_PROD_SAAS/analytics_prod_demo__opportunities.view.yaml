@@ -1,11 +1,11 @@
-# Reference this view as analytics_prod_dbt_cestrada__opportunities
-label: Opportunities
-description: Salesforce sales opportunities (deals) from the DBT_CESTRADA
-  schema, one row per opportunity, with pipeline stage, amounts (ARR/ACV/TCV),
-  forecast category, and win/loss context.
+# Reference this view as analytics_prod_demo__opportunities
+label: Opportunity
+description: Salesforce sales opportunities (deals), one row per opportunity,
+  with pipeline stage, amounts (ARR/ACV/TCV), forecast category, and win/loss
+  context.
 
-catalog: ANALYTICS_PROD
-schema: DBT_CESTRADA
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_SAAS
 table_name: OPPORTUNITIES
 
 dimensions:
@@ -155,8 +155,6 @@ dimensions:
 
 measures:
   count:
-    label: Opportunities Count
-    format: NUMBER_0
     aggregate_type: count
 
   amount_sum:

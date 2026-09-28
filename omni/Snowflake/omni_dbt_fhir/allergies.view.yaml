@@ -1,0 +1,71 @@
+# Reference this view as omni_dbt_fhir__allergies
+schema_label: ""
+#This description was pulled from dbt.
+description: Contains information about patient allergies and intolerances
+
+schema: omni_dbt_fhir
+table_name: ALLERGIES
+
+dimensions:
+  patient_id:
+    sql: '"PATIENT_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for the patient
+
+  code:
+    sql: '"CODE"'
+    #This description was pulled from dbt.
+    description: Allergy or intolerance code
+
+  category:
+    sql: '"CATEGORY"'
+    #This description was pulled from dbt.
+    description: Category of the allergy (e.g., food, medication, environment)
+
+  description:
+    sql: '"DESCRIPTION"'
+    #This description was pulled from dbt.
+    description: Textual description of the allergy
+
+  type:
+    sql: '"TYPE"'
+    #This description was pulled from dbt.
+    description: Type of allergy (e.g., allergy, intolerance)
+
+  asserted_ts:
+    sql: '"ASSERTED_TS"'
+    #This description was pulled from dbt.
+    description: Timestamp when the allergy was asserted
+
+  criticality:
+    sql: '"CRITICALITY"'
+    #This description was pulled from dbt.
+    description: Severity or criticality of the allergy
+
+  clinical_status:
+    sql: '"CLINICAL_STATUS"'
+    #This description was pulled from dbt.
+    description: Current clinical status of the allergy (e.g., active, inactive, resolved)
+
+  resource_raw:
+    sql: '"RESOURCE_RAW"'
+    #This description was pulled from dbt.
+    description: Raw FHIR resource data for the allergy
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: allergies
+  target_schema: DBT_CESTRADA_PROD
+  description: Contains information about patient allergies and intolerances
+  config:
+    schema: fhir
+    materialized: table
+  code: |-
+    select
+      {{ dbt_utils.star(ref('stg_fhir__allergies')) }}
+    from {{ ref('int_fhir__allergies') }}

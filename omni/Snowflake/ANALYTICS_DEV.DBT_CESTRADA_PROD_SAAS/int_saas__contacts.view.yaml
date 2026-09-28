@@ -1,0 +1,89 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_saas__int_saas__contacts
+#This description was pulled from dbt.
+description: Intermidiate table of the contacts records at the accounts for the
+  company Data Blobby
+
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_SAAS
+table_name: INT_SAAS__CONTACTS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for each contact
+    primary_key: true
+
+  account_id:
+    sql: '"ACCOUNT_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Account identifier for each contact
+
+  first_name:
+    sql: '"FIRST_NAME"'
+    #This description was pulled from dbt.
+    description: The given first name of the contact
+
+  last_name:
+    sql: '"LAST_NAME"'
+    #This description was pulled from dbt.
+    description: The given surname of the contact
+
+  email:
+    sql: '"EMAIL"'
+    #This description was pulled from dbt.
+    description: The contact's company email address
+
+  phone:
+    sql: '"PHONE"'
+    #This description was pulled from dbt.
+    description: The contact's phone number if one is given
+
+  title:
+    sql: '"TITLE"'
+    #This description was pulled from dbt.
+    description: The contacts role at the account
+
+  created_date:
+    sql: '"CREATED_DATE"'
+    #This description was pulled from dbt.
+    description: The date the contact record was created
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: int_saas__contacts
+  target_schema: DBT_CESTRADA_PROD
+  description: Intermidiate table of the contacts records at the accounts for the
+    company Data Blobby
+  config:
+    schema: saas
+    materialized: table
+  code: |-
+    WITH PARAMS AS (
+      SELECT 
+        CURRENT_DATE() AS AS_OF_DATE,
+        (YEAR(CURRENT_DATE()) - 2025) AS YEAR_OFFSET 
+    )
+
+    SELECT 
+        ID,
+        ACCOUNT_ID,
+        FIRST_NAME,
+        LAST_NAME,
+        EMAIL,
+        PHONE,
+        TITLE,
+        -- Apply the shift and standardize name
+        DATEADD(MONTH, P.YEAR_OFFSET * 12, CREATED_DATE) AS CREATED_DATE
+    FROM {{ ref('stg_saas__contacts') }}
+    CROSS JOIN PARAMS P
+    -- Filter using standardized identifiers
+    WHERE DATEADD(MONTH, P.YEAR_OFFSET * 12, CREATED_DATE) <= P.AS_OF_DATE
+    ORDER BY CREATED_DATE DESC
+  referenced_by: [ contacts ]

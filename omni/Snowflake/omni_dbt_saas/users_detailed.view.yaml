@@ -1,0 +1,164 @@
+# Reference this view as omni_dbt_saas__users_detailed
+schema_label: ""
+#This description was pulled from dbt.
+description: Table containing user profile and engagement data
+
+schema: omni_dbt_saas
+table_name: USERS_DETAILED
+
+dimensions:
+  account_id:
+    sql: '"ACCOUNT_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier of the account the user belongs to
+
+  days_since_last_event:
+    sql: '"DAYS_SINCE_LAST_EVENT"'
+    #This description was pulled from dbt.
+    description: Number of days since the user last triggered an event
+
+  department:
+    sql: '"DEPARTMENT"'
+    #This description was pulled from dbt.
+    description: Department the user belongs to within their organization
+
+  email:
+    sql: '"EMAIL"'
+    #This description was pulled from dbt.
+    description: Email address of the user
+
+  events_last_30d:
+    sql: '"EVENTS_LAST_30D"'
+    #This description was pulled from dbt.
+    description: Total number of events triggered by the user in the last 30 days
+
+  events_last_90d:
+    sql: '"EVENTS_LAST_90D"'
+    #This description was pulled from dbt.
+    description: Total number of events triggered by the user in the last 90 days
+
+  invited_by_user_id:
+    sql: '"INVITED_BY_USER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: User ID of the person who invited this user
+
+  is_admin:
+    sql: '"IS_ADMIN"'
+    #This description was pulled from dbt.
+    description: Boolean flag indicating whether the user has admin privileges
+
+  license_type:
+    sql: '"LICENSE_TYPE"'
+    #This description was pulled from dbt.
+    description: Type of license assigned to the user
+
+  lifecycle_stage:
+    sql: '"LIFECYCLE_STAGE"'
+    #This description was pulled from dbt.
+    description: Current lifecycle stage of the user (e.g. onboarding, active, churned)
+
+  location:
+    sql: '"LOCATION"'
+    #This description was pulled from dbt.
+    description: Geographic location of the user
+
+  manager_id:
+    sql: '"MANAGER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: User ID of the user's manager
+
+  name:
+    sql: '"NAME"'
+    #This description was pulled from dbt.
+    description: Full name of the user
+
+  onboarding_completed:
+    sql: '"ONBOARDING_COMPLETED"'
+    #This description was pulled from dbt.
+    description: Boolean flag indicating whether the user has completed onboarding
+
+  onboarding_steps_completed:
+    sql: '"ONBOARDING_STEPS_COMPLETED"'
+    #This description was pulled from dbt.
+    description: Number of onboarding steps the user has completed
+
+  role:
+    sql: '"ROLE"'
+    #This description was pulled from dbt.
+    description: Role assigned to the user within their organization
+
+  signup_source:
+    sql: '"SIGNUP_SOURCE"'
+    #This description was pulled from dbt.
+    description: Channel or source through which the user signed up
+
+  status:
+    sql: '"STATUS"'
+    #This description was pulled from dbt.
+    description: Current status of the user (e.g. active, inactive, suspended)
+
+  timezone:
+    sql: '"TIMEZONE"'
+    #This description was pulled from dbt.
+    description: Timezone of the user
+
+  title:
+    sql: '"TITLE"'
+    #This description was pulled from dbt.
+    description: Job title of the user
+
+  total_events_lifetime:
+    sql: '"TOTAL_EVENTS_LIFETIME"'
+    #This description was pulled from dbt.
+    description: Total number of events triggered by the user over their lifetime
+
+  total_sessions_lifetime:
+    sql: '"TOTAL_SESSIONS_LIFETIME"'
+    #This description was pulled from dbt.
+    description: Total number of sessions the user has had over their lifetime
+
+  user_id:
+    sql: '"USER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier of the user
+
+  demo_segment:
+    sql: '"DEMO_SEGMENT"'
+
+  created_date:
+    sql: '"CREATED_DATE"'
+    #This description was pulled from dbt.
+    description: Date the user record was created
+
+  last_event_date:
+    sql: '"LAST_EVENT_DATE"'
+    #This description was pulled from dbt.
+    description: Date of the most recent event triggered by the user
+
+  updated_date:
+    sql: '"UPDATED_DATE"'
+    #This description was pulled from dbt.
+    description: Date the user record was last updated
+
+  activated_date:
+    sql: '"ACTIVATED_DATE"'
+    #This description was pulled from dbt.
+    description: Date the user activated their account
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: users_detailed
+  target_schema: DBT_CESTRADA_PROD
+  description: Table containing user profile and engagement data
+  config:
+    schema: saas
+    materialized: table
+  code: select * from {{ ref('int_saas__users_detailed')}}

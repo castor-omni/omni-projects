@@ -1,0 +1,41 @@
+# Reference this view as omni_dbt__time_spine_daily
+schema_label: ""
+#This description was pulled from dbt.
+description: A time spine with one row per day, ranging from 5 years in the past
+  to 30 days into the future.
+
+schema: omni_dbt
+table_name: TIME_SPINE_DAILY
+
+dimensions:
+  date_day:
+    sql: '"DATE_DAY"'
+    #This description was pulled from dbt.
+    description: The base date column for daily granularity
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: time_spine_daily
+  target_schema: DBT_CESTRADA_PROD
+  description: A time spine with one row per day, ranging from 5 years in the past
+    to 30 days into the future.
+  config:
+    materialized: table
+  code: |-
+    -- https://docs.getdbt.com/guides/mf-time-spine?step=2
+    {{
+        config(
+            materialized = 'table',
+        )
+    }}
+
+    {{ dbt_utils.date_spine(
+        datepart="day",
+        start_date="cast('2019-01-01' as date)",
+        end_date="cast('2026-01-01' as date)"
+       )
+    }}

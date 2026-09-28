@@ -1,0 +1,50 @@
+# Reference this view as omni_dbt_pharma__stg_pharma__dim_sales_rep
+schema_label: ""
+
+schema: omni_dbt_pharma
+table_name: STG_PHARMA__DIM_SALES_REP
+
+dimensions:
+  salesrepid:
+    sql: '"SALESREPID"'
+
+  salesrepname:
+    sql: '"SALESREPNAME"'
+
+  role:
+    sql: '"ROLE"'
+
+  email:
+    sql: '"EMAIL"'
+
+  phone:
+    sql: '"PHONE"'
+
+  startdate:
+    sql: '"STARTDATE"'
+
+  enddate:
+    sql: '"ENDDATE"'
+
+  geographyid:
+    sql: '"GEOGRAPHYID"'
+
+  managerid:
+    sql: '"MANAGERID"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: stg_pharma__dim_sales_rep
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: pharma
+    materialized: view
+  code: |-
+    select
+      {{ dbt_utils.star(source('pharma', 'dim_sales_rep')) }}
+    from {{ source('pharma', 'dim_sales_rep') }}
+  referenced_by: [ int_pharma__dim_sales_rep ]

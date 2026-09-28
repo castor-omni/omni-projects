@@ -1,0 +1,46 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_fhir__medications
+#This description was pulled from dbt.
+description: Contains information about medications
+
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_FHIR
+table_name: MEDICATIONS
+
+dimensions:
+  patient_id:
+    sql: '"PATIENT_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for the patient
+
+  code:
+    sql: '"CODE"'
+    #This description was pulled from dbt.
+    description: Code representing the medication
+
+  name:
+    sql: '"NAME"'
+    #This description was pulled from dbt.
+    description: Name or description of the medication
+
+  resource_raw:
+    sql: '"RESOURCE_RAW"'
+    #This description was pulled from dbt.
+    description: Raw FHIR resource data for the medication
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: medications
+  target_schema: DBT_CESTRADA_PROD
+  description: Contains information about medications
+  config:
+    schema: fhir
+    materialized: table
+  code: |-
+    select
+      {{ dbt_utils.star(ref('stg_fhir__medications')) }}
+    from {{ ref('stg_fhir__medications') }}

@@ -1,0 +1,67 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_fhir__int_fhir__observations
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_FHIR
+table_name: INT_FHIR__OBSERVATIONS
+
+dimensions:
+  effective_ts:
+    sql: '"EFFECTIVE_TS"'
+
+  issued_ts:
+    sql: '"ISSUED_TS"'
+
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  patient_id:
+    sql: '"PATIENT_ID"'
+    format: ID
+
+  encounter_id:
+    sql: '"ENCOUNTER_ID"'
+    format: ID
+
+  code:
+    sql: '"CODE"'
+
+  name:
+    sql: '"NAME"'
+
+  category:
+    sql: '"CATEGORY"'
+
+  value:
+    sql: '"VALUE"'
+
+  unit:
+    sql: '"UNIT"'
+
+  status:
+    sql: '"STATUS"'
+
+  resource_raw:
+    sql: '"RESOURCE_RAW"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: int_fhir__observations
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: fhir
+    materialized: table
+  code: |-
+    select 
+        timestampadd(year, extract(year, current_date()) - 2016, effective_ts) as effective_ts,
+        timestampadd(year, extract(year, current_date()) - 2016, issued_ts) as issued_ts,
+        {{ dbt_utils.star(ref("stg_fhir__observations"), except=["effective_ts", "issued_ts"]) }}
+    from {{ ref("stg_fhir__observations") }}
+    where 1=1
+        and timestampadd(year, extract(year, current_date()) - 2016, issued_ts)
+        < current_date()
+  referenced_by: [ observations ]

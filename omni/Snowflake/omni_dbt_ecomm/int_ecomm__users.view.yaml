@@ -1,0 +1,123 @@
+# Reference this view as omni_dbt_ecomm__int_ecomm__users
+schema_label: ""
+#This description was pulled from dbt.
+description: Intermediate table containing detailed user information for ecommerce platform
+
+schema: omni_dbt_ecomm
+table_name: INT_ECOMM__USERS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for each user
+    primary_key: true
+
+  first_name:
+    sql: '"FIRST_NAME"'
+    #This description was pulled from dbt.
+    description: First name of the user
+
+  last_name:
+    sql: '"LAST_NAME"'
+    #This description was pulled from dbt.
+    description: Last name of the user
+
+  email:
+    sql: '"EMAIL"'
+    #This description was pulled from dbt.
+    description: Email address of the user
+
+  age:
+    sql: '"AGE"'
+    #This description was pulled from dbt.
+    description: Age of the user
+
+  city:
+    sql: '"CITY"'
+    #This description was pulled from dbt.
+    description: City where the user is located
+
+  state:
+    sql: '"STATE"'
+    #This description was pulled from dbt.
+    description: State where the user is located
+
+  country:
+    sql: '"COUNTRY"'
+    #This description was pulled from dbt.
+    description: Country where the user is located
+
+  zip:
+    sql: '"ZIP"'
+    #This description was pulled from dbt.
+    description: ZIP code of the user's location
+
+  latitude:
+    sql: '"LATITUDE"'
+    #This description was pulled from dbt.
+    description: Geographical latitude of the user's location
+
+  longitude:
+    sql: '"LONGITUDE"'
+    #This description was pulled from dbt.
+    description: Geographical longitude of the user's location
+
+  gender:
+    sql: '"GENDER"'
+    #This description was pulled from dbt.
+    description: Gender of the user
+
+  created_at:
+    sql: '"CREATED_AT"'
+    #This description was pulled from dbt.
+    description: Timestamp when the user account was created
+
+  traffic_source:
+    sql: '"TRAFFIC_SOURCE"'
+    #This description was pulled from dbt.
+    description: Source of traffic that led to user signup
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: int_ecomm__users
+  target_schema: DBT_CESTRADA_PROD
+  description: Intermediate table containing detailed user information for
+    ecommerce platform
+  config:
+    schema: ecomm
+    materialized: table
+  code: |-
+    select
+        id,
+        first_name,
+        last_name,
+        email,
+        case
+            when age < 17
+            then age + 1 + mod(id, 89)
+            when age < 34
+            then age + mod(id, 5)
+            when age < 77
+            then age - mod(id, 18)
+            else age - mod(id, 12)
+        end as age,
+        city,
+        state,
+        country,
+        zip,
+        latitude,
+        longitude,
+        gender,
+        timestampadd(year, extract(year, current_date()) - 2022, created_at) as created_at,
+        traffic_source
+    from {{ ref("stg_ecomm__users") }}
+    where 1=1
+        and timestampadd(year, extract(year, current_date()) - 2022, created_at)
+        < current_date()
+  referenced_by: [ order_items, sessions, shipped_order_items, users ]

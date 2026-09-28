@@ -1,0 +1,44 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_finance__stg_asset_management__dim_clients
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_FINANCE
+table_name: STG_ASSET_MANAGEMENT__DIM_CLIENTS
+
+dimensions:
+  client_id:
+    sql: '"CLIENT_ID"'
+    format: ID
+
+  client_name:
+    sql: '"CLIENT_NAME"'
+
+  client_email:
+    sql: '"CLIENT_EMAIL"'
+
+  investment_style:
+    sql: '"INVESTMENT_STYLE"'
+
+  risk_tolerance:
+    sql: '"RISK_TOLERANCE"'
+
+  account_manager:
+    sql: '"ACCOUNT_MANAGER"'
+
+  created_at:
+    sql: '"CREATED_AT"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: stg_asset_management__dim_clients
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: finance
+    materialized: view
+  code: |-
+    select
+      {{ dbt_utils.star( source('asset_management', 'dim_clients') ) }}
+    from {{ source('asset_management', 'dim_clients') }}
+  referenced_by: [ clients ]

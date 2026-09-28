@@ -1,0 +1,55 @@
+# Reference this view as omni_dbt_pharma__fact_sales_activity
+schema_label: ""
+
+schema: omni_dbt_pharma
+table_name: FACT_SALES_ACTIVITY
+
+dimensions:
+  salesactivityid:
+    sql: '"SALESACTIVITYID"'
+
+  salesrepid:
+    sql: '"SALESREPID"'
+
+  physicianid:
+    sql: '"PHYSICIANID"'
+
+  geographyid:
+    sql: '"GEOGRAPHYID"'
+
+  productid:
+    sql: '"PRODUCTID"'
+
+  activitytype:
+    sql: '"ACTIVITYTYPE"'
+
+  channelid:
+    sql: '"CHANNELID"'
+
+  activitydate:
+    sql: '"ACTIVITYDATE"'
+
+  durationminutes:
+    sql: '"DURATIONMINUTES"'
+
+  outcome:
+    sql: '"OUTCOME"'
+
+  notes:
+    sql: '"NOTES"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: fact_sales_activity
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: pharma
+    materialized: table
+  code: |-
+    select
+      {{ dbt_utils.star(ref('int_pharma__fact_sales_activity')) }}
+    from {{ ref('int_pharma__fact_sales_activity') }}

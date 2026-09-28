@@ -47,3 +47,16 @@ dimensions:
 measures:
   count:
     aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: stg_ecomm__inventory_items
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: ecomm
+    materialized: view
+  code: |-
+    select
+      {{ dbt_utils.star(source('ecomm', 'inventory_items')) }}
+    from {{ source('ecomm', 'inventory_items') }}
+  referenced_by: [ int_ecomm__inventory_items ]

@@ -1,3 +1,921 @@
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__account_history
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__account_history.account_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__company_percentile_rank
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__company_percentile_rank.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__company_usage_metrics
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__company_usage_metrics.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__contacts
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__contacts.account_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__account_history
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__account_history.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__company_usage
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__company_usage.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__contacts
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__contacts.account_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__jira_issues
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__jira_issues.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__jira_issues
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__zendesk_tickets
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__jira_issues.zendesk_ticket_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__zendesk_tickets.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__opportunities
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__opportunities.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__opportunities
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__contacts
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__opportunities.contact_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__contacts.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__opportunity_history
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__opportunity_history.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__opportunity_history
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__contacts
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__opportunity_history.contact_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__contacts.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__opportunity_line_items
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__product
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__opportunity_line_items.product_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__sessions
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__sessions.account_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__sessions
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__user
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__sessions.user_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__sessions
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__product
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__sessions.product_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__sessions_focus
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__sessions_focus.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__sessions_focus
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__user
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__sessions_focus.user_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__sessions_focus
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__product
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__sessions_focus.product_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__usage_events
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__usage_events.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__usage_events
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__user
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__usage_events.user_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__usage_events
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__product
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__usage_events.product_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__usage_events_focus
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__usage_events_focus.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__usage_events_focus
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__user
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__usage_events_focus.user_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__usage_events_focus
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__product
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__usage_events_focus.product_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__users_detailed
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__users_detailed.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__users_detailed
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__user
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__users_detailed.user_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__zendesk_tickets
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__zendesk_tickets.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__int_saas__zendesk_tickets
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__jira_issues
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__int_saas__zendesk_tickets.jira_issue_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__jira_issues.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__jira_issues
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__jira_issues.account_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__jira_issues
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__zendesk_tickets
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__jira_issues.zendesk_ticket_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__zendesk_tickets.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__zendesk_tickets
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__jira_issues
+  join_to_view_as: analytics_dev_dbt_cestrada_prod_saas__jira_issues_2
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__zendesk_tickets.jira_issue_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__jira_issues.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__opportunities
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__opportunities.account_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__opportunities
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__contacts
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__opportunities.contact_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__contacts.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__opportunity_history
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__opportunity_history.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__opportunity_history
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__contacts
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__opportunity_history.contact_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__contacts.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__opportunity_line_items
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__product
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__opportunity_line_items.product_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__contacts
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__contacts.account_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__jira_issues
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__jira_issues.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__jira_issues
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__zendesk_tickets
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__jira_issues.zendesk_ticket_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__zendesk_tickets.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__opportunities
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__opportunities.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__opportunities
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__contacts
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__opportunities.contact_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__contacts.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__opportunity_history
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__opportunity_history.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__opportunity_history
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__contacts
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__opportunity_history.contact_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__contacts.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__opportunity_line_items
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__product
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__opportunity_line_items.product_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__sessions
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__sessions.account_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__sessions
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__user
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__sessions.user_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__sessions
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__product
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__sessions.product_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__sessions_focus
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__sessions_focus.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__sessions_focus
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__user
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__sessions_focus.user_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__sessions_focus
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__product
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__sessions_focus.product_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__usage_events
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__product
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__usage_events.product_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__usage_events
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__usage_events.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__usage_events
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__user
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__usage_events.user_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__usage_events_focus
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__usage_events_focus.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__usage_events_focus
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__user
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__usage_events_focus.user_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__usage_events_focus
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__product
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__usage_events_focus.product_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__users_detailed
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__user
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__users_detailed.user_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__users_detailed
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__users_detailed.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__zendesk_tickets
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__zendesk_tickets.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__stg_saas__zendesk_tickets
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__jira_issues
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__stg_saas__zendesk_tickets.jira_issue_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__jira_issues.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__usage_events
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__usage_events.account_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__usage_events
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__user
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__usage_events.user_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__usage_events
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__product
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__usage_events.product_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__usage_events_focus
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__usage_events_focus.account_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__usage_events_focus
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__user
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__usage_events_focus.user_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__usage_events_focus
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__product
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__usage_events_focus.product_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__users_detailed
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__users_detailed.account_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__users_detailed
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__user
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__users_detailed.user_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__user_sessions
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__user_sessions.account_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__user_sessions
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__user
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__user_sessions.user_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__user_sessions
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__product
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__user_sessions.product_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__user_sessions_focus
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__user_sessions_focus.account_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__user_sessions_focus
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__user
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__user_sessions_focus.user_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__user_sessions_focus
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__product
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__user_sessions_focus.product_id}
+    = ${analytics_dev_dbt_cestrada_prod_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_saas__zendesk_tickets
+  join_to_view: analytics_dev_dbt_cestrada_prod_saas__account
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_saas__zendesk_tickets.account_id} =
+    ${analytics_dev_dbt_cestrada_prod_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__allergies
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__allergies.patient_id} =
+    ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__care_plans
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__care_plans.patient_id} =
+    ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__care_plans
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__conditions
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__care_plans.condition_id} =
+    ${analytics_dev_dbt_cestrada_prod_fhir__conditions.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__conditions
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__conditions.patient_id} =
+    ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__conditions
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__encounters
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__conditions.encounter_id} =
+    ${analytics_dev_dbt_cestrada_prod_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__diagnostic_reports
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__diagnostic_reports.patient_id} =
+    ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__encounters
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__encounters.patient_id} =
+    ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__immunizations
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__immunizations.patient_id} =
+    ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__immunizations
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__encounters
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__immunizations.encounter_id} =
+    ${analytics_dev_dbt_cestrada_prod_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__int_fhir__allergies
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__int_fhir__allergies.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__int_fhir__care_plans
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__int_fhir__care_plans.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__int_fhir__care_plans
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__conditions
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__int_fhir__care_plans.condition_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__conditions.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__int_fhir__conditions
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__int_fhir__conditions.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__int_fhir__conditions
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__encounters
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__int_fhir__conditions.encounter_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__int_fhir__diagnostic_reports
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__int_fhir__diagnostic_reports.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__int_fhir__encounters
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__int_fhir__encounters.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__int_fhir__immunizations
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__int_fhir__immunizations.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__int_fhir__immunizations
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__encounters
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__int_fhir__immunizations.encounter_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__int_fhir__medications
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__int_fhir__medications.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__int_fhir__medication_requests
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__int_fhir__medication_requests.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__int_fhir__medication_requests
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__encounters
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__int_fhir__medication_requests.encounter_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__int_fhir__medication_requests
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__conditions
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__int_fhir__medication_requests.condition_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__conditions.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__int_fhir__observations
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__int_fhir__observations.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__int_fhir__observations
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__encounters
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__int_fhir__observations.encounter_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__int_fhir__procedures
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__int_fhir__procedures.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__int_fhir__procedures
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__conditions
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__int_fhir__procedures.condition_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__conditions.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__int_fhir__procedures
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__encounters
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__int_fhir__procedures.encounter_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__medications
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__medications.patient_id} =
+    ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__medication_requests
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__medication_requests.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__medication_requests
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__encounters
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__medication_requests.encounter_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__medication_requests
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__conditions
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__medication_requests.condition_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__conditions.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__observations
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__observations.patient_id} =
+    ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__observations
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__encounters
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__observations.encounter_id} =
+    ${analytics_dev_dbt_cestrada_prod_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__procedures
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__procedures.patient_id} =
+    ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__procedures
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__conditions
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__procedures.condition_id} =
+    ${analytics_dev_dbt_cestrada_prod_fhir__conditions.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__procedures
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__encounters
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__procedures.encounter_id} =
+    ${analytics_dev_dbt_cestrada_prod_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__allergies
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__allergies.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__care_plans
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__care_plans.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__care_plans
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__conditions
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__care_plans.condition_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__conditions.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__conditions
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__conditions.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__conditions
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__encounters
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__conditions.encounter_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__diagnostic_reports
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__diagnostic_reports.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__encounters
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__encounters.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__immunizations
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__immunizations.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__immunizations
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__encounters
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__immunizations.encounter_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__medications
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__medications.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__medication_requests
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__medication_requests.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__medication_requests
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__encounters
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__medication_requests.encounter_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__medication_requests
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__conditions
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__medication_requests.condition_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__conditions.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__observations
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__observations.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__observations
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__encounters
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__observations.encounter_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__procedures
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__patients
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__procedures.patient_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__procedures
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__conditions
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__procedures.condition_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__conditions.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__procedures
+  join_to_view: analytics_dev_dbt_cestrada_prod_fhir__encounters
+  join_type: always_left
+  on_sql: ${analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__procedures.encounter_id}
+    = ${analytics_dev_dbt_cestrada_prod_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
 - join_from_view: analytics_dev_dbt_cestrada_prod_ecomm__events
   join_to_view: analytics_dev_dbt_cestrada_prod_ecomm__users
   join_type: always_left
@@ -136,6 +1054,991 @@
   join_type: always_left
   on_sql: ${analytics_prod_dbt_cestrada__opportunity_line_items.product_id} =
     ${analytics_prod_dbt_cestrada__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__allergies
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__allergies.patient_id} = ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__care_plans
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__care_plans.patient_id} = ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__care_plans
+  join_to_view: omni_dbt_fhir__conditions
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__care_plans.condition_id} = ${omni_dbt_fhir__conditions.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__conditions
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__conditions.patient_id} = ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__conditions
+  join_to_view: omni_dbt_fhir__encounters
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__conditions.encounter_id} = ${omni_dbt_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__int_fhir__care_plans
+  join_to_view: omni_dbt_fhir__conditions
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__int_fhir__care_plans.condition_id} =
+    ${omni_dbt_fhir__conditions.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__int_fhir__medication_requests
+  join_to_view: omni_dbt_fhir__conditions
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__int_fhir__medication_requests.condition_id} =
+    ${omni_dbt_fhir__conditions.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__int_fhir__procedures
+  join_to_view: omni_dbt_fhir__conditions
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__int_fhir__procedures.condition_id} =
+    ${omni_dbt_fhir__conditions.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__medication_requests
+  join_to_view: omni_dbt_fhir__conditions
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__medication_requests.condition_id} =
+    ${omni_dbt_fhir__conditions.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__procedures
+  join_to_view: omni_dbt_fhir__conditions
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__procedures.condition_id} = ${omni_dbt_fhir__conditions.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__stg_fhir__care_plans
+  join_to_view: omni_dbt_fhir__conditions
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__stg_fhir__care_plans.condition_id} =
+    ${omni_dbt_fhir__conditions.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__stg_fhir__medication_requests
+  join_to_view: omni_dbt_fhir__conditions
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__stg_fhir__medication_requests.condition_id} =
+    ${omni_dbt_fhir__conditions.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__stg_fhir__procedures
+  join_to_view: omni_dbt_fhir__conditions
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__stg_fhir__procedures.condition_id} =
+    ${omni_dbt_fhir__conditions.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__diagnostic_reports
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__diagnostic_reports.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__encounters
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__encounters.patient_id} = ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__immunizations
+  join_to_view: omni_dbt_fhir__encounters
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__immunizations.encounter_id} =
+    ${omni_dbt_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__int_fhir__conditions
+  join_to_view: omni_dbt_fhir__encounters
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__int_fhir__conditions.encounter_id} =
+    ${omni_dbt_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__int_fhir__immunizations
+  join_to_view: omni_dbt_fhir__encounters
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__int_fhir__immunizations.encounter_id} =
+    ${omni_dbt_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__int_fhir__medication_requests
+  join_to_view: omni_dbt_fhir__encounters
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__int_fhir__medication_requests.encounter_id} =
+    ${omni_dbt_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__int_fhir__observations
+  join_to_view: omni_dbt_fhir__encounters
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__int_fhir__observations.encounter_id} =
+    ${omni_dbt_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__int_fhir__procedures
+  join_to_view: omni_dbt_fhir__encounters
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__int_fhir__procedures.encounter_id} =
+    ${omni_dbt_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__medication_requests
+  join_to_view: omni_dbt_fhir__encounters
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__medication_requests.encounter_id} =
+    ${omni_dbt_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__observations
+  join_to_view: omni_dbt_fhir__encounters
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__observations.encounter_id} = ${omni_dbt_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__procedures
+  join_to_view: omni_dbt_fhir__encounters
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__procedures.encounter_id} = ${omni_dbt_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__stg_fhir__conditions
+  join_to_view: omni_dbt_fhir__encounters
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__stg_fhir__conditions.encounter_id} =
+    ${omni_dbt_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__stg_fhir__immunizations
+  join_to_view: omni_dbt_fhir__encounters
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__stg_fhir__immunizations.encounter_id} =
+    ${omni_dbt_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__stg_fhir__medication_requests
+  join_to_view: omni_dbt_fhir__encounters
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__stg_fhir__medication_requests.encounter_id} =
+    ${omni_dbt_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__stg_fhir__observations
+  join_to_view: omni_dbt_fhir__encounters
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__stg_fhir__observations.encounter_id} =
+    ${omni_dbt_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__stg_fhir__procedures
+  join_to_view: omni_dbt_fhir__encounters
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__stg_fhir__procedures.encounter_id} =
+    ${omni_dbt_fhir__encounters.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__immunizations
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__immunizations.patient_id} = ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__int_fhir__allergies
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__int_fhir__allergies.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__int_fhir__care_plans
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__int_fhir__care_plans.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__int_fhir__conditions
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__int_fhir__conditions.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__int_fhir__diagnostic_reports
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__int_fhir__diagnostic_reports.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__int_fhir__encounters
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__int_fhir__encounters.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__int_fhir__immunizations
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__int_fhir__immunizations.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__int_fhir__medications
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__int_fhir__medications.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__int_fhir__medication_requests
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__int_fhir__medication_requests.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__int_fhir__observations
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__int_fhir__observations.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__int_fhir__procedures
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__int_fhir__procedures.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__medications
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__medications.patient_id} = ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__medication_requests
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__medication_requests.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__observations
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__observations.patient_id} = ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__procedures
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__procedures.patient_id} = ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__stg_fhir__allergies
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__stg_fhir__allergies.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__stg_fhir__care_plans
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__stg_fhir__care_plans.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__stg_fhir__conditions
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__stg_fhir__conditions.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__stg_fhir__diagnostic_reports
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__stg_fhir__diagnostic_reports.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__stg_fhir__encounters
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__stg_fhir__encounters.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__stg_fhir__immunizations
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__stg_fhir__immunizations.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__stg_fhir__medications
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__stg_fhir__medications.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__stg_fhir__medication_requests
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__stg_fhir__medication_requests.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__stg_fhir__observations
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__stg_fhir__observations.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_fhir__stg_fhir__procedures
+  join_to_view: omni_dbt_fhir__patients
+  join_type: always_left
+  on_sql: ${omni_dbt_fhir__stg_fhir__procedures.patient_id} =
+    ${omni_dbt_fhir__patients.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__account_history
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__account_history.account_id} = ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__company_percentile_rank
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__company_percentile_rank.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__company_usage_metrics
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__company_usage_metrics.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__contacts
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__contacts.account_id} = ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__account_history
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__account_history.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__company_usage
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__company_usage.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__contacts
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__contacts.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__jira_issues
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__jira_issues.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__opportunities
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__opportunities.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__opportunity_history
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__opportunity_history.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__sessions
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__sessions.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__sessions_focus
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__sessions_focus.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__usage_events
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__usage_events.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__usage_events_focus
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__usage_events_focus.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__users_detailed
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__users_detailed.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__zendesk_tickets
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__zendesk_tickets.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__jira_issues
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__jira_issues.account_id} = ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__opportunities
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__opportunities.account_id} = ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__opportunity_history
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__opportunity_history.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__contacts
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__contacts.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__jira_issues
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__jira_issues.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__opportunities
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__opportunities.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__opportunity_history
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__opportunity_history.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__sessions
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__sessions.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__sessions_focus
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__sessions_focus.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__usage_events
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__usage_events.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__usage_events_focus
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__usage_events_focus.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__users_detailed
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__users_detailed.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__zendesk_tickets
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__zendesk_tickets.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__usage_events
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__usage_events.account_id} = ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__usage_events_focus
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__usage_events_focus.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__users_detailed
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__users_detailed.account_id} = ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__user_sessions
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__user_sessions.account_id} = ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__user_sessions_focus
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__user_sessions_focus.account_id} =
+    ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__zendesk_tickets
+  join_to_view: omni_dbt_saas__account
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__zendesk_tickets.account_id} = ${omni_dbt_saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__opportunities
+  join_to_view: omni_dbt_saas__contacts
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__opportunities.contact_id} =
+    ${omni_dbt_saas__contacts.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__opportunity_history
+  join_to_view: omni_dbt_saas__contacts
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__opportunity_history.contact_id} =
+    ${omni_dbt_saas__contacts.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__opportunities
+  join_to_view: omni_dbt_saas__contacts
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__opportunities.contact_id} = ${omni_dbt_saas__contacts.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__opportunity_history
+  join_to_view: omni_dbt_saas__contacts
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__opportunity_history.contact_id} =
+    ${omni_dbt_saas__contacts.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__opportunities
+  join_to_view: omni_dbt_saas__contacts
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__opportunities.contact_id} =
+    ${omni_dbt_saas__contacts.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__opportunity_history
+  join_to_view: omni_dbt_saas__contacts
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__opportunity_history.contact_id} =
+    ${omni_dbt_saas__contacts.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__jira_issues
+  join_to_view: omni_dbt_saas__zendesk_tickets
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__jira_issues.zendesk_ticket_id} =
+    ${omni_dbt_saas__zendesk_tickets.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__opportunity_line_items
+  join_to_view: omni_dbt_saas__product
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__opportunity_line_items.product_id} =
+    ${omni_dbt_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__sessions
+  join_to_view: omni_dbt_saas__user
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__sessions.user_id} = ${omni_dbt_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__sessions
+  join_to_view: omni_dbt_saas__product
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__sessions.product_id} =
+    ${omni_dbt_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__sessions_focus
+  join_to_view: omni_dbt_saas__user
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__sessions_focus.user_id} =
+    ${omni_dbt_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__sessions_focus
+  join_to_view: omni_dbt_saas__product
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__sessions_focus.product_id} =
+    ${omni_dbt_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__usage_events
+  join_to_view: omni_dbt_saas__user
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__usage_events.user_id} = ${omni_dbt_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__usage_events
+  join_to_view: omni_dbt_saas__product
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__usage_events.product_id} =
+    ${omni_dbt_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__usage_events_focus
+  join_to_view: omni_dbt_saas__user
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__usage_events_focus.user_id} =
+    ${omni_dbt_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__usage_events_focus
+  join_to_view: omni_dbt_saas__product
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__usage_events_focus.product_id} =
+    ${omni_dbt_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__users_detailed
+  join_to_view: omni_dbt_saas__user
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__users_detailed.user_id} =
+    ${omni_dbt_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__int_saas__zendesk_tickets
+  join_to_view: omni_dbt_saas__jira_issues
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__int_saas__zendesk_tickets.jira_issue_id} =
+    ${omni_dbt_saas__jira_issues.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__jira_issues
+  join_to_view: omni_dbt_saas__zendesk_tickets
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__jira_issues.zendesk_ticket_id} =
+    ${omni_dbt_saas__zendesk_tickets.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__zendesk_tickets
+  join_to_view: omni_dbt_saas__jira_issues
+  join_to_view_as: omni_dbt_saas__jira_issues_2
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__zendesk_tickets.jira_issue_id} =
+    ${omni_dbt_saas__jira_issues.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__zendesk_tickets
+  join_to_view: omni_dbt_saas__jira_issues
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__zendesk_tickets.jira_issue_id} =
+    ${omni_dbt_saas__jira_issues.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__opportunity_line_items
+  join_to_view: omni_dbt_saas__product
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__opportunity_line_items.product_id} =
+    ${omni_dbt_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__opportunity_line_items
+  join_to_view: omni_dbt_saas__product
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__opportunity_line_items.product_id} =
+    ${omni_dbt_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__sessions
+  join_to_view: omni_dbt_saas__product
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__sessions.product_id} =
+    ${omni_dbt_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__sessions_focus
+  join_to_view: omni_dbt_saas__product
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__sessions_focus.product_id} =
+    ${omni_dbt_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__usage_events
+  join_to_view: omni_dbt_saas__product
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__usage_events.product_id} =
+    ${omni_dbt_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__usage_events_focus
+  join_to_view: omni_dbt_saas__product
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__usage_events_focus.product_id} =
+    ${omni_dbt_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__usage_events
+  join_to_view: omni_dbt_saas__product
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__usage_events.product_id} = ${omni_dbt_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__usage_events_focus
+  join_to_view: omni_dbt_saas__product
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__usage_events_focus.product_id} =
+    ${omni_dbt_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__user_sessions
+  join_to_view: omni_dbt_saas__product
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__user_sessions.product_id} = ${omni_dbt_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__user_sessions_focus
+  join_to_view: omni_dbt_saas__product
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__user_sessions_focus.product_id} =
+    ${omni_dbt_saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__jira_issues
+  join_to_view: omni_dbt_saas__zendesk_tickets
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__jira_issues.zendesk_ticket_id} =
+    ${omni_dbt_saas__zendesk_tickets.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__sessions
+  join_to_view: omni_dbt_saas__user
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__sessions.user_id} = ${omni_dbt_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__sessions_focus
+  join_to_view: omni_dbt_saas__user
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__sessions_focus.user_id} =
+    ${omni_dbt_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__usage_events
+  join_to_view: omni_dbt_saas__user
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__usage_events.user_id} = ${omni_dbt_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__usage_events_focus
+  join_to_view: omni_dbt_saas__user
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__usage_events_focus.user_id} =
+    ${omni_dbt_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__stg_saas__users_detailed
+  join_to_view: omni_dbt_saas__user
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__stg_saas__users_detailed.user_id} =
+    ${omni_dbt_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__usage_events
+  join_to_view: omni_dbt_saas__user
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__usage_events.user_id} = ${omni_dbt_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__usage_events_focus
+  join_to_view: omni_dbt_saas__user
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__usage_events_focus.user_id} = ${omni_dbt_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__users_detailed
+  join_to_view: omni_dbt_saas__user
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__users_detailed.user_id} = ${omni_dbt_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__user_sessions
+  join_to_view: omni_dbt_saas__user
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__user_sessions.user_id} = ${omni_dbt_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_saas__user_sessions_focus
+  join_to_view: omni_dbt_saas__user
+  join_type: always_left
+  on_sql: ${omni_dbt_saas__user_sessions_focus.user_id} = ${omni_dbt_saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_ecomm__products
+  join_to_view: omni_dbt_ecomm__distribution_centers
+  join_type: always_left
+  on_sql: ${omni_dbt_ecomm__products.distribution_center_id} =
+    ${omni_dbt_ecomm__distribution_centers.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_ecomm__stg_ecomm__products
+  join_to_view: omni_dbt_ecomm__distribution_centers
+  join_type: always_left
+  on_sql: ${omni_dbt_ecomm__stg_ecomm__products.distribution_center_id} =
+    ${omni_dbt_ecomm__distribution_centers.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_ecomm__events
+  join_to_view: omni_dbt_ecomm__users
+  join_type: always_left
+  on_sql: ${omni_dbt_ecomm__events.user_id} = ${omni_dbt_ecomm__users.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_ecomm__int_ecomm__events
+  join_to_view: omni_dbt_ecomm__users
+  join_type: always_left
+  on_sql: ${omni_dbt_ecomm__int_ecomm__events.user_id} = ${omni_dbt_ecomm__users.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_ecomm__int_ecomm__inventory_items
+  join_to_view: omni_dbt_ecomm__products
+  join_type: always_left
+  on_sql: ${omni_dbt_ecomm__int_ecomm__inventory_items.product_id} =
+    ${omni_dbt_ecomm__products.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_ecomm__int_ecomm__order_items
+  join_to_view: omni_dbt_ecomm__users
+  join_type: always_left
+  on_sql: ${omni_dbt_ecomm__int_ecomm__order_items.user_id} =
+    ${omni_dbt_ecomm__users.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_ecomm__int_ecomm__order_items
+  join_to_view: omni_dbt_ecomm__inventory_items
+  join_type: always_left
+  on_sql: ${omni_dbt_ecomm__int_ecomm__order_items.inventory_item_id} =
+    ${omni_dbt_ecomm__inventory_items.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_ecomm__inventory_items
+  join_to_view: omni_dbt_ecomm__products
+  join_type: always_left
+  on_sql: ${omni_dbt_ecomm__inventory_items.product_id} =
+    ${omni_dbt_ecomm__products.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_ecomm__order_items
+  join_to_view: omni_dbt_ecomm__inventory_items
+  join_type: always_left
+  on_sql: ${omni_dbt_ecomm__order_items.inventory_item_id} =
+    ${omni_dbt_ecomm__inventory_items.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_ecomm__stg_ecomm__order_items
+  join_to_view: omni_dbt_ecomm__inventory_items
+  join_type: always_left
+  on_sql: ${omni_dbt_ecomm__stg_ecomm__order_items.inventory_item_id} =
+    ${omni_dbt_ecomm__inventory_items.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_ecomm__order_items
+  join_to_view: omni_dbt_ecomm__users
+  join_type: always_left
+  on_sql: ${omni_dbt_ecomm__order_items.user_id} = ${omni_dbt_ecomm__users.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_ecomm__stg_ecomm__inventory_items
+  join_to_view: omni_dbt_ecomm__products
+  join_type: always_left
+  on_sql: ${omni_dbt_ecomm__stg_ecomm__inventory_items.product_id} =
+    ${omni_dbt_ecomm__products.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_ecomm__sessions
+  join_to_view: omni_dbt_ecomm__users
+  join_type: always_left
+  on_sql: ${omni_dbt_ecomm__sessions.user_id} = ${omni_dbt_ecomm__users.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_ecomm__stg_ecomm__events
+  join_to_view: omni_dbt_ecomm__users
+  join_type: always_left
+  on_sql: ${omni_dbt_ecomm__stg_ecomm__events.user_id} = ${omni_dbt_ecomm__users.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: omni_dbt_ecomm__stg_ecomm__order_items
+  join_to_view: omni_dbt_ecomm__users
+  join_type: always_left
+  on_sql: ${omni_dbt_ecomm__stg_ecomm__order_items.user_id} =
+    ${omni_dbt_ecomm__users.id}
   relationship_type: assumed_many_to_one
 
 - join_from_view: analytics_prod_ecomm__events

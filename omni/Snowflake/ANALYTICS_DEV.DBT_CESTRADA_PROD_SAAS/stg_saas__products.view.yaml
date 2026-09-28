@@ -1,0 +1,39 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_saas__stg_saas__products
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_SAAS
+table_name: STG_SAAS__PRODUCTS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  name:
+    sql: '"NAME"'
+
+  family:
+    sql: '"FAMILY"'
+
+  created_date:
+    sql: '"CREATED_DATE"'
+
+  product_code:
+    sql: '"PRODUCT_CODE"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: stg_saas__products
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: saas
+    materialized: view
+  code: |-
+    select
+      {{ dbt_utils.star(source('saas', 'products')) }}
+    from {{ source('saas', 'products') }}
+  referenced_by: [ product ]

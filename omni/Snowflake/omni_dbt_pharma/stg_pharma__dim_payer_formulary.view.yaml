@@ -1,0 +1,65 @@
+# Reference this view as omni_dbt_pharma__stg_pharma__dim_payer_formulary
+schema_label: ""
+
+schema: omni_dbt_pharma
+table_name: STG_PHARMA__DIM_PAYER_FORMULARY
+
+dimensions:
+  formularyid:
+    sql: '"FORMULARYID"'
+
+  payer:
+    sql: '"PAYER"'
+
+  planname:
+    sql: '"PLANNAME"'
+
+  productid:
+    sql: '"PRODUCTID"'
+
+  marketid:
+    sql: '"MARKETID"'
+
+  coveragestatus:
+    sql: '"COVERAGESTATUS"'
+
+  formularytier:
+    sql: '"FORMULARYTIER"'
+
+  priorauthrequired:
+    sql: '"PRIORAUTHREQUIRED"'
+
+  steptherapyrequired:
+    sql: '"STEPTHERAPYREQUIRED"'
+
+  copay:
+    sql: '"COPAY"'
+
+  effectivedate:
+    sql: '"EFFECTIVEDATE"'
+
+  expirationdate:
+    sql: '"EXPIRATIONDATE"'
+
+  lastupdated:
+    sql: '"LASTUPDATED"'
+
+  sourcesystem:
+    sql: '"SOURCESYSTEM"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: stg_pharma__dim_payer_formulary
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: pharma
+    materialized: view
+  code: |-
+    select
+      {{ dbt_utils.star(source('pharma', 'dim_payer_formulary')) }}
+    from {{ source('pharma', 'dim_payer_formulary') }}
+  referenced_by: [ int_pharma__dim_payer_formulary ]

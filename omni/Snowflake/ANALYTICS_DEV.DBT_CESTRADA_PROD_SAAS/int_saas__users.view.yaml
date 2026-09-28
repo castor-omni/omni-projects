@@ -1,0 +1,124 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_saas__int_saas__users
+#This description was pulled from dbt.
+description: Data Blobby sales team table
+
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_SAAS
+table_name: INT_SAAS__USERS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier of the Data Blobby Employee
+    primary_key: true
+
+  first_name:
+    sql: '"FIRST_NAME"'
+    #This description was pulled from dbt.
+    description: First Name of the employee
+
+  last_name:
+    sql: '"LAST_NAME"'
+    #This description was pulled from dbt.
+    description: Last name of the employee
+
+  email:
+    sql: '"EMAIL"'
+    #This description was pulled from dbt.
+    description: Employee Data Blobby email address
+
+  role:
+    sql: '"ROLE"'
+    #This description was pulled from dbt.
+    description: Employee role
+
+  region:
+    sql: '"REGION"'
+    #This description was pulled from dbt.
+    description: Region the employee covers
+
+  segment:
+    sql: '"SEGMENT"'
+    #This description was pulled from dbt.
+    description: Account segement the employee covers
+
+  manager_id:
+    sql: '"MANAGER_ID"'
+    format: ID
+
+  se_id:
+    sql: '"SE_ID"'
+    format: ID
+
+  quota_target:
+    sql: '"QUOTA_TARGET"'
+
+  quota_2024:
+    sql: '"QUOTA_2024"'
+
+  quota_2025:
+    sql: '"QUOTA_2025"'
+
+  quota_2026:
+    sql: '"QUOTA_2026"'
+
+  quota_attainment_pct:
+    sql: '"QUOTA_ATTAINMENT_PCT"'
+
+  performance_tier:
+    sql: '"PERFORMANCE_TIER"'
+
+  created_date:
+    sql: '"CREATED_DATE"'
+    #This description was pulled from dbt.
+    description: Date employee started
+
+  ramp_end_date:
+    sql: '"RAMP_END_DATE"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: int_saas__users
+  target_schema: DBT_CESTRADA_PROD
+  description: Data Blobby sales team table
+  config:
+    schema: saas
+    materialized: table
+  code: |-
+    WITH PARAMS AS (
+      SELECT 
+        CURRENT_DATE() AS AS_OF_DATE,
+        -- Dynamic offset to move 2025 data to 2026
+        (YEAR(CURRENT_DATE()) - 2025) AS YEAR_OFFSET
+    )
+
+    SELECT
+      ID
+      , FIRST_NAME
+      , LAST_NAME
+      , EMAIL
+      , ROLE
+      , REGION
+      , SEGMENT
+      , MANAGER_ID
+      , SE_ID
+      , QUOTA_TARGET
+      , QUOTA_2024
+      , QUOTA_2025
+      , QUOTA_2026
+      , QUOTA_ATTAINMENT_PCT
+      , PERFORMANCE_TIER
+      -- Shift the creation date forward to 2026
+      , DATEADD(MONTH, 12, CREATED_DATE) AS CREATED_DATE
+      , DATEADD(MONTH, 12, RAMP_END_DATE) AS RAMP_END_DATE
+    FROM {{ ref('stg_saas__users') }}
+    -- CROSS JOIN PARAMS P
+    -- Only show users who have "been hired" by today in our new timeline
+    -- WHERE DATEADD(MONTH, P.YEAR_OFFSET * 12, CREATED_DATE) <= P.AS_OF_DATE
+  referenced_by: [ user ]

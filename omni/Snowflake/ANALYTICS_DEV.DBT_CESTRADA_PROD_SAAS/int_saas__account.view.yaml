@@ -1,0 +1,181 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_saas__int_saas__account
+#This description was pulled from dbt.
+description: Intermidiate table describing accounts for the data company Blobby Data
+
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_SAAS
+table_name: INT_SAAS__ACCOUNT
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for an account
+    primary_key: true
+
+  name:
+    sql: '"NAME"'
+    #This description was pulled from dbt.
+    description: Account company name
+
+  type:
+    sql: '"TYPE"'
+    #This description was pulled from dbt.
+    description: Identifier is the account is a customer, prospect or partner
+
+  billing_street:
+    sql: '"BILLING_STREET"'
+    #This description was pulled from dbt.
+    description: Account billing street
+
+  billing_state:
+    sql: '"BILLING_STATE"'
+    #This description was pulled from dbt.
+    description: Account billing state
+
+  billing_city:
+    sql: '"BILLING_CITY"'
+    #This description was pulled from dbt.
+    description: Account billing city
+
+  billing_zip:
+    sql: '"BILLING_ZIP"'
+    #This description was pulled from dbt.
+    description: Account billing zip code
+
+  billing_country:
+    sql: '"BILLING_COUNTRY"'
+    #This description was pulled from dbt.
+    description: Account billing country
+
+  region:
+    sql: '"REGION"'
+    #This description was pulled from dbt.
+    description: Region owner of the account (NA, EMEA, APAC)
+
+  industry:
+    sql: '"INDUSTRY"'
+    #This description was pulled from dbt.
+    description: Industry the account operates in
+
+  annual_revenue:
+    sql: '"ANNUAL_REVENUE"'
+    #This description was pulled from dbt.
+    description: The account's annual operating revenue
+
+  number_of_employees:
+    sql: '"NUMBER_OF_EMPLOYEES"'
+    #This description was pulled from dbt.
+    description: The number of employees at an account.  Used for segmentation
+
+  segment:
+    sql: '"SEGMENT"'
+    #This description was pulled from dbt.
+    description: Segment the account belongs to. Enterprise, Commercial or SMB.
+
+  owner_id:
+    sql: '"OWNER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for the account owner
+
+  created_date:
+    sql: '"CREATED_DATE"'
+    #This description was pulled from dbt.
+    description: SFDC account created date
+
+  csm_id:
+    sql: '"CSM_ID"'
+    format: ID
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: int_saas__account
+  target_schema: DBT_CESTRADA_PROD
+  description: Intermidiate table describing accounts for the data company Blobby Data
+  config:
+    schema: saas
+    materialized: table
+  code: |-
+    WITH PARAMS AS (
+      SELECT 
+        CURRENT_DATE() AS AS_OF_DATE,
+        (YEAR(CURRENT_DATE()) - 2025) AS YEAR_OFFSET 
+    ),
+
+    BASE_ACCOUNTS AS (
+      SELECT 
+        *,
+        -- Shift CREATED_DATE forward to 2026
+        DATEADD(MONTH, (SELECT YEAR_OFFSET * 12 FROM PARAMS), CREATED_DATE) AS SHIFTED_CREATED_DATE
+      FROM {{ ref('stg_saas__account') }}
+    ),
+
+    FILTERED_ACCOUNTS AS (
+      SELECT *
+      FROM BASE_ACCOUNTS
+      CROSS JOIN PARAMS P
+      WHERE SHIFTED_CREATED_DATE <= P.AS_OF_DATE
+    ),
+
+    HISTORY_ASOF AS (
+      SELECT *
+      FROM (
+        SELECT
+          AH.ACCOUNT_ID,
+          AH.TYPE,
+          AH.INDUSTRY,
+          AH.ANNUAL_REVENUE,
+          AH.NUMBER_OF_EMPLOYEES,
+          AH.SEGMENT,
+          AH.OWNER_ID,
+          AH.CSM_ID, 
+          ROW_NUMBER() OVER (
+            PARTITION BY AH.ACCOUNT_ID
+            ORDER BY COALESCE(AH.LAST_MODIFIED_DATE, AH.CREATED_DATE) DESC,
+                     AH.CREATED_DATE DESC
+          ) AS RN
+        FROM {{ ref('stg_saas__account_history') }} AH
+        CROSS JOIN PARAMS P
+        -- History snapshot must be "as of today" in the shifted timeline
+        WHERE COALESCE(
+            DATEADD(MONTH, P.YEAR_OFFSET * 12, AH.LAST_MODIFIED_DATE), 
+            DATEADD(MONTH, P.YEAR_OFFSET * 12, AH.CREATED_DATE)
+          ) <= P.AS_OF_DATE
+      )
+      WHERE RN = 1
+    )
+
+    SELECT
+      A.ID,
+      A.NAME,
+      COALESCE(H.TYPE, A.TYPE) AS TYPE,
+      A.BILLING_STREET,
+      A.BILLING_STATE,
+      A.BILLING_CITY,
+      A.BILLING_ZIP,
+      A.BILLING_COUNTRY,
+      A.REGION,
+      COALESCE(H.INDUSTRY, A.INDUSTRY) AS INDUSTRY,
+      CAST(COALESCE(H.ANNUAL_REVENUE, A.ANNUAL_REVENUE) AS BIGINT) AS ANNUAL_REVENUE,
+      CAST(COALESCE(H.NUMBER_OF_EMPLOYEES, A.NUMBER_OF_EMPLOYEES) AS BIGINT) AS NUMBER_OF_EMPLOYEES,
+      COALESCE(H.SEGMENT, A.SEGMENT) AS SEGMENT,
+      COALESCE(H.OWNER_ID, A.OWNER_ID) AS OWNER_ID,
+      A.SHIFTED_CREATED_DATE AS CREATED_DATE,
+      
+      /* BUSINESS RULE: CSMs only assigned to 'Customer' types */
+      CASE 
+        WHEN COALESCE(H.TYPE, A.TYPE) = 'Customer' THEN COALESCE(H.CSM_ID, A.CSM_ID)
+        ELSE NULL 
+      END AS CSM_ID
+
+    FROM FILTERED_ACCOUNTS A
+    LEFT JOIN HISTORY_ASOF H
+      ON H.ACCOUNT_ID = A.ID
+    ORDER BY CREATED_DATE DESC
+  referenced_by: [ account ]

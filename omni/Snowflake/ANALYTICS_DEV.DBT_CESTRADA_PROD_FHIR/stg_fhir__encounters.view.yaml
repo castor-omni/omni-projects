@@ -1,0 +1,72 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_fhir__stg_fhir__encounters
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_FHIR
+table_name: STG_FHIR__ENCOUNTERS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  patient_id:
+    sql: '"PATIENT_ID"'
+    format: ID
+
+  class:
+    sql: '"CLASS"'
+
+  type:
+    sql: '"TYPE"'
+
+  start_ts:
+    sql: '"START_TS"'
+
+  end_ts:
+    sql: '"END_TS"'
+
+  service_provider_id:
+    sql: '"SERVICE_PROVIDER_ID"'
+    format: ID
+
+  reason_code:
+    sql: '"REASON_CODE"'
+
+  reason:
+    sql: '"REASON"'
+
+  resource_raw:
+    sql: '"RESOURCE_RAW"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: stg_fhir__encounters
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: fhir
+    materialized: view
+  code: |-
+    with raw as (
+        select v.resource_raw
+        from {{ source("fhir", "raw_fhir") }},
+        lateral flatten(input => variant_col:entry) as f,
+        lateral (select f.value:resource::variant as resource_raw) as v
+        where lower(v.resource_raw:"resourceType"::varchar) = 'encounter'
+    )
+    select
+        resource_raw:"id"::varchar as id,
+        replace(resource_raw:"subject"."reference"::varchar,'urn:uuid:', '') as patient_id,
+        resource_raw:"class"."code"::varchar as class,
+        resource_raw:"type"[0]."text"::varchar as type,
+        resource_raw:"period"."start"::timestamp as start_ts,
+        resource_raw:"period"."end"::timestamp as end_ts,
+        replace(resource_raw:"serviceProvider"."reference"::varchar,'urn:uuid:', '') as service_provider_id,
+        resource_raw:"reason"."coding"[0]:"code"::varchar as reason_code,
+        resource_raw:"reason"."coding"[0]:"display"::varchar as reason,
+        resource_raw
+    from raw
+  referenced_by: [ encounters, int_fhir__encounters ]

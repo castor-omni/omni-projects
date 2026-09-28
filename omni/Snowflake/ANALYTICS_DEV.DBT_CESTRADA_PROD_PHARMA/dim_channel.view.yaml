@@ -1,0 +1,30 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_pharma__dim_channel
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_PHARMA
+table_name: DIM_CHANNEL
+
+dimensions:
+  channelid:
+    sql: '"CHANNELID"'
+
+  channelname:
+    sql: '"CHANNELNAME"'
+
+  description:
+    sql: '"DESCRIPTION"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: dim_channel
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: pharma
+    materialized: table
+  code: |-
+    select
+      {{ dbt_utils.star(ref('stg_pharma__dim_channel')) }}
+    from {{ ref('stg_pharma__dim_channel') }}

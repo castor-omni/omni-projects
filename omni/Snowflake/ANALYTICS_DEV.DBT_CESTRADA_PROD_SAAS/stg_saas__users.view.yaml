@@ -1,0 +1,77 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_saas__stg_saas__users
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_SAAS
+table_name: STG_SAAS__USERS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  first_name:
+    sql: '"FIRST_NAME"'
+
+  last_name:
+    sql: '"LAST_NAME"'
+
+  email:
+    sql: '"EMAIL"'
+
+  role:
+    sql: '"ROLE"'
+
+  region:
+    sql: '"REGION"'
+
+  segment:
+    sql: '"SEGMENT"'
+
+  manager_id:
+    sql: '"MANAGER_ID"'
+    format: ID
+
+  se_id:
+    sql: '"SE_ID"'
+    format: ID
+
+  created_date:
+    sql: '"CREATED_DATE"'
+
+  quota_target:
+    sql: '"QUOTA_TARGET"'
+
+  quota_2024:
+    sql: '"QUOTA_2024"'
+
+  quota_2025:
+    sql: '"QUOTA_2025"'
+
+  quota_2026:
+    sql: '"QUOTA_2026"'
+
+  quota_attainment_pct:
+    sql: '"QUOTA_ATTAINMENT_PCT"'
+
+  performance_tier:
+    sql: '"PERFORMANCE_TIER"'
+
+  ramp_end_date:
+    sql: '"RAMP_END_DATE"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: stg_saas__users
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: saas
+    materialized: view
+  code: |-
+    select
+      {{ dbt_utils.star(source('saas', 'users')) }}
+    from {{ source('saas', 'users') }}
+  referenced_by: [ int_saas__users ]

@@ -1,0 +1,67 @@
+# Reference this view as omni_dbt_ecomm__stg_ecomm__users
+schema_label: ""
+
+schema: omni_dbt_ecomm
+table_name: STG_ECOMM__USERS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  first_name:
+    sql: '"FIRST_NAME"'
+
+  last_name:
+    sql: '"LAST_NAME"'
+
+  email:
+    sql: '"EMAIL"'
+
+  age:
+    sql: '"AGE"'
+
+  city:
+    sql: '"CITY"'
+
+  state:
+    sql: '"STATE"'
+
+  country:
+    sql: '"COUNTRY"'
+
+  zip:
+    sql: '"ZIP"'
+
+  latitude:
+    sql: '"LATITUDE"'
+
+  longitude:
+    sql: '"LONGITUDE"'
+
+  gender:
+    sql: '"GENDER"'
+
+  created_at:
+    sql: '"CREATED_AT"'
+
+  traffic_source:
+    sql: '"TRAFFIC_SOURCE"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: stg_ecomm__users
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: ecomm
+    materialized: view
+  code: |-
+    select
+      {{ dbt_utils.star(source('ecomm', 'users')) }}
+    from {{ source('ecomm', 'users') }}
+  referenced_by: [ int_ecomm__users ]

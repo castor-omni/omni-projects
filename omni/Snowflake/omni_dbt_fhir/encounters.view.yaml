@@ -1,0 +1,80 @@
+# Reference this view as omni_dbt_fhir__encounters
+schema_label: ""
+#This description was pulled from dbt.
+description: Contains information about patient encounters or visits
+
+schema: omni_dbt_fhir
+table_name: ENCOUNTERS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for the encounter
+    primary_key: true
+
+  patient_id:
+    sql: '"PATIENT_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for the patient
+
+  class:
+    sql: '"CLASS"'
+    #This description was pulled from dbt.
+    description: Class of the encounter (e.g., inpatient, outpatient, emergency)
+
+  type:
+    sql: '"TYPE"'
+    #This description was pulled from dbt.
+    description: Type or category of the encounter
+
+  start_ts:
+    sql: '"START_TS"'
+    #This description was pulled from dbt.
+    description: Timestamp when the encounter started
+
+  end_ts:
+    sql: '"END_TS"'
+    #This description was pulled from dbt.
+    description: Timestamp when the encounter ended
+
+  service_provider_id:
+    sql: '"SERVICE_PROVIDER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Identifier for the healthcare provider or organization providing
+      the service
+
+  reason_code:
+    sql: '"REASON_CODE"'
+    #This description was pulled from dbt.
+    description: Code representing the reason for the encounter
+
+  reason:
+    sql: '"REASON"'
+    #This description was pulled from dbt.
+    description: Reason for the encounter
+
+  resource_raw:
+    sql: '"RESOURCE_RAW"'
+    #This description was pulled from dbt.
+    description: Raw FHIR resource data for the encounter
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: encounters
+  target_schema: DBT_CESTRADA_PROD
+  description: Contains information about patient encounters or visits
+  config:
+    schema: fhir
+    materialized: table
+  code: |-
+    select
+      {{ dbt_utils.star(ref('stg_fhir__encounters')) }}
+    from {{ ref('int_fhir__encounters') }}

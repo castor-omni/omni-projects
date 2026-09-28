@@ -1,0 +1,110 @@
+# Reference this view as omni_dbt_pharma__stg_pharma__fact_claim
+schema_label: ""
+
+schema: omni_dbt_pharma
+table_name: STG_PHARMA__FACT_CLAIM
+
+dimensions:
+  claimid:
+    sql: '"CLAIMID"'
+
+  physicianid:
+    sql: '"PHYSICIANID"'
+
+  productid:
+    sql: '"PRODUCTID"'
+
+  marketid:
+    sql: '"MARKETID"'
+
+  patientdeidentifiedid:
+    sql: '"PATIENTDEIDENTIFIEDID"'
+
+  claimdate:
+    sql: '"CLAIMDATE"'
+
+  claimtype:
+    sql: '"CLAIMTYPE"'
+
+  payer:
+    sql: '"PAYER"'
+
+  payertype:
+    sql: '"PAYERTYPE"'
+
+  payerregion:
+    sql: '"PAYERREGION"'
+
+  claimstatus:
+    sql: '"CLAIMSTATUS"'
+
+  dayssupply:
+    sql: '"DAYSSUPPLY"'
+
+  quantity:
+    sql: '"QUANTITY"'
+
+  amountbilled:
+    sql: '"AMOUNTBILLED"'
+
+  amountpaid:
+    sql: '"AMOUNTPAID"'
+
+  formularytier:
+    sql: '"FORMULARYTIER"'
+
+  priorauthrequired:
+    sql: '"PRIORAUTHREQUIRED"'
+
+  steptherapyrequired:
+    sql: '"STEPTHERAPYREQUIRED"'
+
+  quantitylimit:
+    sql: '"QUANTITYLIMIT"'
+
+  rebateeligible:
+    sql: '"REBATEELIGIBLE"'
+
+  copayamount:
+    sql: '"COPAYAMOUNT"'
+
+  deductibleamount:
+    sql: '"DEDUCTIBLEAMOUNT"'
+
+  patientoutofpocket:
+    sql: '"PATIENTOUTOFPOCKET"'
+
+  accessbarrierscore:
+    sql: '"ACCESSBARRIERSCORE"'
+
+  risktolerancescore:
+    sql: '"RISKTOLERANCESCORE"'
+
+  competitorclaimshare:
+    sql: '"COMPETITORCLAIMSHARE"'
+
+  coveragebreadth:
+    sql: '"COVERAGEBREADTH"'
+
+  reimbursementlagdays:
+    sql: '"REIMBURSEMENTLAGDAYS"'
+
+  sourcesystem:
+    sql: '"SOURCESYSTEM"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: stg_pharma__fact_claim
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: pharma
+    materialized: view
+  code: |-
+    select
+      {{ dbt_utils.star(source('pharma', 'fact_claim')) }}
+    from {{ source('pharma', 'fact_claim') }}
+  referenced_by: [ int_pharma__fact_claim ]

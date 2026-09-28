@@ -1,0 +1,72 @@
+# Reference this view as omni_dbt_pharma__int_pharma__dim_sales_rep
+schema_label: ""
+
+schema: omni_dbt_pharma
+table_name: INT_PHARMA__DIM_SALES_REP
+
+dimensions:
+  salesrepid:
+    sql: '"SALESREPID"'
+
+  salesrepname:
+    sql: '"SALESREPNAME"'
+
+  role:
+    sql: '"ROLE"'
+
+  email:
+    sql: '"EMAIL"'
+
+  phone:
+    sql: '"PHONE"'
+
+  startdate:
+    sql: '"STARTDATE"'
+
+  enddate:
+    sql: '"ENDDATE"'
+
+  geographyid:
+    sql: '"GEOGRAPHYID"'
+
+  managerid:
+    sql: '"MANAGERID"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: int_pharma__dim_sales_rep
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: pharma
+    materialized: table
+  code: |-
+    with base as (
+      select * from {{ ref('stg_pharma__dim_sales_rep') }}
+    ),
+
+    anchor_sd as (
+      select max(STARTDATE) as anchor_date from base
+    ),
+
+    anchor_ed as (
+      select max(ENDDATE) as anchor_date from base
+    )
+
+    select
+      t.SALESREPID as SALESREPID,
+      t.SALESREPNAME as SALESREPNAME,
+      t.ROLE as ROLE,
+      t.EMAIL as EMAIL,
+      t.PHONE as PHONE,
+      {{ pharma_shift_date('t.STARTDATE', 'anchor_sd.anchor_date') }} as STARTDATE,
+      {{ pharma_shift_date('t.ENDDATE', 'anchor_ed.anchor_date') }} as ENDDATE,
+      t.GEOGRAPHYID as GEOGRAPHYID,
+      t.MANAGERID as MANAGERID
+    from base t
+    cross join anchor_sd
+    cross join anchor_ed
+  referenced_by: [ dim_sales_rep ]

@@ -1,0 +1,44 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod__user_js
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD
+table_name: USER_JS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  first_name:
+    sql: '"FIRST_NAME"'
+
+  last_name:
+    sql: '"LAST_NAME"'
+
+  email:
+    sql: '"EMAIL"'
+
+  role_id:
+    sql: '"ROLE_ID"'
+    format: ID
+
+  created_date:
+    sql: '"CREATED_DATE"'
+
+  region:
+    sql: '"REGION"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: user_js
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    materialized: view
+  code: |-
+    select
+      {{ dbt_utils.star(source('demo', 'user_js')) }}
+    from {{ source('demo', 'user_js') }}

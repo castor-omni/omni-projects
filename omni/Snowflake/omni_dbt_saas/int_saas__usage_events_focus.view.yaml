@@ -1,0 +1,208 @@
+# Reference this view as omni_dbt_saas__int_saas__usage_events_focus
+schema_label: ""
+#This description was pulled from dbt.
+description: Intermediate table for application event data filtered for a few customers
+
+schema: omni_dbt_saas
+table_name: INT_SAAS__USAGE_EVENTS_FOCUS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for an event
+    primary_key: true
+
+  account_id:
+    sql: '"ACCOUNT_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Account ID associated with the unique event
+
+  user_id:
+    sql: '"USER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: User ID who performed unique event
+
+  event_type:
+    sql: '"EVENT_TYPE"'
+    #This description was pulled from dbt.
+    description: Type of event performed
+
+  event_name:
+    sql: '"EVENT_NAME"'
+    #This description was pulled from dbt.
+    description: Name of the unique event
+
+  event_date:
+    sql: '"EVENT_DATE"'
+
+  event_timestamp:
+    sql: '"EVENT_TIMESTAMP"'
+    #This description was pulled from dbt.
+    description: Timestamp for when unique event occurred
+
+  session_id:
+    sql: '"SESSION_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique session each event occurred in
+
+  sequence_number:
+    sql: '"SEQUENCE_NUMBER"'
+    #This description was pulled from dbt.
+    description: Sequence number of a given event within a session
+
+  product_id:
+    sql: '"PRODUCT_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier of the product interacted with for an event
+
+  page_url:
+    sql: '"PAGE_URL"'
+    #This description was pulled from dbt.
+    description: url of given event
+
+  user_agent:
+    sql: '"USER_AGENT"'
+
+  ip_address:
+    sql: '"IP_ADDRESS"'
+    #This description was pulled from dbt.
+    description: ip address where event occurred
+
+  country:
+    sql: '"COUNTRY"'
+    #This description was pulled from dbt.
+    description: Country where event occurred
+
+  region:
+    sql: '"REGION"'
+    #This description was pulled from dbt.
+    description: Account region where event occurred
+
+  city:
+    sql: '"CITY"'
+    #This description was pulled from dbt.
+    description: City where event occurred
+
+  device_type:
+    sql: '"DEVICE_TYPE"'
+    #This description was pulled from dbt.
+    description: Type of device user used for event
+
+  browser:
+    sql: '"BROWSER"'
+    #This description was pulled from dbt.
+    description: Type of browser used for event
+
+  os:
+    sql: '"OS"'
+    #This description was pulled from dbt.
+    description: Operating system used for event
+
+  screen_resolution:
+    sql: '"SCREEN_RESOLUTION"'
+    #This description was pulled from dbt.
+    description: Screen resolution setting for browser
+
+  referrer:
+    sql: '"REFERRER"'
+    #This description was pulled from dbt.
+    description: The referred page
+
+  utm_source:
+    sql: '"UTM_SOURCE"'
+
+  utm_medium:
+    sql: '"UTM_MEDIUM"'
+
+  utm_campaign:
+    sql: '"UTM_CAMPAIGN"'
+
+  account_segment:
+    sql: '"ACCOUNT_SEGMENT"'
+    #This description was pulled from dbt.
+    description: Account segement the user belongs to for event
+
+  product_tier:
+    sql: '"PRODUCT_TIER"'
+    #This description was pulled from dbt.
+    description: Product tier for the account
+
+  user_count:
+    sql: '"USER_COUNT"'
+
+  user_role:
+    sql: '"USER_ROLE"'
+    #This description was pulled from dbt.
+    description: Role of the user performing the event
+
+  feature_name:
+    sql: '"FEATURE_NAME"'
+    #This description was pulled from dbt.
+    description: Feature used for the unique event
+
+  event_properties:
+    sql: '"EVENT_PROPERTIES"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: int_saas__usage_events_focus
+  target_schema: DBT_CESTRADA_PROD
+  description: Intermediate table for application event data filtered for a few customers
+  config:
+    schema: saas
+    materialized: table
+  code: |-
+    WITH PARAMS AS (
+      SELECT 
+        CURRENT_TIMESTAMP() AS AS_OF_TS,
+        (YEAR(CURRENT_DATE()) - 2025) AS YEAR_OFFSET
+    )
+
+    SELECT
+        "id" as ID
+        , "account_id" as ACCOUNT_ID
+        , "user_id" as USER_ID
+        , "event_type" as EVENT_TYPE
+        , "event_name" as EVENT_NAME
+        -- Shifting the date and timestamp forward to 2026
+        , DATEADD(MONTH, P.YEAR_OFFSET * 12, "event_date") AS EVENT_DATE
+        , DATEADD(MONTH, P.YEAR_OFFSET * 12, "event_timestamp") AS EVENT_TIMESTAMP
+        , "session_id" as SESSION_ID
+        , "sequence_number" as SEQUENCE_NUMBER
+        , "product_id" as PRODUCT_ID
+        , "page_url" as PAGE_URL
+        , "user_agent" as USER_AGENT
+        , "ip_address" as IP_ADDRESS
+        , "country" as COUNTRY
+        , "region" as REGION
+        , "city" as CITY
+        , "device_type" as DEVICE_TYPE
+        , "browser" as BROWSER
+        , "os" as OS
+        , "screen_resolution" as SCREEN_RESOLUTION
+        , "referrer" as REFERRER
+        , "utm_source" as UTM_SOURCE
+        , "utm_medium" as UTM_MEDIUM
+        , "utm_campaign" as UTM_CAMPAIGN
+        , "account_segment" as ACCOUNT_SEGMENT
+        , "product_tier" as PRODUCT_TIER
+        , "user_count" as USER_COUNT
+        , "user_role" as USER_ROLE
+        , "feature_name" as FEATURE_NAME
+        , "event_properties" as EVENT_PROPERTIES
+    FROM {{ ref('stg_saas__usage_events_focus') }}
+    CROSS JOIN PARAMS P
+    -- Filter so events "appear" in real-time as the clock ticks today in 2026
+    WHERE DATEADD(MONTH, P.YEAR_OFFSET * 12, "event_timestamp") < P.AS_OF_TS
+    ORDER BY EVENT_DATE DESC
+  referenced_by: [ usage_events_focus ]

@@ -1,0 +1,60 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_pharma__fact_prescription
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_PHARMA
+table_name: FACT_PRESCRIPTION
+
+dimensions:
+  prescriptionid:
+    sql: '"PRESCRIPTIONID"'
+
+  physicianid:
+    sql: '"PHYSICIANID"'
+
+  productid:
+    sql: '"PRODUCTID"'
+
+  marketid:
+    sql: '"MARKETID"'
+
+  channelid:
+    sql: '"CHANNELID"'
+
+  geographyid:
+    sql: '"GEOGRAPHYID"'
+
+  date:
+    sql: '"DATE"'
+
+  nrx:
+    sql: '"NRX"'
+
+  trx:
+    sql: '"TRX"'
+
+  nbrx:
+    sql: '"NBRX"'
+
+  repeats:
+    sql: '"REPEATS"'
+
+  payertype:
+    sql: '"PAYERTYPE"'
+
+  sourcesystem:
+    sql: '"SOURCESYSTEM"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: fact_prescription
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: pharma
+    materialized: table
+  code: |-
+    select
+      {{ dbt_utils.star(ref('int_pharma__fact_prescription')) }}
+    from {{ ref('int_pharma__fact_prescription') }}

@@ -1,0 +1,56 @@
+# Reference this view as omni_dbt_fhir__int_fhir__immunizations
+schema_label: ""
+
+schema: omni_dbt_fhir
+table_name: INT_FHIR__IMMUNIZATIONS
+
+dimensions:
+  date_ts:
+    sql: '"DATE_TS"'
+
+  patient_id:
+    sql: '"PATIENT_ID"'
+    format: ID
+
+  encounter_id:
+    sql: '"ENCOUNTER_ID"'
+    format: ID
+
+  status:
+    sql: '"STATUS"'
+
+  code:
+    sql: '"CODE"'
+
+  name:
+    sql: '"NAME"'
+
+  primary_source:
+    sql: '"PRIMARY_SOURCE"'
+
+  not_given:
+    sql: '"NOT_GIVEN"'
+
+  resource_raw:
+    sql: '"RESOURCE_RAW"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: int_fhir__immunizations
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: fhir
+    materialized: table
+  code: |-
+    select
+        timestampadd(year, extract(year, current_date()) - 2016, date_ts) as date_ts,
+        {{ dbt_utils.star(ref("stg_fhir__immunizations"), except=["date_ts"]) }}
+    from {{ ref("stg_fhir__immunizations") }}
+    where 1=1
+        and timestampadd(year, extract(year, current_date()) - 2016, date_ts)
+        < current_date()
+  referenced_by: [ immunizations ]

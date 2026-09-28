@@ -69,3 +69,16 @@ dimensions:
 measures:
   count:
     aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: stg_ecomm__events
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: ecomm
+    materialized: view
+  code: |-
+    select
+      {{ dbt_utils.star(source('ecomm', 'events')) }}
+    from {{ source('ecomm', 'events') }}
+  referenced_by: [ int_ecomm__events ]

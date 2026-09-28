@@ -1,0 +1,43 @@
+# Reference this view as omni_dbt_pharma__dim_market
+schema_label: ""
+
+schema: omni_dbt_pharma
+table_name: DIM_MARKET
+
+dimensions:
+  marketid:
+    sql: '"MARKETID"'
+
+  marketname:
+    sql: '"MARKETNAME"'
+
+  therapeuticarea:
+    sql: '"THERAPEUTICAREA"'
+
+  primarycompetitors:
+    sql: '"PRIMARYCOMPETITORS"'
+
+  launchyear:
+    sql: '"LAUNCHYEAR"'
+
+  marketsizeusd:
+    sql: '"MARKETSIZEUSD"'
+
+  lifecyclestage:
+    sql: '"LIFECYCLESTAGE"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: dim_market
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: pharma
+    materialized: table
+  code: |-
+    select
+      {{ dbt_utils.star(ref('stg_pharma__dim_market')) }}
+    from {{ ref('stg_pharma__dim_market') }}

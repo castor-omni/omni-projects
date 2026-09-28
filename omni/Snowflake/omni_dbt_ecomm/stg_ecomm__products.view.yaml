@@ -1,0 +1,53 @@
+# Reference this view as omni_dbt_ecomm__stg_ecomm__products
+schema_label: ""
+
+schema: omni_dbt_ecomm
+table_name: STG_ECOMM__PRODUCTS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  cost:
+    sql: '"COST"'
+
+  category:
+    sql: '"CATEGORY"'
+
+  name:
+    sql: '"NAME"'
+
+  brand:
+    sql: '"BRAND"'
+
+  retail_price:
+    sql: '"RETAIL_PRICE"'
+
+  department:
+    sql: '"DEPARTMENT"'
+
+  sku:
+    sql: '"SKU"'
+
+  distribution_center_id:
+    sql: '"DISTRIBUTION_CENTER_ID"'
+    format: ID
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: stg_ecomm__products
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: ecomm
+    materialized: view
+  code: |-
+    select
+      {{ dbt_utils.star(source('ecomm', 'products')) }}
+    from {{ source('ecomm', 'products') }}
+  referenced_by: [ products ]

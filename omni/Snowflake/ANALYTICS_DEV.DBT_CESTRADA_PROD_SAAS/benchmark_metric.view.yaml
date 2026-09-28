@@ -1,0 +1,89 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_saas__benchmark_metric
+#This description was pulled from dbt.
+description: |
+  Metric catalog. One row per metric. Lifts metric metadata (display name, category, denominator semantics, directionality, format) out of column names so the fact tables can stay long and narrow. Referenced by all three fact tables via metric_id.
+
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_SAAS
+table_name: BENCHMARK_METRIC
+
+dimensions:
+  metric_id:
+    sql: '"METRIC_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Canonical metric key. Matches metric_id in all fact tables.
+
+  name:
+    sql: '"NAME"'
+    #This description was pulled from dbt.
+    description: Human-readable metric name for display in the BI layer.
+
+  category:
+    sql: '"CATEGORY"'
+    #This description was pulled from dbt.
+    description: "Coarse grouping of the metric: a count of users, a count of
+      events, or a per-user rate."
+    all_values: [ users, events, rate ]
+
+  denominator_type:
+    sql: '"DENOMINATOR_TYPE"'
+    #This description was pulled from dbt.
+    description: |
+      For rate metrics, which user population the metric is divided by (e.g. total_users, admin_users, creator_users, viewer_users). NULL for raw count metrics that have no denominator.
+
+  higher_is_better:
+    sql: '"HIGHER_IS_BETTER"'
+    #This description was pulled from dbt.
+    description: |
+      Whether a larger value is the favorable direction. Drives conditional coloring in the dashboard. Review per metric — not all rates are unambiguously "higher is better".
+
+  format:
+    sql: '"FORMAT"'
+    #This description was pulled from dbt.
+    description: Display format hint for the BI layer (e.g. integer, decimal_2).
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: benchmark_metric
+  target_schema: DBT_CESTRADA_PROD
+  description: |
+    Metric catalog. One row per metric. Lifts metric metadata (display name, category, denominator semantics, directionality, format) out of column names so the fact tables can stay long and narrow. Referenced by all three fact tables via metric_id.
+  config:
+    schema: saas
+    materialized: table
+  code: |-
+    -- models/02-mart/saas/benchmark_metric.sql
+
+    {{ config(materialized='table') }}
+
+    select
+        column1::varchar  as metric_id,
+        column2::varchar  as name,
+        column3::varchar  as category,
+        column4::varchar  as denominator_type,
+        column5::boolean  as higher_is_better,
+        column6::varchar  as format
+    from values
+        ('total_users',                       'Total Active Users',        'users',   null,            true, 'integer'),
+        ('total_admin_users',                 'Admin Users',               'users',   null,            true, 'integer'),
+        ('total_creator_users',               'Creator Users',             'users',   null,            true, 'integer'),
+        ('total_viewer_users',                'Viewer Users',              'users',   null,            true, 'integer'),
+        ('total_events',                      'Total Events',              'events',  null,            true, 'integer'),
+        ('total_agentic_events',              'AI/Agentic Events',         'events',  null,            true, 'integer'),
+        ('total_api_events',                  'API Events',                'events',  null,            true, 'integer'),
+        ('total_ui_events',                   'UI Feature Events',         'events',  null,            true, 'integer'),
+        ('total_admin_other_events',          'Admin/Other Events',        'events',  null,            true, 'integer'),
+        ('events_per_user',                   'Events / User',             'rate',    'total_users',   true, 'decimal_2'),
+        ('agentic_events_per_user',           'AI Events / User',          'rate',    'total_users',   true, 'decimal_2'),
+        ('api_events_per_user',               'API Events / User',         'rate',    'total_users',   true, 'decimal_2'),
+        ('ui_events_per_user',                'UI Events / User',          'rate',    'total_users',   true, 'decimal_2'),
+        ('admin_other_events_per_user',       'Admin Events / User',       'rate',    'total_users',   true, 'decimal_2'),
+        ('admin_other_events_per_admin_user', 'Admin Events / Admin User', 'rate',    'total_admin_users',   true, 'decimal_2'),
+        ('agentic_events_per_creator_user',   'AI Events / Creator User',  'rate',    'total_creator_users', true, 'decimal_2'),
+        ('ui_events_per_creator_user',        'UI Events / Creator User',  'rate',    'total_creator_users', true, 'decimal_2'),
+        ('ui_events_per_viewer_user',         'UI Events / Viewer User',   'rate',    'total_viewer_users',  true, 'decimal_2')

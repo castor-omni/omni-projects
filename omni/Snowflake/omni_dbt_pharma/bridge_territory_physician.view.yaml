@@ -1,0 +1,37 @@
+# Reference this view as omni_dbt_pharma__bridge_territory_physician
+schema_label: ""
+
+schema: omni_dbt_pharma
+table_name: BRIDGE_TERRITORY_PHYSICIAN
+
+dimensions:
+  bridgeid:
+    sql: '"BRIDGEID"'
+
+  territoryid:
+    sql: '"TERRITORYID"'
+
+  physicianid:
+    sql: '"PHYSICIANID"'
+
+  assignmentstartdate:
+    sql: '"ASSIGNMENTSTARTDATE"'
+
+  assignmentenddate:
+    sql: '"ASSIGNMENTENDDATE"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: bridge_territory_physician
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: pharma
+    materialized: table
+  code: |-
+    select
+      {{ dbt_utils.star(ref('int_pharma__bridge_territory_physician')) }}
+    from {{ ref('int_pharma__bridge_territory_physician') }}

@@ -1,0 +1,46 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_finance__stg_asset_management__dim_accounts
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_FINANCE
+table_name: STG_ASSET_MANAGEMENT__DIM_ACCOUNTS
+
+dimensions:
+  account_id:
+    sql: '"ACCOUNT_ID"'
+    format: ID
+
+  account_type:
+    sql: '"ACCOUNT_TYPE"'
+
+  account_status:
+    sql: '"ACCOUNT_STATUS"'
+
+  balance:
+    sql: '"BALANCE"'
+
+  currency:
+    sql: '"CURRENCY"'
+
+  open_date:
+    sql: '"OPEN_DATE"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: stg_asset_management__dim_accounts
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: finance
+    materialized: view
+  code: |-
+    -- {{ log("Current role: " ~ target.role, info=True) }}
+    -- {{ log("Current user: " ~ target.user, info=True) }}
+    -- {{ log("Current database: " ~ target.database, info=True) }}
+    -- {{ log("Current warehouse: " ~ target.warehouse, info=True) }}
+
+    select
+      {{ dbt_utils.star(source('asset_management', 'dim_accounts')) }}
+    from {{ source('asset_management', 'dim_accounts') }}
+  referenced_by: [ accounts ]

@@ -1,0 +1,41 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_finance__stg_asset_management__dim_assets
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_FINANCE
+table_name: STG_ASSET_MANAGEMENT__DIM_ASSETS
+
+dimensions:
+  asset_id:
+    sql: '"ASSET_ID"'
+    format: ID
+
+  asset_name:
+    sql: '"ASSET_NAME"'
+
+  asset_type:
+    sql: '"ASSET_TYPE"'
+
+  asset_class:
+    sql: '"ASSET_CLASS"'
+
+  sector:
+    sql: '"SECTOR"'
+
+  current_price:
+    sql: '"CURRENT_PRICE"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: stg_asset_management__dim_assets
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: finance
+    materialized: view
+  code: |-
+    select
+      {{ dbt_utils.star( source('asset_management', 'dim_assets') ) }}
+    from {{ source('asset_management', 'dim_assets') }}
+  referenced_by: [ assets ]

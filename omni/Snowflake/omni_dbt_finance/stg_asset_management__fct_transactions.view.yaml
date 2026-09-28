@@ -1,0 +1,61 @@
+# Reference this view as omni_dbt_finance__stg_asset_management__fct_transactions
+schema_label: ""
+
+schema: omni_dbt_finance
+table_name: STG_ASSET_MANAGEMENT__FCT_TRANSACTIONS
+
+dimensions:
+  transaction_id:
+    sql: '"TRANSACTION_ID"'
+    format: ID
+
+  client_id:
+    sql: '"CLIENT_ID"'
+    format: ID
+
+  portfolio_id:
+    sql: '"PORTFOLIO_ID"'
+    format: ID
+
+  asset_id:
+    sql: '"ASSET_ID"'
+    format: ID
+
+  account_id:
+    sql: '"ACCOUNT_ID"'
+    format: ID
+
+  transaction_type:
+    sql: '"TRANSACTION_TYPE"'
+
+  quantity:
+    sql: '"QUANTITY"'
+
+  price_per_unit:
+    sql: '"PRICE_PER_UNIT"'
+
+  total_amount:
+    sql: '"TOTAL_AMOUNT"'
+
+  fees:
+    sql: '"FEES"'
+
+  created_at:
+    sql: '"CREATED_AT"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: stg_asset_management__fct_transactions
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: finance
+    materialized: view
+  code: |-
+    select
+      {{ dbt_utils.star( source('asset_management', 'fct_transactions') ) }}
+    from {{ source('asset_management', 'fct_transactions') }}
+  referenced_by: [ transactions ]

@@ -1,0 +1,28 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod__product_images_staging
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD
+table_name: PRODUCT_IMAGES_STAGING
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  image:
+    sql: '"IMAGE"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: product_images_staging
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    materialized: view
+  code: |-
+    select
+      {{ dbt_utils.star(source('demo', 'product_images_staging')) }}
+    from {{ source('demo', 'product_images_staging') }}

@@ -1,0 +1,60 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_finance__portfolios
+#This description was pulled from dbt.
+description: Investment portfolios that group assets according to specific
+  investment strategies and objectives. Each portfolio has defined risk and
+  return targets.
+
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_FINANCE
+table_name: PORTFOLIOS
+
+dimensions:
+  portfolio_id:
+    sql: '"PORTFOLIO_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for each investment portfolio
+
+  portfolio_name:
+    sql: '"PORTFOLIO_NAME"'
+    #This description was pulled from dbt.
+    description: Descriptive name of the portfolio
+
+  portfolio_type:
+    sql: '"PORTFOLIO_TYPE"'
+    #This description was pulled from dbt.
+    description: Portfolio strategy category
+
+  target_return:
+    sql: '"TARGET_RETURN"'
+    #This description was pulled from dbt.
+    description: Expected annual return percentage for the portfolio
+
+  risk_level:
+    sql: '"RISK_LEVEL"'
+    #This description was pulled from dbt.
+    description: Portfolio risk classification
+
+  inception_date:
+    sql: '"INCEPTION_DATE"'
+    #This description was pulled from dbt.
+    description: Date and time when the portfolio strategy was created or launched
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: portfolios
+  target_schema: DBT_CESTRADA_PROD
+  description: Investment portfolios that group assets according to specific
+    investment strategies and objectives. Each portfolio has defined risk and
+    return targets.
+  config:
+    schema: finance
+    materialized: table
+  code: |-
+    select
+      {{ dbt_utils.star(ref('stg_asset_management__dim_portfolios')) }}
+    from {{ ref('stg_asset_management__dim_portfolios') }}

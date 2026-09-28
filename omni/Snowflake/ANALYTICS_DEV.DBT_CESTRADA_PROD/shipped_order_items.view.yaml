@@ -1,0 +1,138 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod__shipped_order_items
+#This description was pulled from dbt.
+description: Dimension table containing information about customer orders
+
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD
+table_name: SHIPPED_ORDER_ITEMS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for each order line item
+    primary_key: true
+
+  order_id:
+    sql: '"ORDER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Identifier for the order
+
+  user_id:
+    sql: '"USER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Identifier of the user who placed the order
+
+  inventory_item_id:
+    sql: '"INVENTORY_ITEM_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Identifier of the inventory item in the order
+
+  sale_price:
+    sql: '"SALE_PRICE"'
+    #This description was pulled from dbt.
+    description: Price at which the item was sold
+
+  status:
+    sql: '"STATUS"'
+    #This description was pulled from dbt.
+    description: Current status of the order
+
+  created_at:
+    sql: '"CREATED_AT"'
+    #This description was pulled from dbt.
+    description: Timestamp when the order was created
+
+  returned_at:
+    sql: '"RETURNED_AT"'
+    #This description was pulled from dbt.
+    description: Timestamp when the order was returned (if applicable)
+
+  shipped_at:
+    sql: '"SHIPPED_AT"'
+    #This description was pulled from dbt.
+    description: Timestamp when the order was shipped
+
+  delivered_at:
+    sql: '"DELIVERED_AT"'
+    #This description was pulled from dbt.
+    description: Timestamp when the order was delivered
+
+  is_returned:
+    sql: '"IS_RETURNED"'
+    #This description was pulled from dbt.
+    description: Boolean indicating if the order was returned
+
+  is_delivered:
+    sql: '"IS_DELIVERED"'
+    #This description was pulled from dbt.
+    description: Boolean indicating if the order was delivered
+
+  is_shipped:
+    sql: '"IS_SHIPPED"'
+    #This description was pulled from dbt.
+    description: Boolean indicating if the order was shipped
+
+  margin:
+    sql: '"MARGIN"'
+    #This description was pulled from dbt.
+    description: Profit margin for the order
+
+  months_since_signup:
+    sql: '"MONTHS_SINCE_SIGNUP"'
+    #This description was pulled from dbt.
+    description: Number of months since the user signed up
+
+  time_to_ship:
+    sql: '"TIME_TO_SHIP"'
+    #This description was pulled from dbt.
+    description: Time taken to ship the order (hours)
+
+  upper_case_status:
+    sql: '"UPPER_CASE_STATUS"'
+    #This description was pulled from dbt.
+    description: Status of the order in uppercase
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: shipped_order_items
+  target_schema: DBT_CESTRADA_PROD
+  description: Dimension table containing information about customer orders
+  config:
+    materialized: table
+  code: |-
+    with order_items as (
+        select
+            order_items.id,
+            order_items.order_id,
+            order_items.user_id,
+            order_items.inventory_item_id,
+            order_items.sale_price,
+            order_items.status,
+            order_items.created_at,
+            order_items.returned_at,
+            order_items.shipped_at,
+            order_items.delivered_at as delivered_at,
+            order_items.returned_at is not null as is_returned,
+            order_items.delivered_at is not null as is_delivered,
+            order_items.shipped_at is not null as is_shipped,
+            order_items.sale_price - inventory_items.cost as margin,
+            datediff(month, users.created_at, order_items.created_at) as months_since_signup,
+            datediff('days', order_items.created_at, order_items.shipped_at) as time_to_ship,
+            upper(order_items.status) as upper_case_status
+        from {{ ref("int_ecomm__order_items") }} as order_items
+        left join
+            {{ ref("int_ecomm__inventory_items") }} as inventory_items
+            on order_items.inventory_item_id = inventory_items.id
+        left join {{ ref("int_ecomm__users") }} as users on order_items.user_id = users.id
+    )
+
+    select * from order_items

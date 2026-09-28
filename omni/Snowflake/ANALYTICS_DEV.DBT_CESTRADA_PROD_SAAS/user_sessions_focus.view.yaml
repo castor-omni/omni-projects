@@ -1,0 +1,185 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_saas__user_sessions_focus
+#This description was pulled from dbt.
+description: Table for application session data
+
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_SAAS
+table_name: USER_SESSIONS_FOCUS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique session identifier
+    primary_key: true
+
+  account_id:
+    sql: '"ACCOUNT_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Account ID associated with the unique session
+
+  user_id:
+    sql: '"USER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for the user of a given session
+
+  session_duration_seconds:
+    sql: '"SESSION_DURATION_SECONDS"'
+    #This description was pulled from dbt.
+    description: Length of session measured in seconds
+
+  session_duration_minutes:
+    sql: '"SESSION_DURATION_MINUTES"'
+    #This description was pulled from dbt.
+    description: Length of session measured in minutes
+
+  product_id:
+    sql: '"PRODUCT_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Identifier of the product used in the session
+
+  pages_visited:
+    sql: '"PAGES_VISITED"'
+    #This description was pulled from dbt.
+    description: Pages visited during the session
+
+  events_count:
+    sql: '"EVENTS_COUNT"'
+    #This description was pulled from dbt.
+    description: Count of the number of events that occured during the session
+
+  unique_pages:
+    sql: '"UNIQUE_PAGES"'
+    #This description was pulled from dbt.
+    description: The number of unique pages that the session navigated to
+
+  bounce_rate:
+    sql: '"BOUNCE_RATE"'
+    #This description was pulled from dbt.
+    description: Percentage of bounces in the session
+
+  exit_page:
+    sql: '"EXIT_PAGE"'
+    #This description was pulled from dbt.
+    description: Page the session ended on
+
+  entry_page:
+    sql: '"ENTRY_PAGE"'
+    #This description was pulled from dbt.
+    description: Page the session began on
+
+  device_type:
+    sql: '"DEVICE_TYPE"'
+
+  browser:
+    sql: '"BROWSER"'
+    #This description was pulled from dbt.
+    description: Browser type that was used in the session
+
+  os:
+    sql: '"OS"'
+    #This description was pulled from dbt.
+    description: Operation system that the session was on
+
+  country:
+    sql: '"COUNTRY"'
+    #This description was pulled from dbt.
+    description: Country of origin for the session
+
+  region:
+    sql: '"REGION"'
+    #This description was pulled from dbt.
+    description: Account region the session belongs to
+
+  city:
+    sql: '"CITY"'
+    #This description was pulled from dbt.
+    description: City where the session took place
+
+  ip_address:
+    sql: '"IP_ADDRESS"'
+    #This description was pulled from dbt.
+    description: ip address of where the session takes place
+
+  user_agent:
+    sql: '"USER_AGENT"'
+
+  referrer:
+    sql: '"REFERRER"'
+
+  utm_source:
+    sql: '"UTM_SOURCE"'
+
+  utm_medium:
+    sql: '"UTM_MEDIUM"'
+
+  utm_campaign:
+    sql: '"UTM_CAMPAIGN"'
+
+  account_segment:
+    sql: '"ACCOUNT_SEGMENT"'
+    #This description was pulled from dbt.
+    description: Account Segment the session belongs to
+
+  product_tier:
+    sql: '"PRODUCT_TIER"'
+    #This description was pulled from dbt.
+    description: Product tier the user belongs to
+
+  user_count:
+    sql: '"USER_COUNT"'
+    #This description was pulled from dbt.
+    description: User count of the session
+
+  user_role:
+    sql: '"USER_ROLE"'
+    #This description was pulled from dbt.
+    description: Role of the user in the session
+
+  session_quality_score:
+    sql: '"SESSION_QUALITY_SCORE"'
+    #This description was pulled from dbt.
+    description: Quality score of the unique session
+
+  errors_encountered:
+    sql: '"ERRORS_ENCOUNTERED"'
+    #This description was pulled from dbt.
+    description: Number of errors encountered within the unique session
+
+  conversion_events:
+    sql: '"CONVERSION_EVENTS"'
+    #This description was pulled from dbt.
+    description: Number of conversion events to the next page
+
+  session_date:
+    sql: '"SESSION_DATE"'
+    #This description was pulled from dbt.
+    description: Date of unique session
+
+  session_start_time:
+    sql: '"SESSION_START_TIME"'
+    #This description was pulled from dbt.
+    description: Time in which the unique session starts
+
+  session_end_time:
+    sql: '"SESSION_END_TIME"'
+    #This description was pulled from dbt.
+    description: Time in which the unique session ended
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: user_sessions_focus
+  target_schema: DBT_CESTRADA_PROD
+  description: Table for application session data
+  config:
+    schema: saas
+    materialized: table
+  code: select * from {{ ref('int_saas__sessions_focus') }}

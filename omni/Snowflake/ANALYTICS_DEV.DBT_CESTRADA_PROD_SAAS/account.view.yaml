@@ -1,0 +1,104 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_saas__account
+#This description was pulled from dbt.
+description: Table describing accounts for the data company Blobby Data
+
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_SAAS
+table_name: ACCOUNT
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for an account
+    primary_key: true
+
+  name:
+    sql: '"NAME"'
+    #This description was pulled from dbt.
+    description: Account company name
+
+  type:
+    sql: '"TYPE"'
+    #This description was pulled from dbt.
+    description: Identifier is the account is a customer, prospect or partner
+
+  billing_street:
+    sql: '"BILLING_STREET"'
+    #This description was pulled from dbt.
+    description: Account billing street
+
+  billing_state:
+    sql: '"BILLING_STATE"'
+    #This description was pulled from dbt.
+    description: Account billing state
+
+  billing_city:
+    sql: '"BILLING_CITY"'
+    #This description was pulled from dbt.
+    description: Account billing city
+
+  billing_zip:
+    sql: '"BILLING_ZIP"'
+    #This description was pulled from dbt.
+    description: Account billing zip code
+
+  billing_country:
+    sql: '"BILLING_COUNTRY"'
+    #This description was pulled from dbt.
+    description: Account billing country
+
+  region:
+    sql: '"REGION"'
+    #This description was pulled from dbt.
+    description: Region owner of the account (NA, EMEA, APAC)
+
+  industry:
+    sql: '"INDUSTRY"'
+    #This description was pulled from dbt.
+    description: Industry the account operates in
+
+  annual_revenue:
+    sql: '"ANNUAL_REVENUE"'
+    #This description was pulled from dbt.
+    description: The account's annual operating revenue
+
+  number_of_employees:
+    sql: '"NUMBER_OF_EMPLOYEES"'
+    #This description was pulled from dbt.
+    description: The number of employees at an account.  Used for segmentation
+
+  segment:
+    sql: '"SEGMENT"'
+    #This description was pulled from dbt.
+    description: Segment the account belongs to. Enterprise, Commercial or SMB.
+
+  owner_id:
+    sql: '"OWNER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for the account owner
+
+  created_date:
+    sql: '"CREATED_DATE"'
+    #This description was pulled from dbt.
+    description: SFDC account created date
+
+  csm_id:
+    sql: '"CSM_ID"'
+    format: ID
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: account
+  target_schema: DBT_CESTRADA_PROD
+  description: Table describing accounts for the data company Blobby Data
+  config:
+    schema: saas
+    materialized: table
+  code: select * from {{ ref('int_saas__account')}}

@@ -1,0 +1,47 @@
+# Reference this view as omni_dbt_ecomm__distribution_centers
+schema_label: ""
+#This description was pulled from dbt.
+description: Dimension table containing information about distribution centers
+
+schema: omni_dbt_ecomm
+table_name: DISTRIBUTION_CENTERS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for each distribution center
+    primary_key: true
+
+  name:
+    sql: '"NAME"'
+    #This description was pulled from dbt.
+    description: Name of the distribution center
+
+  latitude:
+    sql: '"LATITUDE"'
+    #This description was pulled from dbt.
+    description: Geographical latitude of the distribution center location
+
+  longitude:
+    sql: '"LONGITUDE"'
+    #This description was pulled from dbt.
+    description: Geographical longitude of the distribution center location
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: distribution_centers
+  target_schema: DBT_CESTRADA_PROD
+  description: Dimension table containing information about distribution centers
+  config:
+    schema: ecomm
+    materialized: table
+  code: |-
+    select
+      {{ dbt_utils.star(ref('stg_ecomm__distribution_centers')) }}
+    from {{ ref('stg_ecomm__distribution_centers') }}

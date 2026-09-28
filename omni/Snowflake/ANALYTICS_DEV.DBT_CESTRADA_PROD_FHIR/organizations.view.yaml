@@ -1,0 +1,57 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_fhir__organizations
+#This description was pulled from dbt.
+description: Contains information about healthcare organizations
+
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_FHIR
+table_name: ORGANIZATIONS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for the organization
+    primary_key: true
+
+  name:
+    sql: '"NAME"'
+    #This description was pulled from dbt.
+    description: Name of the organization
+
+  type:
+    sql: '"TYPE"'
+    #This description was pulled from dbt.
+    description: Type or category of the organization
+
+  profile:
+    sql: '"PROFILE"'
+    #This description was pulled from dbt.
+    description: Profile or classification of the organization
+
+  revenue:
+    sql: '"REVENUE"'
+    #This description was pulled from dbt.
+    description: Revenue of the organization
+
+  resource_raw:
+    sql: '"RESOURCE_RAW"'
+    #This description was pulled from dbt.
+    description: Raw FHIR resource data for the organization
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: organizations
+  target_schema: DBT_CESTRADA_PROD
+  description: Contains information about healthcare organizations
+  config:
+    schema: fhir
+    materialized: table
+  code: |-
+    select
+      {{ dbt_utils.star(ref('stg_fhir__organizations')) }}
+    from {{ ref('stg_fhir__organizations') }}

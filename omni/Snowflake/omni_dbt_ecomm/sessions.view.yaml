@@ -1,0 +1,174 @@
+# Reference this view as omni_dbt_ecomm__sessions
+schema_label: ""
+#This description was pulled from dbt.
+description: Materialized table containing information about user sessions
+
+schema: omni_dbt_ecomm
+table_name: SESSIONS
+
+dimensions:
+  session_id:
+    sql: '"SESSION_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for each session
+    primary_key: true
+
+  user_id:
+    sql: '"USER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Identifier of the user associated with the session
+
+  session_start:
+    sql: '"SESSION_START"'
+    #This description was pulled from dbt.
+    description: Timestamp when the session started
+
+  session_end:
+    sql: '"SESSION_END"'
+    #This description was pulled from dbt.
+    description: Timestamp when the session ended
+
+  events_in_sessions:
+    sql: '"EVENTS_IN_SESSIONS"'
+    #This description was pulled from dbt.
+    description: Number of events in the session
+
+  duration:
+    sql: '"DURATION"'
+    #This description was pulled from dbt.
+    description: Duration of the session in seconds
+
+  months_since_created:
+    sql: '"MONTHS_SINCE_CREATED"'
+    #This description was pulled from dbt.
+    description: Number of months since the user account was created
+
+  duration_minutes:
+    sql: '"DURATION_MINUTES"'
+    #This description was pulled from dbt.
+    description: Duration of the session in minutes
+
+  add_to_cart_events:
+    sql: '"ADD_TO_CART_EVENTS"'
+    #This description was pulled from dbt.
+    description: Number of add-to-cart events in the session
+
+  viewed_product_events:
+    sql: '"VIEWED_PRODUCT_EVENTS"'
+    #This description was pulled from dbt.
+    description: Number of product view events in the session
+
+  purchase_events:
+    sql: '"PURCHASE_EVENTS"'
+    #This description was pulled from dbt.
+    description: Number of purchase events in the session
+
+  login_events:
+    sql: '"LOGIN_EVENTS"'
+    #This description was pulled from dbt.
+    description: Number of login events in the session
+
+  is_abandoned_cart:
+    sql: '"IS_ABANDONED_CART"'
+    #This description was pulled from dbt.
+    description: Boolean indicating if the cart was abandoned
+
+  had_login_event:
+    sql: '"HAD_LOGIN_EVENT"'
+    #This description was pulled from dbt.
+    description: Boolean indicating if a login event occurred
+
+  had_viewed_product_event:
+    sql: '"HAD_VIEWED_PRODUCT_EVENT"'
+    #This description was pulled from dbt.
+    description: Boolean indicating if a product view event occurred
+
+  had_add_to_cart_event:
+    sql: '"HAD_ADD_TO_CART_EVENT"'
+    #This description was pulled from dbt.
+    description: Boolean indicating if an add-to-cart event occurred
+
+  had_purchase_event:
+    sql: '"HAD_PURCHASE_EVENT"'
+    #This description was pulled from dbt.
+    description: Boolean indicating if a purchase event occurred
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: sessions
+  target_schema: DBT_CESTRADA_PROD
+  description: Materialized table containing information about user sessions
+  config:
+    schema: ecomm
+    materialized: table
+  code: |-
+    with
+        sessions as (
+            select *
+            from
+                (
+                    with
+                        events_plus as (
+                            select
+                                id,
+                                session_id,
+                                created_at,
+                                event_type,
+                                first_value(user_id) over (
+                                    partition by session_id order by created_at asc
+                                ) as user_id
+
+                            from {{ ref("int_ecomm__events") }}
+                        )
+                    select
+                        session_id,
+                        user_id,
+                        min(created_at) as session_start,
+                        max(created_at) as session_end,
+                        count(
+                            distinct case when event_type = 'Product' then id else null end
+                        ) as viewed_product_events,
+                        count(
+                            distinct case when event_type = 'Cart' then id else null end
+                        ) as add_to_cart_events,
+                        count(
+                            distinct case when event_type = 'Purchase' then id else null end
+                        ) as purchase_events,
+                        count(
+                            distinct case when event_type = 'Home' then id else null end
+                        ) as login_events,
+                        count(*) as total_events
+                    from events_plus
+                    group by 1, 2
+                )
+        )
+
+    select
+        sessions.session_id,
+        sessions.user_id,
+        sessions.session_start,
+        sessions.session_end,
+        sessions.total_events as events_in_sessions,
+        datediff(second, sessions.session_start, sessions.session_end) as duration,
+        datediff(month, users.created_at, sessions.session_start) as months_since_created,
+        round(
+            datediff(second, sessions.session_start, sessions.session_end) / 60, 0
+        ) as duration_minutes,
+        sessions.add_to_cart_events,
+        sessions.viewed_product_events,
+        sessions.purchase_events,
+        sessions.login_events,
+        sessions.add_to_cart_events > 0
+        and sessions.purchase_events < 1 as is_abandoned_cart,
+        sessions.login_events > 0 as had_login_event,
+        sessions.viewed_product_events > 0 as had_viewed_product_event,
+        sessions.add_to_cart_events > 0 as had_add_to_cart_event,
+        sessions.purchase_events > 0 as had_purchase_event
+    from sessions
+    left join {{ ref("int_ecomm__users") }} as users on sessions.user_id = users.id

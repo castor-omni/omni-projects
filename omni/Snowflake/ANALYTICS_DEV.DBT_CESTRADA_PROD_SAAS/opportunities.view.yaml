@@ -1,0 +1,162 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_saas__opportunities
+#This description was pulled from dbt.
+description: Table for all Salesforce opportunities in Blobby Data
+
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_SAAS
+table_name: OPPORTUNITIES
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique Identifier for the opportunity.  This should be the
+      salesforce record
+    primary_key: true
+
+  account_id:
+    sql: '"ACCOUNT_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for an account
+
+  name:
+    sql: '"NAME"'
+    #This description was pulled from dbt.
+    description: Opportunity name.  Should be account name + opportunity type
+
+  stage_name:
+    sql: '"STAGE_NAME"'
+    #This description was pulled from dbt.
+    description: Current pipeline stage the opportunity is in
+
+  amount:
+    sql: '"AMOUNT"'
+    #This description was pulled from dbt.
+    description: Contract amount for given opportunity
+
+  arr:
+    sql: '"ARR"'
+
+  acv:
+    sql: '"ACV"'
+
+  tcv:
+    sql: '"TCV"'
+
+  contract_term_months:
+    sql: '"CONTRACT_TERM_MONTHS"'
+
+  probability:
+    sql: '"PROBABILITY"'
+    #This description was pulled from dbt.
+    description: Probability that the given opportunity will be won
+
+  close_date:
+    sql: '"CLOSE_DATE"'
+    #This description was pulled from dbt.
+    description: Forecasted close date for the opportunity
+
+  type:
+    sql: '"TYPE"'
+    #This description was pulled from dbt.
+    description: Type of opportunity.  New business, upsell/expansion, or renewal
+
+  next_steps:
+    sql: '"NEXT_STEPS"'
+
+  lead_source:
+    sql: '"LEAD_SOURCE"'
+    #This description was pulled from dbt.
+    description: Channel the opportunity was sourced from
+
+  is_won:
+    sql: '"IS_WON"'
+    #This description was pulled from dbt.
+    description: Boolean field to determine if the opportunity is won or not
+
+  forecast_category:
+    sql: '"FORECAST_CATEGORY"'
+    #This description was pulled from dbt.
+    description: Sales manager's forecast category
+
+  owner_id:
+    sql: '"OWNER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: ID of account executive who currently owns the account
+
+  sales_engineer_id:
+    sql: '"SALES_ENGINEER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: ID of sales engineer who currently owns the account
+
+  created_date:
+    sql: '"CREATED_DATE"'
+    #This description was pulled from dbt.
+    description: Date the opportunity was created
+
+  contact_id:
+    sql: '"CONTACT_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Identifier for main point of contact at the account
+
+  last_stage_change_date:
+    sql: '"LAST_STAGE_CHANGE_DATE"'
+    #This description was pulled from dbt.
+    description: Date of last change in opportunity stage
+
+  first_demo_date:
+    sql: '"FIRST_DEMO_DATE"'
+    #This description was pulled from dbt.
+    description: Date of the first demo
+
+  trial_start_date:
+    sql: '"TRIAL_START_DATE"'
+    #This description was pulled from dbt.
+    description: Date of the trial start day
+
+  competitor:
+    sql: '"COMPETITOR"'
+    #This description was pulled from dbt.
+    description: Competitors in the sales process
+
+  loss_reason:
+    sql: '"LOSS_REASON"'
+    #This description was pulled from dbt.
+    description: Reason for opportunity not winning
+
+  win_reason:
+    sql: '"WIN_REASON"'
+
+  risk_score:
+    sql: '"RISK_SCORE"'
+
+  risk_flags:
+    sql: '"RISK_FLAGS"'
+
+  identified_pain:
+    sql: '"IDENTIFIED_PAIN"'
+
+  risk_details:
+    sql: '"RISK_DETAILS"'
+
+  ae_notes:
+    sql: '"AE_NOTES"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: opportunities
+  target_schema: DBT_CESTRADA_PROD
+  description: Table for all Salesforce opportunities in Blobby Data
+  config:
+    schema: saas
+    materialized: table
+  code: select * from {{ ref('int_saas__opportunities') }}

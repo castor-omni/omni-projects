@@ -1,0 +1,63 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_finance__clients
+#This description was pulled from dbt.
+description: Individual or institutional clients who invest through the asset
+  management platform. Contains client profile and investment preferences.
+
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_FINANCE
+table_name: CLIENTS
+
+dimensions:
+  client_id:
+    sql: '"CLIENT_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for each client
+
+  client_name:
+    sql: '"CLIENT_NAME"'
+    #This description was pulled from dbt.
+    description: Full name of the client (individual or institution)
+
+  client_email:
+    sql: '"CLIENT_EMAIL"'
+    #This description was pulled from dbt.
+    description: Primary email address for client communications
+
+  investment_style:
+    sql: '"INVESTMENT_STYLE"'
+    #This description was pulled from dbt.
+    description: Client's preferred investment approach
+
+  risk_tolerance:
+    sql: '"RISK_TOLERANCE"'
+    #This description was pulled from dbt.
+    description: Client's risk appetite level
+
+  account_manager:
+    sql: '"ACCOUNT_MANAGER"'
+    #This description was pulled from dbt.
+    description: Name or ID of the assigned relationship manager or advisor
+
+  created_at:
+    sql: '"CREATED_AT"'
+    #This description was pulled from dbt.
+    description: Date and time when the client record was created in the system
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: clients
+  target_schema: DBT_CESTRADA_PROD
+  description: Individual or institutional clients who invest through the asset
+    management platform. Contains client profile and investment preferences.
+  config:
+    schema: finance
+    materialized: table
+  code: |-
+    select
+      {{ dbt_utils.star(ref('stg_asset_management__dim_clients')) }}
+    from {{ ref('stg_asset_management__dim_clients') }}

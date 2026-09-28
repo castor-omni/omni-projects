@@ -1,4 +1,7 @@
 # Reference this view as analytics_dev_dbt_cestrada_prod_ecomm__monthly_sales_overview
+#This description was pulled from dbt.
+description: Fact table providing a monthly overview of sales
+
 catalog: ANALYTICS_DEV
 schema: DBT_CESTRADA_PROD_ECOMM
 table_name: MONTHLY_SALES_OVERVIEW
@@ -6,16 +9,46 @@ table_name: MONTHLY_SALES_OVERVIEW
 dimensions:
   month:
     sql: '"MONTH"'
+    #This description was pulled from dbt.
+    description: Month for which the sales data is aggregated
 
   status:
     sql: '"STATUS"'
 
   total_sale_price:
     sql: '"TOTAL_SALE_PRICE"'
+    #This description was pulled from dbt.
+    description: Total sales for the month
 
   mom_change:
     sql: '"MOM_CHANGE"'
+    #This description was pulled from dbt.
+    description: Month-over-month change in sales
 
 measures:
   count:
     aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: monthly_sales_overview
+  target_schema: DBT_CESTRADA_PROD
+  description: Fact table providing a monthly overview of sales
+  config:
+    schema: ecomm
+    materialized: table
+  code: |-
+    select
+        date(date_trunc('MONTH', created_at)) as month,
+        status,
+        coalesce(sum(sale_price), 0) as total_sale_price,
+        round(
+            (total_sale_price - lag(total_sale_price, 1) over (order by month))
+            / lag(total_sale_price, 1) over (order by month),
+            2
+        ) as mom_change
+
+    from {{ ref('order_items') }} as order_items
+    where not status = 'Returned' or status is null
+    group by 1,2
+    order by 1 desc

@@ -1,0 +1,76 @@
+# Reference this view as omni_dbt_fhir__stg_fhir__procedures
+schema_label: ""
+
+schema: omni_dbt_fhir
+table_name: STG_FHIR__PROCEDURES
+
+dimensions:
+  patient_id:
+    sql: '"PATIENT_ID"'
+    format: ID
+
+  condition_id:
+    sql: '"CONDITION_ID"'
+    format: ID
+
+  encounter_id:
+    sql: '"ENCOUNTER_ID"'
+    format: ID
+
+  status:
+    sql: '"STATUS"'
+
+  code:
+    sql: '"CODE"'
+
+  name:
+    sql: '"NAME"'
+
+  performed_ts:
+    sql: '"PERFORMED_TS"'
+
+  performed_start_ts:
+    sql: '"PERFORMED_START_TS"'
+
+  performed_end_ts:
+    sql: '"PERFORMED_END_TS"'
+
+  reason_reference:
+    sql: '"REASON_REFERENCE"'
+
+  resource_raw:
+    sql: '"RESOURCE_RAW"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: stg_fhir__procedures
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: fhir
+    materialized: view
+  code: |-
+    with raw as (
+        select v.resource_raw
+        from {{ source("fhir", "raw_fhir") }},
+        lateral flatten(input => variant_col:entry) as f,
+        lateral (select f.value:resource::variant as resource_raw) as v
+        where lower(v.resource_raw:"resourceType"::varchar) = 'procedure'
+    )
+    select
+        replace(resource_raw:"subject"."reference"::varchar,'urn:uuid:','') as patient_id,
+        replace(resource_raw:"reasonReference"."reference"::varchar,'urn:uuid:','') as condition_id,
+        replace(resource_raw:"context"."reference"::varchar,'urn:uuid:','') as encounter_id,
+        resource_raw:"status"::varchar as status,
+        resource_raw:"code"."coding"[0]."code"::varchar as code,
+        resource_raw:"code"."coding"[0]."display"::varchar as name,
+        resource_raw:"performedDateTime"::timestamp as performed_ts,
+        resource_raw:"performedPeriod"."start"::timestamp as performed_start_ts,
+        resource_raw:"performedPeriod"."end"::timestamp as performed_end_ts,
+        resource_raw:"reasonReference"."display"::varchar as reason_reference,
+        resource_raw
+    from raw
+  referenced_by: [ int_fhir__procedures ]

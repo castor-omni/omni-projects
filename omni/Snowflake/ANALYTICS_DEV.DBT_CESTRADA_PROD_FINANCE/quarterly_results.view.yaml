@@ -1,0 +1,79 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_finance__quarterly_results
+#This description was pulled from dbt.
+description: This model contains quarterly financial results, including details
+  about the company, financial statements, and line items for each fiscal
+  quarter.
+
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_FINANCE
+table_name: QUARTERLY_RESULTS
+
+dimensions:
+  company:
+    sql: '"COMPANY"'
+    #This description was pulled from dbt.
+    description: The name of the company to which the financial data pertains.
+
+  statement_name:
+    sql: '"STATEMENT_NAME"'
+    #This description was pulled from dbt.
+    description: The type of financial statement, such as Balance Sheet, Income
+      Statement, or Cash Flow Statement.
+
+  fiscal_quarter:
+    sql: '"FISCAL_QUARTER"'
+    #This description was pulled from dbt.
+    description: The fiscal quarter for which the financial data is reported (e.g.,
+      1, 2, 3, 4).
+
+  fiscal_year:
+    sql: '"FISCAL_YEAR"'
+    #This description was pulled from dbt.
+    description: The fiscal year corresponding to the reported financial data.
+
+  filing_date:
+    sql: '"FILING_DATE"'
+    #This description was pulled from dbt.
+    description: The date on which the financial statement was filed with regulatory
+      authorities.
+
+  period_end_date:
+    sql: '"PERIOD_END_DATE"'
+    #This description was pulled from dbt.
+    description: The end date of the reporting period for the financial statement.
+
+  line_item_name:
+    sql: '"LINE_ITEM_NAME"'
+    #This description was pulled from dbt.
+    description: The specific line item in the financial statement, such as 'Sales
+      of investments' or 'Revenue.'
+
+  line_item_value:
+    sql: '"LINE_ITEM_VALUE"'
+    #This description was pulled from dbt.
+    description: The value associated with the specific line item in the financial
+      statement.
+
+  unit_name:
+    sql: '"UNIT_NAME"'
+    #This description was pulled from dbt.
+    description: The unit of measurement for the line item value (e.g., Thousands, Ones).
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: quarterly_results
+  target_schema: DBT_CESTRADA_PROD
+  description: This model contains quarterly financial results, including details
+    about the company, financial statements, and line items for each fiscal
+    quarter.
+  config:
+    schema: finance
+    materialized: table
+  code: |-
+    select
+      {{ dbt_utils.star(ref('stg_finance__quarterly_results')) }}
+    from {{ ref('stg_finance__quarterly_results') }}

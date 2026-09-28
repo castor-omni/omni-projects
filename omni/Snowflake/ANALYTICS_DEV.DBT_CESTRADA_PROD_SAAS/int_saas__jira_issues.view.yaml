@@ -1,0 +1,171 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod_saas__int_saas__jira_issues
+#This description was pulled from dbt.
+description: Intermidiate table to make the Jira issues seem live in the data
+
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD_SAAS
+table_name: INT_SAAS__JIRA_ISSUES
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique Identifier in the data for the jira issue
+    primary_key: true
+
+  account_id:
+    sql: '"ACCOUNT_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Account identifier for the account who opened the jira issue
+
+  issue_key:
+    sql: '"ISSUE_KEY"'
+    #This description was pulled from dbt.
+    description: Unique Jira issue key
+
+  issue_type:
+    sql: '"ISSUE_TYPE"'
+    #This description was pulled from dbt.
+    description: Type of issue, bug, feature request, task or story
+
+  summary:
+    sql: '"SUMMARY"'
+    #This description was pulled from dbt.
+    description: Brief summary of issue
+
+  description:
+    sql: '"DESCRIPTION"'
+    #This description was pulled from dbt.
+    description: Brief description of the issue
+
+  priority:
+    sql: '"PRIORITY"'
+    #This description was pulled from dbt.
+    description: Engineering priority of issue
+
+  status:
+    sql: '"STATUS"'
+    #This description was pulled from dbt.
+    description: Most up to date status of issue
+
+  assignee:
+    sql: '"ASSIGNEE"'
+    #This description was pulled from dbt.
+    description: Engineering team member assigned to issue
+
+  reporter:
+    sql: '"REPORTER"'
+    #This description was pulled from dbt.
+    description: Internal reporter of issue
+
+  created_date:
+    sql: '"CREATED_DATE"'
+    #This description was pulled from dbt.
+    description: Date that the issue was created
+
+  updated_date:
+    sql: '"UPDATED_DATE"'
+    #This description was pulled from dbt.
+    description: Date in which the issue was last updated
+
+  resolved_date:
+    sql: '"RESOLVED_DATE"'
+    #This description was pulled from dbt.
+    description: Date in which the issue was resolved
+
+  resolution:
+    sql: '"RESOLUTION"'
+    #This description was pulled from dbt.
+    description: The final resolution of the issue.  Fixed, won't fix or duplicate issue
+
+  component:
+    sql: '"COMPONENT"'
+    #This description was pulled from dbt.
+    description: Application component issue pertains to
+
+  labels:
+    sql: '"LABELS"'
+    #This description was pulled from dbt.
+    description: Jira labels or tags assigned to the issue
+
+  story_points:
+    sql: '"STORY_POINTS"'
+
+  time_spent_hours:
+    sql: '"TIME_SPENT_HOURS"'
+    #This description was pulled from dbt.
+    description: Total time in hours spent fixing or debugging the issue
+
+  account_segment:
+    sql: '"ACCOUNT_SEGMENT"'
+    #This description was pulled from dbt.
+    description: Account segment for the account who initially reported the issue
+
+  sprint:
+    sql: '"SPRINT"'
+    #This description was pulled from dbt.
+    description: Which engineering sprint this issue was part of
+
+  epic_link:
+    sql: '"EPIC_LINK"'
+    #This description was pulled from dbt.
+    description: Epic ID for the issue
+
+  zendesk_ticket_id:
+    sql: '"ZENDESK_TICKET_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Associated Zendesk ticket for issue
+
+  as_of_date:
+    sql: '"AS_OF_DATE"'
+
+  year_offset:
+    sql: '"YEAR_OFFSET"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: int_saas__jira_issues
+  target_schema: DBT_CESTRADA_PROD
+  description: Intermidiate table to make the Jira issues seem live in the data
+  config:
+    schema: saas
+    materialized: table
+  code: |-
+    WITH PARAMS AS (
+      SELECT 
+        CURRENT_DATE() AS AS_OF_DATE,
+        (YEAR(CURRENT_DATE()) - 2025) AS YEAR_OFFSET 
+    )
+
+    SELECT 
+        * REPLACE (
+            -- 1. Shift Created Date (Original Logic)
+            DATEADD(MONTH, P.YEAR_OFFSET * 12, CREATED_DATE) AS CREATED_DATE,
+
+            -- 2. Logic: If shifted Updated Date is in the future, cap it at TODAY
+            IFF(
+                DATEADD(MONTH, P.YEAR_OFFSET * 12, UPDATED_DATE) > P.AS_OF_DATE,
+                P.AS_OF_DATE,
+                DATEADD(MONTH, P.YEAR_OFFSET * 12, UPDATED_DATE)
+            ) AS UPDATED_DATE,
+
+            -- 3. Logic: If shifted Resolved Date is in the future, it's not resolved yet (NULL)
+            IFF(
+                DATEADD(MONTH, P.YEAR_OFFSET * 12, RESOLVED_DATE) > P.AS_OF_DATE,
+                NULL,
+                DATEADD(MONTH, P.YEAR_OFFSET * 12, RESOLVED_DATE)
+            ) AS RESOLVED_DATE
+        )
+    FROM {{ ref('stg_saas__jira_issues') }}
+    CROSS JOIN PARAMS P
+    -- Only show issues that have been 'created' in our 2026 timeline
+    WHERE DATEADD(MONTH, P.YEAR_OFFSET * 12, CREATED_DATE) <= P.AS_OF_DATE
+    ORDER BY CREATED_DATE DESC
+  referenced_by: [ jira_issues ]

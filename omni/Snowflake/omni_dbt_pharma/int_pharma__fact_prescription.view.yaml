@@ -1,0 +1,81 @@
+# Reference this view as omni_dbt_pharma__int_pharma__fact_prescription
+schema_label: ""
+
+schema: omni_dbt_pharma
+table_name: INT_PHARMA__FACT_PRESCRIPTION
+
+dimensions:
+  prescriptionid:
+    sql: '"PRESCRIPTIONID"'
+
+  physicianid:
+    sql: '"PHYSICIANID"'
+
+  productid:
+    sql: '"PRODUCTID"'
+
+  marketid:
+    sql: '"MARKETID"'
+
+  channelid:
+    sql: '"CHANNELID"'
+
+  geographyid:
+    sql: '"GEOGRAPHYID"'
+
+  date:
+    sql: '"DATE"'
+
+  nrx:
+    sql: '"NRX"'
+
+  trx:
+    sql: '"TRX"'
+
+  nbrx:
+    sql: '"NBRX"'
+
+  repeats:
+    sql: '"REPEATS"'
+
+  payertype:
+    sql: '"PAYERTYPE"'
+
+  sourcesystem:
+    sql: '"SOURCESYSTEM"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: int_pharma__fact_prescription
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    schema: pharma
+    materialized: table
+  code: |-
+    with base as (
+      select * from {{ ref('stg_pharma__fact_prescription') }}
+    ),
+    anchor as (
+      select max("DATE") as anchor_date from base
+    )
+    select
+      t.PRESCRIPTIONID as PRESCRIPTIONID,
+      t.PHYSICIANID as PHYSICIANID,
+      t.PRODUCTID as PRODUCTID,
+      t.MARKETID as MARKETID,
+      t.CHANNELID as CHANNELID,
+      t.GEOGRAPHYID as GEOGRAPHYID,
+      {{ pharma_shift_date('t."DATE"', 'anchor.anchor_date') }} as "DATE",
+      t.NRX as NRX,
+      t.TRX as TRX,
+      t.NBRX as NBRX,
+      t.REPEATS as REPEATS,
+      t.PAYERTYPE as PAYERTYPE,
+      t.SOURCESYSTEM as SOURCESYSTEM
+    from base t
+    cross join anchor
+  referenced_by: [ fact_prescription ]

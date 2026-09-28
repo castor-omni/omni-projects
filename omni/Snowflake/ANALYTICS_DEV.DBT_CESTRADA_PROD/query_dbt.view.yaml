@@ -1,0 +1,34 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod__query_dbt
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD
+table_name: QUERY_DBT
+
+dimensions:
+  total_sale_price:
+    sql: '"TOTAL_SALE_PRICE"'
+
+  calculation:
+    sql: '"CALCULATION"'
+
+  order_id_count_distinct:
+    sql: '"ORDER_ID_COUNT_DISTINCT"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: query_dbt
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    materialized: view
+  code: |-
+    SELECT COALESCE(SUM("SALE_PRICE"), 0) AS "TOTAL_SALE_PRICE",
+        CASE
+            WHEN COUNT(DISTINCT "ORDER_ID") = 0 THEN NULL
+            ELSE COALESCE(COALESCE(SUM("SALE_PRICE"), 0), 0) / COUNT(DISTINCT "ORDER_ID")
+        END AS "CALCULATION",
+        COUNT(DISTINCT "ORDER_ID") AS "ORDER_ID_COUNT_DISTINCT"
+    FROM {{ref('order_items')}} AS "omni_dbt_ecomm__order_items"
+    WHERE "STATUS" NOT IN ('Cancelled', 'Returned') OR "STATUS" IS NULL

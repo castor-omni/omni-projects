@@ -3,6 +3,6 @@ ai_settings:
 
 fiscal_month_offset: 11
 
-included_schemas: [ ANALYTICS_DEV.ECOMM ]
+included_schemas: [ ANALYTICS_DEV.SAAS, ANALYTICS_DEV.ECOMM ]
 
 ai_chat_topics: [ Transactions ]

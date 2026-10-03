@@ -4,9 +4,9 @@ default:
     snowflake:
       account: ''
       user: ''
-      database: ANALYTICS_PROD
+      database: ANALYTICS_DEV
       type: snowflake
-      schema: ECOMM_SOURCE
+      schema: DBT_CESTRADA_DEV
       threads: 4
-      role: DBT_DEMO_ROLE
+      role: ANALYST
       warehouse: COMPUTE_WH

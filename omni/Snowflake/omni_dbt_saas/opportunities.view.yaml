@@ -160,3 +160,4 @@ dbt:
     schema: saas
     materialized: table
   code: select * from {{ ref('int_saas__opportunities') }}
+  referenced_by: [ test_query_dbt ]

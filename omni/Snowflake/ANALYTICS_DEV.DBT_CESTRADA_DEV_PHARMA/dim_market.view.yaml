@@ -1,0 +1,30 @@
+# Reference this view as analytics_dev_dbt_cestrada_dev_pharma__dim_market
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_DEV_PHARMA
+table_name: DIM_MARKET
+
+dimensions:
+  marketid:
+    sql: '"MARKETID"'
+
+  marketname:
+    sql: '"MARKETNAME"'
+
+  therapeuticarea:
+    sql: '"THERAPEUTICAREA"'
+
+  primarycompetitors:
+    sql: '"PRIMARYCOMPETITORS"'
+
+  launchyear:
+    sql: '"LAUNCHYEAR"'
+
+  marketsizeusd:
+    sql: '"MARKETSIZEUSD"'
+
+  lifecyclestage:
+    sql: '"LIFECYCLESTAGE"'
+
+measures:
+  count:
+    aggregate_type: count

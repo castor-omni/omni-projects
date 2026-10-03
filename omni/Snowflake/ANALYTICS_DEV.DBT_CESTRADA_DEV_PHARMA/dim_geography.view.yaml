@@ -1,0 +1,30 @@
+# Reference this view as analytics_dev_dbt_cestrada_dev_pharma__dim_geography
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_DEV_PHARMA
+table_name: DIM_GEOGRAPHY
+
+dimensions:
+  geographyid:
+    sql: '"GEOGRAPHYID"'
+
+  country:
+    sql: '"COUNTRY"'
+
+  region:
+    sql: '"REGION"'
+
+  district:
+    sql: '"DISTRICT"'
+
+  territory:
+    sql: '"TERRITORY"'
+
+  territorycode:
+    sql: '"TERRITORYCODE"'
+
+  regionmanager:
+    sql: '"REGIONMANAGER"'
+
+measures:
+  count:
+    aggregate_type: count

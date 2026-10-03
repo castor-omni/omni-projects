@@ -1,0 +1,12 @@
+# Reference this view as analytics_dev_dbt_cestrada_dev_ecomm__order_items_agg
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_DEV_ECOMM
+table_name: ORDER_ITEMS_AGG
+
+dimensions:
+  margin_average:
+    sql: '"MARGIN_AVERAGE"'
+
+measures:
+  count:
+    aggregate_type: count

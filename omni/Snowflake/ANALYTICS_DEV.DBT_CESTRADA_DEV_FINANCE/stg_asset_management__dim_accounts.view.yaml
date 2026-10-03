@@ -1,0 +1,28 @@
+# Reference this view as analytics_dev_dbt_cestrada_dev_finance__stg_asset_management__dim_accounts
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_DEV_FINANCE
+table_name: STG_ASSET_MANAGEMENT__DIM_ACCOUNTS
+
+dimensions:
+  account_id:
+    sql: '"ACCOUNT_ID"'
+    format: ID
+
+  account_type:
+    sql: '"ACCOUNT_TYPE"'
+
+  account_status:
+    sql: '"ACCOUNT_STATUS"'
+
+  balance:
+    sql: '"BALANCE"'
+
+  currency:
+    sql: '"CURRENCY"'
+
+  open_date:
+    sql: '"OPEN_DATE"'
+
+measures:
+  count:
+    aggregate_type: count

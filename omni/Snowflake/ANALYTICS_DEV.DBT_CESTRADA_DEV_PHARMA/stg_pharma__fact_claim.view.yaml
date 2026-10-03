@@ -1,0 +1,96 @@
+# Reference this view as analytics_dev_dbt_cestrada_dev_pharma__stg_pharma__fact_claim
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_DEV_PHARMA
+table_name: STG_PHARMA__FACT_CLAIM
+
+dimensions:
+  claimid:
+    sql: '"CLAIMID"'
+
+  physicianid:
+    sql: '"PHYSICIANID"'
+
+  productid:
+    sql: '"PRODUCTID"'
+
+  marketid:
+    sql: '"MARKETID"'
+
+  patientdeidentifiedid:
+    sql: '"PATIENTDEIDENTIFIEDID"'
+
+  claimdate:
+    sql: '"CLAIMDATE"'
+
+  claimtype:
+    sql: '"CLAIMTYPE"'
+
+  payer:
+    sql: '"PAYER"'
+
+  payertype:
+    sql: '"PAYERTYPE"'
+
+  payerregion:
+    sql: '"PAYERREGION"'
+
+  claimstatus:
+    sql: '"CLAIMSTATUS"'
+
+  dayssupply:
+    sql: '"DAYSSUPPLY"'
+
+  quantity:
+    sql: '"QUANTITY"'
+
+  amountbilled:
+    sql: '"AMOUNTBILLED"'
+
+  amountpaid:
+    sql: '"AMOUNTPAID"'
+
+  formularytier:
+    sql: '"FORMULARYTIER"'
+
+  priorauthrequired:
+    sql: '"PRIORAUTHREQUIRED"'
+
+  steptherapyrequired:
+    sql: '"STEPTHERAPYREQUIRED"'
+
+  quantitylimit:
+    sql: '"QUANTITYLIMIT"'
+
+  rebateeligible:
+    sql: '"REBATEELIGIBLE"'
+
+  copayamount:
+    sql: '"COPAYAMOUNT"'
+
+  deductibleamount:
+    sql: '"DEDUCTIBLEAMOUNT"'
+
+  patientoutofpocket:
+    sql: '"PATIENTOUTOFPOCKET"'
+
+  accessbarrierscore:
+    sql: '"ACCESSBARRIERSCORE"'
+
+  risktolerancescore:
+    sql: '"RISKTOLERANCESCORE"'
+
+  competitorclaimshare:
+    sql: '"COMPETITORCLAIMSHARE"'
+
+  coveragebreadth:
+    sql: '"COVERAGEBREADTH"'
+
+  reimbursementlagdays:
+    sql: '"REIMBURSEMENTLAGDAYS"'
+
+  sourcesystem:
+    sql: '"SOURCESYSTEM"'
+
+measures:
+  count:
+    aggregate_type: count

@@ -1,0 +1,31 @@
+# Reference this view as analytics_dev_dbt_cestrada_dev_finance__clients
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_DEV_FINANCE
+table_name: CLIENTS
+
+dimensions:
+  client_id:
+    sql: '"CLIENT_ID"'
+    format: ID
+
+  client_name:
+    sql: '"CLIENT_NAME"'
+
+  client_email:
+    sql: '"CLIENT_EMAIL"'
+
+  investment_style:
+    sql: '"INVESTMENT_STYLE"'
+
+  risk_tolerance:
+    sql: '"RISK_TOLERANCE"'
+
+  account_manager:
+    sql: '"ACCOUNT_MANAGER"'
+
+  created_at:
+    sql: '"CREATED_AT"'
+
+measures:
+  count:
+    aggregate_type: count

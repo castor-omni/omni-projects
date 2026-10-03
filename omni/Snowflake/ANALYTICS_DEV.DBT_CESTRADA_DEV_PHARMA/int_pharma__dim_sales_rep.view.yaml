@@ -1,0 +1,36 @@
+# Reference this view as analytics_dev_dbt_cestrada_dev_pharma__int_pharma__dim_sales_rep
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_DEV_PHARMA
+table_name: INT_PHARMA__DIM_SALES_REP
+
+dimensions:
+  salesrepid:
+    sql: '"SALESREPID"'
+
+  salesrepname:
+    sql: '"SALESREPNAME"'
+
+  role:
+    sql: '"ROLE"'
+
+  email:
+    sql: '"EMAIL"'
+
+  phone:
+    sql: '"PHONE"'
+
+  startdate:
+    sql: '"STARTDATE"'
+
+  enddate:
+    sql: '"ENDDATE"'
+
+  geographyid:
+    sql: '"GEOGRAPHYID"'
+
+  managerid:
+    sql: '"MANAGERID"'
+
+measures:
+  count:
+    aggregate_type: count

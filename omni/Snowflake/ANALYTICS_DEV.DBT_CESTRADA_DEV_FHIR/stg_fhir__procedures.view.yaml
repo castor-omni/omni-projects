@@ -1,0 +1,45 @@
+# Reference this view as analytics_dev_dbt_cestrada_dev_fhir__stg_fhir__procedures
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_DEV_FHIR
+table_name: STG_FHIR__PROCEDURES
+
+dimensions:
+  patient_id:
+    sql: '"PATIENT_ID"'
+    format: ID
+
+  condition_id:
+    sql: '"CONDITION_ID"'
+    format: ID
+
+  encounter_id:
+    sql: '"ENCOUNTER_ID"'
+    format: ID
+
+  status:
+    sql: '"STATUS"'
+
+  code:
+    sql: '"CODE"'
+
+  name:
+    sql: '"NAME"'
+
+  performed_ts:
+    sql: '"PERFORMED_TS"'
+
+  performed_start_ts:
+    sql: '"PERFORMED_START_TS"'
+
+  performed_end_ts:
+    sql: '"PERFORMED_END_TS"'
+
+  reason_reference:
+    sql: '"REASON_REFERENCE"'
+
+  resource_raw:
+    sql: '"RESOURCE_RAW"'
+
+measures:
+  count:
+    aggregate_type: count

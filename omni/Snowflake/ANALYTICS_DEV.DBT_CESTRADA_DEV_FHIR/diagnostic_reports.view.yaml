@@ -1,0 +1,39 @@
+# Reference this view as analytics_dev_dbt_cestrada_dev_fhir__diagnostic_reports
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_DEV_FHIR
+table_name: DIAGNOSTIC_REPORTS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  patient_id:
+    sql: '"PATIENT_ID"'
+    format: ID
+
+  status:
+    sql: '"STATUS"'
+
+  code:
+    sql: '"CODE"'
+
+  name:
+    sql: '"NAME"'
+
+  effective_ts:
+    sql: '"EFFECTIVE_TS"'
+
+  issued_ts:
+    sql: '"ISSUED_TS"'
+
+  result:
+    sql: '"RESULT"'
+
+  resource_raw:
+    sql: '"RESOURCE_RAW"'
+
+measures:
+  count:
+    aggregate_type: count

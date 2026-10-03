@@ -1,0 +1,24 @@
+# Reference this view as analytics_dev_dbt_cestrada_dev_pharma__bridge_territory_physician
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_DEV_PHARMA
+table_name: BRIDGE_TERRITORY_PHYSICIAN
+
+dimensions:
+  bridgeid:
+    sql: '"BRIDGEID"'
+
+  territoryid:
+    sql: '"TERRITORYID"'
+
+  physicianid:
+    sql: '"PHYSICIANID"'
+
+  assignmentstartdate:
+    sql: '"ASSIGNMENTSTARTDATE"'
+
+  assignmentenddate:
+    sql: '"ASSIGNMENTENDDATE"'
+
+measures:
+  count:
+    aggregate_type: count

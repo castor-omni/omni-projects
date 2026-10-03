@@ -1,0 +1,18 @@
+# Reference this view as analytics_dev_dbt_cestrada_dev__test_query_dbt
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_DEV
+table_name: TEST_QUERY_DBT
+
+dimensions:
+  competitor:
+    sql: '"COMPETITOR"'
+
+  amount_sum:
+    sql: '"AMOUNT_SUM"'
+
+  count:
+    sql: '"COUNT"'
+
+measures:
+  count:
+    aggregate_type: count

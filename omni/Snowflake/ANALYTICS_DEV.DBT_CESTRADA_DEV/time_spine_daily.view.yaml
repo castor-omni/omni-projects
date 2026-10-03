@@ -1,0 +1,12 @@
+# Reference this view as analytics_dev_dbt_cestrada_dev__time_spine_daily
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_DEV
+table_name: TIME_SPINE_DAILY
+
+dimensions:
+  date_day:
+    sql: '"DATE_DAY"'
+
+measures:
+  count:
+    aggregate_type: count

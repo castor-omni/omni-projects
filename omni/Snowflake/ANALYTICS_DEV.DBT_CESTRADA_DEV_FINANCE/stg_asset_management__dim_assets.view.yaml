@@ -1,0 +1,28 @@
+# Reference this view as analytics_dev_dbt_cestrada_dev_finance__stg_asset_management__dim_assets
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_DEV_FINANCE
+table_name: STG_ASSET_MANAGEMENT__DIM_ASSETS
+
+dimensions:
+  asset_id:
+    sql: '"ASSET_ID"'
+    format: ID
+
+  asset_name:
+    sql: '"ASSET_NAME"'
+
+  asset_type:
+    sql: '"ASSET_TYPE"'
+
+  asset_class:
+    sql: '"ASSET_CLASS"'
+
+  sector:
+    sql: '"SECTOR"'
+
+  current_price:
+    sql: '"CURRENT_PRICE"'
+
+measures:
+  count:
+    aggregate_type: count

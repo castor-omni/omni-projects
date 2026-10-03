@@ -1,0 +1,86 @@
+# Reference this view as analytics_dev_dbt_cestrada_dev_fhir__patients
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_DEV_FHIR
+table_name: PATIENTS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  family_name:
+    sql: '"FAMILY_NAME"'
+
+  given_names:
+    sql: '"GIVEN_NAMES"'
+
+  phone_number:
+    sql: '"PHONE_NUMBER"'
+
+  birth_date:
+    sql: '"BIRTH_DATE"'
+
+  deceased_ts:
+    sql: '"DECEASED_TS"'
+
+  gender:
+    sql: '"GENDER"'
+
+  marital_status:
+    sql: '"MARITAL_STATUS"'
+
+  multiple_birth:
+    sql: '"MULTIPLE_BIRTH"'
+
+  city:
+    sql: '"CITY"'
+
+  country:
+    sql: '"COUNTRY"'
+
+  postal_code:
+    sql: '"POSTAL_CODE"'
+
+  state:
+    sql: '"STATE"'
+
+  address_line_1:
+    sql: '"ADDRESS_LINE_1"'
+
+  address_line_2:
+    sql: '"ADDRESS_LINE_2"'
+
+  latitude:
+    sql: '"LATITUDE"'
+
+  longitude:
+    sql: '"LONGITUDE"'
+
+  race:
+    sql: '"RACE"'
+
+  ethnicity:
+    sql: '"ETHNICITY"'
+
+  birth_sex:
+    sql: '"BIRTH_SEX"'
+
+  birth_place:
+    sql: '"BIRTH_PLACE"'
+
+  mothers_maiden_name:
+    sql: '"MOTHERS_MAIDEN_NAME"'
+
+  interpreter_required:
+    sql: '"INTERPRETER_REQUIRED"'
+
+  ssn:
+    sql: '"SSN"'
+
+  resource_raw:
+    sql: '"RESOURCE_RAW"'
+
+measures:
+  count:
+    aggregate_type: count

@@ -1,0 +1,42 @@
+# Reference this view as analytics_dev_dbt_cestrada_dev_pharma__stg_pharma__fact_sales_activity
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_DEV_PHARMA
+table_name: STG_PHARMA__FACT_SALES_ACTIVITY
+
+dimensions:
+  salesactivityid:
+    sql: '"SALESACTIVITYID"'
+
+  salesrepid:
+    sql: '"SALESREPID"'
+
+  physicianid:
+    sql: '"PHYSICIANID"'
+
+  geographyid:
+    sql: '"GEOGRAPHYID"'
+
+  productid:
+    sql: '"PRODUCTID"'
+
+  activitytype:
+    sql: '"ACTIVITYTYPE"'
+
+  channelid:
+    sql: '"CHANNELID"'
+
+  activitydate:
+    sql: '"ACTIVITYDATE"'
+
+  durationminutes:
+    sql: '"DURATIONMINUTES"'
+
+  outcome:
+    sql: '"OUTCOME"'
+
+  notes:
+    sql: '"NOTES"'
+
+measures:
+  count:
+    aggregate_type: count

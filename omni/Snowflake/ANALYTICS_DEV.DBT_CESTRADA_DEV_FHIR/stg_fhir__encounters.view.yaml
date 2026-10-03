@@ -1,0 +1,43 @@
+# Reference this view as analytics_dev_dbt_cestrada_dev_fhir__stg_fhir__encounters
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_DEV_FHIR
+table_name: STG_FHIR__ENCOUNTERS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  patient_id:
+    sql: '"PATIENT_ID"'
+    format: ID
+
+  class:
+    sql: '"CLASS"'
+
+  type:
+    sql: '"TYPE"'
+
+  start_ts:
+    sql: '"START_TS"'
+
+  end_ts:
+    sql: '"END_TS"'
+
+  service_provider_id:
+    sql: '"SERVICE_PROVIDER_ID"'
+    format: ID
+
+  reason_code:
+    sql: '"REASON_CODE"'
+
+  reason:
+    sql: '"REASON"'
+
+  resource_raw:
+    sql: '"RESOURCE_RAW"'
+
+measures:
+  count:
+    aggregate_type: count

@@ -1,0 +1,15 @@
+# Reference this view as analytics_dev_dbt_cestrada_dev__monthly_orders_rollup
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_DEV
+table_name: MONTHLY_ORDERS_ROLLUP
+
+dimensions:
+  created_at_month_:
+    sql: '"CREATED_AT[MONTH]"'
+
+  total_sales:
+    sql: '"TOTAL_SALES"'
+
+measures:
+  count:
+    aggregate_type: count

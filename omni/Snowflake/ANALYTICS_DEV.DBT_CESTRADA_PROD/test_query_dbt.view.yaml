@@ -1,0 +1,31 @@
+# Reference this view as analytics_dev_dbt_cestrada_prod__test_query_dbt
+catalog: ANALYTICS_DEV
+schema: DBT_CESTRADA_PROD
+table_name: TEST_QUERY_DBT
+
+dimensions:
+  competitor:
+    sql: '"COMPETITOR"'
+
+  amount_sum:
+    sql: '"AMOUNT_SUM"'
+
+  count:
+    sql: '"COUNT"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: test_query_dbt
+  target_schema: DBT_CESTRADA_PROD
+  config:
+    materialized: view
+  code: |-
+    SELECT "COMPETITOR",
+        COALESCE(SUM("AMOUNT"), 0) + 1 AS "AMOUNT_SUM",
+        COUNT(*) AS "COUNT"
+    FROM {{ref('opportunities')}} AS "analytics_dev_dbt_cestrada_prod_saas__opportunities"
+    GROUP BY 1

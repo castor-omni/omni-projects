@@ -11,8 +11,8 @@ dimensions:
   amount_sum:
     sql: '"AMOUNT_SUM"'
 
-  count:
-    sql: '"COUNT"'
+  row_count:
+    sql: '"ROW_COUNT"'
 
 measures:
   count:

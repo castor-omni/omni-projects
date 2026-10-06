@@ -1,11 +1,11 @@
-base_view: analytics_dev_dbt_cestrada_prod_saas__zendesk_tickets
+base_view: omni_dbt_saas__zendesk_tickets
 label: Customer Support
 group_label: Customer Success
 description: |
   Zendesk support tickets joined to Salesforce accounts. Supports support-load analysis, response and resolution SLA tracking, satisfaction scoring, and ticket volume by account segment, region and industry.
 
 joins:
-  analytics_dev_dbt_cestrada_prod_saas__account: {}
+  omni_dbt_saas__account: {}
 
 ai_context: |
   You are an expert support and customer success analyst.
@@ -13,7 +13,7 @@ ai_context: |
   One row per Zendesk ticket. Every ticket resolves to a Salesforce account, across roughly 318 accounts.
 
   Core metrics:
-  - ticket volume is analytics_dev_dbt_cestrada_prod_saas__zendesk_tickets.count
+  - ticket volume is omni_dbt_saas__zendesk_tickets.count
   - open_tickets counts unsolved tickets (status open or pending); solved_tickets counts solved
   - average_first_response_hours and average_resolution_hours are the SLA measures
   - average_satisfaction_score is CSAT

@@ -14,9 +14,6 @@ dimensions:
   row_count:
     sql: '"ROW_COUNT"'
 
-  count:
-    label: Total Rows
-
 measures:
   count:
     aggregate_type: count

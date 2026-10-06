@@ -1,4 +1,4 @@
-base_view: omni_dbt_saas__stg_saas__opportunities
+base_view: omni_dbt_saas__opportunities
 label: Opportunities
 group_label: Sales & Revenue
 display_order: 5
@@ -9,26 +9,25 @@ cache_policy: daily_cache_policy
 
 joins:
   opportunity_owner: {}
-  omni_dbt_saas__stg_saas__opportunity_line_items:
-    omni_dbt_saas__product: {}
   omni_dbt_saas__account: {}
   omni_dbt_saas__contacts: {}
+  omni_dbt_saas__opportunity_line_items:
+    omni_dbt_saas__product: {}
 
 relationships:
-  - join_from_view: omni_dbt_saas__stg_saas__opportunities
+  - join_from_view: omni_dbt_saas__opportunities
     join_to_view: omni_dbt_saas__int_saas__users
     join_to_view_as: opportunity_owner
     join_type: always_left
-    on_sql: ${omni_dbt_saas__stg_saas__opportunities.owner_id} =
-      ${opportunity_owner.id}
+    on_sql: ${omni_dbt_saas__opportunities.owner_id} = ${opportunity_owner.id}
     relationship_type: many_to_one
     join_to_view_as_label: Opportunity Owner
 
-  - join_from_view: omni_dbt_saas__stg_saas__opportunities
-    join_to_view: omni_dbt_saas__stg_saas__opportunity_line_items
+  - join_from_view: omni_dbt_saas__opportunities
+    join_to_view: omni_dbt_saas__opportunity_line_items
     join_type: always_left
-    on_sql: ${omni_dbt_saas__stg_saas__opportunities.id} =
-      ${omni_dbt_saas__stg_saas__opportunity_line_items.opportunity_id}
+    on_sql: ${omni_dbt_saas__opportunities.id} =
+      ${omni_dbt_saas__opportunity_line_items.opportunity_id}
     relationship_type: one_to_one
 
 ai_context: |
@@ -40,7 +39,7 @@ ai_context: |
   Don't pivot unless there is more than one dimension included in the query.
 
   Typical questions will be focused on sales performance and pipeline, with breakdowns across reps, stages, accounts, products, and more:
-  - if asked about total sales or revenue, always use this field: omni_dbt_saas__stg_saas__opportunities.amount_sum
+  - if asked about total sales or revenue, always use this field: omni_dbt_saas__opportunities.amount_sum
   - if asked about which reps or sales reps, use opportunity_owner.name (which combines first_name and last_name). Never return an ID unless explicitly asked. If only given the first name, use a contains filter.
   - if asked about lost deals or losses, filter on stage_name = Closed Lost
   - pipeline means open new opportunities (status = Open Pipeline, type = New Business); more generally pipeline is all stages that are not Closed Won or Closed Lost
@@ -48,7 +47,7 @@ ai_context: |
   - if asked about active trials, filter on stage_name = [Trial, Trial Positive]
   - if asked about early stage deals, filter on stage_name = [Pre-Qualified, Qualified]
   - if asked about late stage deals, filter on stage_name = [Trial Positive, Negotiate]
-  - in general, you should always filter on omni_dbt_saas__stg_saas__opportunities.type: usually to New Business for pipeline and any value for closed business
+  - in general, you should always filter on omni_dbt_saas__opportunities.type: usually to New Business for pipeline and any value for closed business
   - if asked about new customers or new business, filter on type = New Business
   - if asked about expansion or upsell, filter on type = Expansion
   - if asked about renewals, filter on type = Renewal
@@ -68,21 +67,21 @@ sample_queries:
     query:
       fields:
         [
-          "omni_dbt_saas__stg_saas__opportunities.close_date[date]",
-          omni_dbt_saas__stg_saas__opportunities.name,
+          "omni_dbt_saas__opportunities.close_date[date]",
+          omni_dbt_saas__opportunities.name,
           opportunity_owner.name,
-          omni_dbt_saas__stg_saas__opportunities.stage_name,
-          omni_dbt_saas__stg_saas__opportunities.amount_sum
+          omni_dbt_saas__opportunities.stage_name,
+          omni_dbt_saas__opportunities.amount_sum
         ]
-      base_view: omni_dbt_saas__stg_saas__opportunities
+      base_view: omni_dbt_saas__opportunities
       filters:
-        omni_dbt_saas__stg_saas__opportunities.type:
+        omni_dbt_saas__opportunities.type:
           is: New Business
-        omni_dbt_saas__stg_saas__opportunities.stage_name:
+        omni_dbt_saas__opportunities.stage_name:
           is: [ Trial, Trial Positive, Negotiate ]
       limit: 1000
       sorts:
-        - field: omni_dbt_saas__stg_saas__opportunities.close_date[date]
+        - field: omni_dbt_saas__opportunities.close_date[date]
       topic: opportunity
     description: Show a list of all active trials
     prompt: Show me all active trials
@@ -92,36 +91,36 @@ sample_queries:
     query:
       fields:
         [
-          omni_dbt_saas__stg_saas__opportunities.name,
+          omni_dbt_saas__opportunities.name,
           opportunity_owner.name,
-          "omni_dbt_saas__stg_saas__opportunities.close_date[date]",
-          omni_dbt_saas__stg_saas__opportunities.competitor,
-          omni_dbt_saas__stg_saas__opportunities.stage_name,
-          omni_dbt_saas__stg_saas__opportunities.amount_sum
+          "omni_dbt_saas__opportunities.close_date[date]",
+          omni_dbt_saas__opportunities.competitor,
+          omni_dbt_saas__opportunities.stage_name,
+          omni_dbt_saas__opportunities.amount_sum
         ]
-      base_view: omni_dbt_saas__stg_saas__opportunities
+      base_view: omni_dbt_saas__opportunities
       filters:
-        omni_dbt_saas__stg_saas__opportunities.type:
+        omni_dbt_saas__opportunities.type:
           is: [ New Business, Expansion ]
-        omni_dbt_saas__stg_saas__opportunities.close_date:
+        omni_dbt_saas__opportunities.close_date:
           time_for_duration: [ 1 quarters ago, 1 quarters ]
-        omni_dbt_saas__stg_saas__opportunities.stage_name:
+        omni_dbt_saas__opportunities.stage_name:
           is: Closed Won
       limit: 1000
       sorts:
-        - field: omni_dbt_saas__stg_saas__opportunities.close_date[date]
+        - field: omni_dbt_saas__opportunities.close_date[date]
       topic: opportunity
     description: List of deals won in this quarter
     ai_context: All the deals that have closed this quarter. This includes new
       business and expansions.
   Won iARR:
     query:
-      fields: [ omni_dbt_saas__stg_saas__opportunities.amount_sum ]
-      base_view: omni_dbt_saas__stg_saas__opportunities
+      fields: [ omni_dbt_saas__opportunities.amount_sum ]
+      base_view: omni_dbt_saas__opportunities
       filters:
-        omni_dbt_saas__stg_saas__opportunities.type:
+        omni_dbt_saas__opportunities.type:
           is: [ New Business, Expansion ]
-        omni_dbt_saas__stg_saas__opportunities.is_won:
+        omni_dbt_saas__opportunities.is_won:
           is: true
       limit: 1000
       topic: opportunity
@@ -132,23 +131,23 @@ sample_queries:
     query:
       fields:
         [
-          "omni_dbt_saas__stg_saas__opportunities.created_date[fiscal_quarter]",
+          "omni_dbt_saas__opportunities.created_date[fiscal_quarter]",
           omni_dbt_saas__account.segment,
-          omni_dbt_saas__stg_saas__opportunities.amount_sum
+          omni_dbt_saas__opportunities.amount_sum
         ]
-      base_view: omni_dbt_saas__stg_saas__opportunities
+      base_view: omni_dbt_saas__opportunities
       filters:
-        omni_dbt_saas__stg_saas__opportunities.type:
+        omni_dbt_saas__opportunities.type:
           is: New Business
-        omni_dbt_saas__stg_saas__opportunities.is_iqcc:
+        omni_dbt_saas__opportunities.is_iqcc:
           is: true
-        omni_dbt_saas__stg_saas__opportunities.stage_name:
+        omni_dbt_saas__opportunities.stage_name:
           is: Closed Won
-        omni_dbt_saas__stg_saas__opportunities.created_date:
+        omni_dbt_saas__opportunities.created_date:
           time_for_duration: [ 3 years ago, 3 years ]
       limit: 1000
       sorts:
-        - field: omni_dbt_saas__stg_saas__opportunities.created_date[fiscal_quarter]
+        - field: omni_dbt_saas__opportunities.created_date[fiscal_quarter]
           desc: true
       topic: opportunity
       pivots: [ omni_dbt_saas__account.segment ]
@@ -163,18 +162,18 @@ sample_queries:
         [
           omni_dbt_saas__account.segment,
           omni_dbt_saas__account.region,
-          omni_dbt_saas__stg_saas__opportunities.count,
-          omni_dbt_saas__stg_saas__opportunities.won_opps_count,
-          omni_dbt_saas__stg_saas__opportunities.conversion_rate,
-          omni_dbt_saas__stg_saas__opportunities.amount_sum_won
+          omni_dbt_saas__opportunities.count,
+          omni_dbt_saas__opportunities.won_opps_count,
+          omni_dbt_saas__opportunities.conversion_rate,
+          omni_dbt_saas__opportunities.amount_sum_won
         ]
-      base_view: omni_dbt_saas__stg_saas__opportunities
+      base_view: omni_dbt_saas__opportunities
       filters:
-        omni_dbt_saas__stg_saas__opportunities.close_date:
+        omni_dbt_saas__opportunities.close_date:
           time_for_duration: [ 1 complete fiscal quarters ago, 1 quarters ]
       limit: 1000
       sorts:
-        - field: omni_dbt_saas__stg_saas__opportunities.amount_sum_won
+        - field: omni_dbt_saas__opportunities.amount_sum_won
           desc: true
       topic: opportunity
       pivots: [ omni_dbt_saas__account.segment ]

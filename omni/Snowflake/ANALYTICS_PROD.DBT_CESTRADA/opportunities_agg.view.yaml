@@ -27,8 +27,8 @@ dimensions:
 
 materialized_query:
   fields:
-    analytics_prod_dbt_cestrada__opportunities.account_id: ACCOUNT_ID
-    analytics_prod_dbt_cestrada__opportunities.stage_name: STAGE_NAME
-    analytics_prod_dbt_cestrada__opportunities.count: TOTAL_OPPS
-    analytics_prod_dbt_cestrada__opportunities.amount_sum: AMOUNT
-  base_view: analytics_prod_dbt_cestrada__opportunities
+    omni_dbt_saas__stg_saas__opportunities.account_id: ACCOUNT_ID
+    omni_dbt_saas__stg_saas__opportunities.stage_name: STAGE_NAME
+    omni_dbt_saas__stg_saas__opportunities.count: TOTAL_OPPS
+    omni_dbt_saas__stg_saas__opportunities.amount_sum: AMOUNT
+  base_view: omni_dbt_saas__stg_saas__opportunities

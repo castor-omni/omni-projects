@@ -135,7 +135,7 @@ models:
         description: "Date issue was resolved on"
 
   - name: opportunities
-    description: "Table for all Salesforce opportunities in Blobby Data"
+    description: "Table for all Salesforce opportunities in Blobby Data - TEST"
     columns:
       - name: id
         description: "Unique Identifier for the opportunity.  This should be the salesforce record"

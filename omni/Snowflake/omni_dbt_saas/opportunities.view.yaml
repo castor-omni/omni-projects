@@ -1,7 +1,7 @@
 # Reference this view as omni_dbt_saas__opportunities
 schema_label: ""
 #This description was pulled from dbt.
-description: Table for all Salesforce opportunities in Blobby Data
+description: Table for all Salesforce opportunities in Blobby Data - TEST
 
 schema: omni_dbt_saas
 table_name: OPPORTUNITIES
@@ -161,7 +161,7 @@ measures:
 dbt:
   name: opportunities
   target_schema: DBT_CESTRADA_PROD
-  description: Table for all Salesforce opportunities in Blobby Data
+  description: Table for all Salesforce opportunities in Blobby Data - TEST
   config:
     schema: saas
     materialized: table

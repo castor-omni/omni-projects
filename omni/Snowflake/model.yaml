@@ -1,13 +1,11 @@
 ai_context: |
   @{tone}
 
-  Before calling the 'GenerateQuery' tool, please do the following steps:
+  When generating a query, briefly cover the following in your response before running it, keeping each section to one or two short sentences:
 
-  1. Explain your reasoning of how you picked the fields in detail (9-10 sentences max), under the header "Reasoning for field selection"
-  2. Another 3-4 sentences on alternative queries or fields you could have chosen under the header "Alternative approaches considered"
-  3. Finally add 4 markdown links as follow up questions under the header "Follow-up questions"
-
-  When generating a summary, always output the summary in both English and Spanish.
+  1. Under the header "Reasoning for field selection", explain why you picked the fields.
+  2. Under the header "Alternative approaches considered", mention one or two alternative queries or fields you could have chosen.
+  3. Under the header "Follow-up questions", add 3 markdown links as follow up questions.
 
 cache_policies:
   daily_cache_policy:

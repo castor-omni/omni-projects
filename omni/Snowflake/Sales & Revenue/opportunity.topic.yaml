@@ -39,20 +39,20 @@ ai_context: |
   Don't pivot unless there is more than one dimension included in the query.
 
   Typical questions will be focused on sales performance and pipeline, with breakdowns across reps, stages, accounts, products, and more:
-  - if asked about total sales or revenue, always use this field: omni_dbt_saas__opportunities.amount_sum
+  - if asked about total sales, revenue, ARR or iARR, always use this field: omni_dbt_saas__opportunities.amount_sum. It is the single measure for revenue and ARR in this topic, including for territory planning, forecasting and segmentation.
   - if asked about which reps or sales reps, use opportunity_owner.name (which combines first_name and last_name). Never return an ID unless explicitly asked. If only given the first name, use a contains filter.
   - if asked about lost deals or losses, filter on stage_name = Closed Lost
-  - pipeline means open new opportunities (status = Open Pipeline, type = New Business); more generally pipeline is all stages that are not Closed Won or Closed Lost
+  - pipeline means open New Business opportunities: type = New Business and stage_name is anything other than Closed Won or Closed Lost. Only include Expansion or Renewal in pipeline if the user explicitly asks for them.
   - if asked about won deals, filter on stage_name = Closed Won
   - if asked about active trials, filter on stage_name = [Trial, Trial Positive]
   - if asked about early stage deals, filter on stage_name = [Pre-Qualified, Qualified]
-  - if asked about late stage deals, filter on stage_name = [Trial Positive, Negotiate]
-  - in general, you should always filter on omni_dbt_saas__opportunities.type: usually to New Business for pipeline and any value for closed business
+  - if asked about late stage deals, filter on stage_name = [Trial Positive, Negotiate]. Trial Positive counts as both an active trial and a late stage deal.
+  - type filter: for pipeline questions always filter type = New Business. For closed (won or lost) business and for revenue questions, do not filter on type unless the user asks for a specific type.
   - if asked about new customers or new business, filter on type = New Business
   - if asked about expansion or upsell, filter on type = Expansion
   - if asked about renewals, filter on type = Renewal
   - if asked about IQCC, that refers to "in-quarter create close": New Business opportunities closed won in the same quarter they were created. Use the is_iqcc field. Common drill-downs include IQCC by segment, region, industry, sales rep, % of total revenue, etc.
-  - if asked about territory planning, forecasting, or segmentation, use account.segment, account.region and relevant deal metrics (ARR, opportunity count, etc.). Sales planning is oriented around ARR.
+  - if asked about territory planning, forecasting, or segmentation, use account.segment, account.region and relevant deal metrics (amount_sum, opportunity count, etc.).
   - if asked about competitors or competitive deals, use the competitor field
   - if asked about loss reasons, use the loss_reason field
   - if asked about lead sources or where deals came from, use the lead_source field
@@ -75,18 +75,16 @@ sample_queries:
         ]
       base_view: omni_dbt_saas__opportunities
       filters:
-        omni_dbt_saas__opportunities.type:
-          is: New Business
         omni_dbt_saas__opportunities.stage_name:
-          is: [ Trial, Trial Positive, Negotiate ]
+          is: [ Trial, Trial Positive ]
       limit: 1000
       sorts:
         - field: omni_dbt_saas__opportunities.close_date[date]
       topic: opportunity
     description: Show a list of all active trials
     prompt: Show me all active trials
-    ai_context: This is a list of all active trials. If anyone asks about current
-      active trials this is the list.
+    ai_context: This is a list of all active trials (Trial and Trial Positive
+      stages). If anyone asks about current active trials this is the list.
   Deals Won this Quarter:
     query:
       fields:
@@ -100,10 +98,8 @@ sample_queries:
         ]
       base_view: omni_dbt_saas__opportunities
       filters:
-        omni_dbt_saas__opportunities.type:
-          is: [ New Business, Expansion ]
         omni_dbt_saas__opportunities.close_date:
-          time_for_duration: [ 1 quarters ago, 1 quarters ]
+          time_for_duration: [ this quarter, 1 quarters ]
         omni_dbt_saas__opportunities.stage_name:
           is: Closed Won
       limit: 1000
@@ -111,22 +107,21 @@ sample_queries:
         - field: omni_dbt_saas__opportunities.close_date[date]
       topic: opportunity
     description: List of deals won in this quarter
-    ai_context: All the deals that have closed this quarter. This includes new
-      business and expansions.
+    ai_context: All the deals that have closed won this quarter, across all
+      opportunity types (New Business, Expansion and Renewal).
   Won iARR:
     query:
       fields: [ omni_dbt_saas__opportunities.amount_sum ]
       base_view: omni_dbt_saas__opportunities
       filters:
-        omni_dbt_saas__opportunities.type:
-          is: [ New Business, Expansion ]
         omni_dbt_saas__opportunities.is_won:
           is: true
       limit: 1000
       topic: opportunity
     description: How much iARR we've won across all time
     prompt: What is our total won iARR?
-    ai_context: Use this when asked about our total iARR.
+    ai_context: Use this when asked about our total iARR. It is not filtered by
+      opportunity type.
   Quarterly IQCC ARR by Segment:
     query:
       fields:

@@ -1,5 +1,13 @@
 ai_context: |
-  @{tone} @{addressee}
+  @{tone}
+
+  Before calling the 'GenerateQuery' tool, please do the following steps:
+
+  1. Explain your reasoning of how you picked the fields in detail (9-10 sentences max), under the header "Reasoning for field selection"
+  2. Another 3-4 sentences on alternative queries or fields you could have chosen under the header "Alternative approaches considered"
+  3. Finally add 4 markdown links as follow up questions under the header "Follow-up questions"
+
+  When generating a summary, always output the summary in both English and Spanish.
 
 cache_policies:
   daily_cache_policy:
@@ -31,6 +39,3 @@ ignored_schemas:
 constants:
   tone:
     value: Keep responses concise, professional, and friendly.
-  addressee:
-    value: Always address the user in every response with
-      {{omni_attributes.omni_user_name}} in a natural and conversational manner.

@@ -1,3 +1,6 @@
+ai_context: |
+  @{tone} @{addressee}
+
 cache_policies:
   daily_cache_policy:
     max_cache_age: 0 hours
@@ -24,3 +27,10 @@ ignored_schemas:
     ANALYTICS_DEV.DBT_CESTRADA_PROD_PHARMA,
     ANALYTICS_DEV.DBT_CESTRADA_PROD_SAAS
   ]
+
+constants:
+  tone:
+    value: Keep responses concise and professional.
+  addressee:
+    value: Always address the user in every response with
+      {{omni_attributes.omni_user_name}}

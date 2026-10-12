@@ -65,7 +65,7 @@ CLOSED_ASOF AS (
     ID, 
     ACCOUNT_ID, 
     NAME, 
-    STAGE_NAME, 
+    STAGE_NAME as STAGE_NAME_UPDATED, 
     AMOUNT, 
     ARR, 
     ACV, 

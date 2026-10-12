@@ -110,3 +110,20 @@ dimensions:
 measures:
   count:
     aggregate_type: count
+
+  total_amount_sum:
+    sql: ${sample_data_stage_nyc__taxi.total_amount}
+    description: "(Sum) Total Amount: The total_amount column represents the full
+      fare charged to the rider for a taxi trip, including all applicable
+      charges such as base fare, taxes, surcharges, tolls, and tips (and may be
+      negative in cases of refunds or adjustments)."
+    aggregate_type: sum
+
+  trip_distance_max:
+    sql: ${sample_data_stage_nyc__taxi.trip_distance}
+    label: Max Trip Distance
+    description: "(Max) Trip Distance: The trip_distance column records the total
+      mileage of a taxi ride, representing how far the passenger traveled from
+      pickup to drop-off, which drives fare calculation and operational metrics
+      like demand and driver efficiency."
+    aggregate_type: max

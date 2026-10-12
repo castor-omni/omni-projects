@@ -1,5 +1,4 @@
-# Reference this view as sample_data_stage_nyc__service_requests
-catalog: sample_data_stage
+# Reference this view as nyc__service_requests
 schema: nyc
 table_name: service_requests
 

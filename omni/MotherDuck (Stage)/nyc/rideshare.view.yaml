@@ -130,3 +130,10 @@ measures:
     description: "(Sum) Trip Time: Duration of the ride from pickup to dropoff,
       representing how long each trip took in seconds."
     aggregate_type: sum
+
+  trip_miles_sum:
+    sql: ${nyc__rideshare.trip_miles}
+    description: "(Sum) Trip Miles: Distance traveled during a completed rideshare
+      trip, measured in miles, used to calculate fares, driver earnings, and
+      operational metrics like trip length and routing efficiency."
+    aggregate_type: sum

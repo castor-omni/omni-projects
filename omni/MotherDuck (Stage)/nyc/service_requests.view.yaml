@@ -203,3 +203,10 @@ dimensions:
 measures:
   count:
     aggregate_type: count
+
+  agency_count_distinct:
+    sql: ${nyc__service_requests.agency}
+    description: "(Count Distinct) Agency: The agency column identifies which New
+      York City government department handled the reported service request,
+      indicating organizational responsibility for addressing the issue."
+    aggregate_type: count_distinct

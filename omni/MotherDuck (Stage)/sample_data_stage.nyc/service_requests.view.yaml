@@ -1,0 +1,206 @@
+# Reference this view as sample_data_stage_nyc__service_requests
+catalog: sample_data_stage
+schema: nyc
+table_name: service_requests
+
+dimensions:
+  unique_key:
+    description: A system-assigned identifier that uniquely tracks each NYC service
+      request so it can be referenced, managed, and linked across processes and
+      reports.
+
+  created_date:
+    description: The date and time when a 311 service request was originally
+      submitted to the city, marking the start of the request’s lifecycle.
+
+  closed_date:
+    description: The date and time when a 311 service request was resolved or
+      officially closed, indicating the completion of the reported issue’s
+      handling by the responsible agency.
+
+  agency:
+    description: The agency column identifies which New York City government
+      department handled the reported service request, indicating organizational
+      responsibility for addressing the issue.
+
+  agency_name:
+    description: The agency_name column identifies the NYC government department or
+      office responsible for handling the service request, indicating which
+      entity is accountable for responding to and resolving the reported issue.
+
+  complaint_type:
+    description: Indicates the category of issue reported in a NYC 311 service
+      request, describing the general nature of the complaint (e.g., plumbing,
+      electrical, construction, property owner issues) for routing and
+      resolution.
+
+  descriptor:
+    description: A short text field specifying the detailed subtype or condition of
+      the reported issue within the broader complaint type for a NYC service
+      request (e.g., the specific fixture or problem area).
+
+  location_type:
+    description: Indicates the kind of place associated with the service request,
+      specifying where the issue occurred or was reported (e.g., residential
+      building, street, property address, tenant address).
+
+  incident_zip:
+    description: The ZIP code where the service request incident occurred, used to
+      locate and route the complaint to the appropriate NYC agency or service
+      area.
+
+  incident_address:
+    description: The street address where the reported service request incident
+      occurred, used to locate and route the complaint for investigation or
+      resolution.
+
+  street_name:
+    description: The street_name column captures the name of the street where the
+      service request incident occurred, enabling location-based tracking and
+      analysis of NYC service issues.
+
+  cross_street_1:
+    description: The nearest intersecting street to the incident address, used to
+      pinpoint the location of a reported NYC service request for operational
+      routing and response.
+
+  cross_street_2:
+    description: The secondary cross street near the reported incident location,
+      used to pinpoint where the NYC service request occurred.
+
+  intersection_street_1:
+    description: The primary street name at the reported intersection for a NYC 311
+      service request, indicating where the issue was observed.
+
+  intersection_street_2:
+    description: The secondary cross street at the reported incident location, used
+      to pinpoint the intersection for the NYC service request.
+
+  address_type:
+    description: Indicates the format or reference type used to locate the reported
+      incident (e.g., specific address, block face, intersection, place name, or
+      latitude/longitude), defining how the service request’s location was
+      provided.
+
+  city:
+    description: The city column identifies the New York City borough or locality
+      where the service request was reported, enabling agencies to analyze and
+      route complaints based on geographic area.
+
+  landmark:
+    description: The “landmark” column identifies a notable place or facility near
+      the reported incident, providing a recognizable reference point to help
+      locate and categorize the service request within NYC.
+
+  facility_type:
+    description: Categorizes the type of facility associated with a service request
+      (e.g., school, police precinct, sanitation garage), providing context
+      about where the issue originates or is managed.
+
+  status:
+    description: The status column indicates the current lifecycle stage of a
+      service request (e.g., whether it’s open, in progress, or closed), which
+      helps track workflow progress and prioritize operational response.
+
+  due_date:
+    description: The deadline by which the responsible agency aims to resolve or
+      take action on the service request.
+
+  resolution_description:
+    description: A short text note explaining how a 311 service request was resolved
+      or addressed, summarizing the agency’s action or outcome for the
+      complaint.
+
+  resolution_action_updated_date:
+    description: The date and time when the agency last updated the action taken to
+      resolve a specific NYC service request, indicating the most recent
+      progress or change in the resolution process.
+
+  community_board:
+    description: The community_board column indicates the New York City community
+      board (borough and board number) associated with where the service request
+      originated or is assigned, with some entries marked as unspecified when
+      the board is not determined.
+
+  bbl:
+    description: The “bbl” column stores the NYC Borough-Block-Lot identifier,
+      linking each service request to the specific property parcel where the
+      issue occurred for precise location and ownership reference.
+
+  borough:
+    description: The borough column indicates the New York City borough where the
+      service request was reported, identifying the geographic area responsible
+      for addressing the complaint or issue.
+
+  x_coordinate_state_plane:
+    description: The x_coordinate_state_plane column stores the horizontal State
+      Plane coordinate for the service request’s location in NYC, used to
+      precisely map and analyze where the complaint occurred.
+
+  y_coordinate_state_plane:
+    description: The northing (Y) coordinate of the service request’s location in
+      the New York State Plane coordinate system, used to pinpoint where the
+      incident occurred.
+
+  open_data_channel_type:
+    description: Indicates the channel through which the 311 service request was
+      submitted (e.g., phone, online, mobile), providing insight into how
+      residents interact with the city to report issues.
+
+  park_facility_name:
+    description: The name of the specific NYC park or playground associated with the
+      service request, indicating where the reported issue occurred within the
+      parks system.
+
+  park_borough:
+    description: Indicates the New York City borough in which the service request
+      occurred, used to route and analyze 311 complaints by geographic area.
+
+  vehicle_type:
+    description: Indicates the type of vehicle involved in the NYC service request,
+      specifying the service category (e.g., car service, ambulette/paratransit,
+      commuter van) to guide routing, compliance, and resolution actions.
+
+  taxi_company_borough:
+    description: The borough of New York City where the taxi company associated with
+      the service request is based or operates, used to categorize and route
+      issues by the company’s primary service area.
+
+  taxi_pick_up_location:
+    description: Indicates where the reported taxi pickup occurred, categorizing the
+      service request’s pickup location (e.g., intersection, airport, bus
+      terminal) to support routing, analysis, and service enforcement.
+
+  bridge_highway_name:
+    description: The name of the specific bridge or highway associated with the
+      service request, indicating the roadway location relevant to the reported
+      issue.
+
+  bridge_highway_direction:
+    description: Indicates the directional heading or destination bound of traffic
+      on the relevant bridge or highway associated with the service request
+      (e.g., toward Manhattan, Queens, Bronx, Staten Island).
+
+  road_ramp:
+    description: Indicates the specific roadway, ramp, or intersection location
+      associated with the service request, capturing where the reported issue
+      occurred.
+
+  bridge_highway_segment:
+    description: Indicates the specific bridge or highway segment associated with
+      the service request, identifying the exact roadway location relevant to
+      the reported issue.
+
+  latitude:
+    description: The latitude records the north–south geographic coordinate of where
+      the NYC service request incident occurred, enabling location-based
+      analysis of complaints.
+
+  longitude:
+    description: The longitude coordinate of the reported service request’s location
+      in New York City, used to geographically pinpoint where the incident
+      occurred.
+
+measures:
+  count:
+    aggregate_type: count

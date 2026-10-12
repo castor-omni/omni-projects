@@ -1,0 +1,127 @@
+# Reference this view as sample_data_stage_nyc__rideshare
+catalog: sample_data_stage
+schema: nyc
+table_name: rideshare
+
+dimensions:
+  hvfhs_license_num:
+    description: The hvfhs_license_num identifies the specific High Volume For-Hire
+      Service (e.g., Uber, Lyft) licensed by NYC that is responsible for the
+      ride, enabling attribution of trips to the correct company for reporting
+      and compliance.
+
+  dispatching_base_num:
+    description: Identifier for the rideshare base that dispatched the trip,
+      indicating which affiliated base or company initiated and managed the
+      ride.
+
+  originating_base_num:
+    description: The originating_base_num identifies the rideshare base (dispatch
+      company or fleet hub) that initially received and originated the trip
+      request, indicating which base was responsible for starting the ride.
+
+  request_datetime:
+    description: The timestamp when the rider requested a trip, marking the start of
+      the service lifecycle for that ride (used to analyze demand patterns,
+      response times, and service efficiency).
+
+  on_scene_datetime:
+    description: Timestamp when the driver arrived at the pickup location after a
+      ride request, marking the start of passenger pickup readiness.
+
+  pickup_datetime:
+    description: The timestamp when the passenger was actually picked up and the
+      trip began, used to track ride start times for scheduling, demand
+      analysis, and service performance.
+
+  dropoff_datetime:
+    description: The date and time when the passenger was dropped off, marking the
+      end of the ride for billing, service duration, and operational tracking.
+
+  pulocation_id:
+    sql: '"PULocationID"'
+    format: ID
+    description: The PULocationID column identifies the NYC Taxi & Limousine
+      Commission zone where the rideshare trip was picked up, serving as the
+      geographic starting point for the ride.
+
+  dolocation_id:
+    sql: '"DOLocationID"'
+    format: ID
+    description: The destination location identifier for the trip, indicating the
+      NYC zone where the passenger was dropped off.
+
+  trip_miles:
+    description: Distance traveled during a completed rideshare trip, measured in
+      miles, used to calculate fares, driver earnings, and operational metrics
+      like trip length and routing efficiency.
+
+  trip_time:
+    description: Duration of the ride from pickup to dropoff, representing how long
+      each trip took in seconds.
+
+  base_passenger_fare:
+    description: The base_passenger_fare represents the core fare amount charged to
+      the rider for the trip (excluding extras like taxes, tips, surcharges, or
+      tolls), reflecting the primary revenue from the ride itself.
+
+  tolls:
+    description: Total toll charges paid during the ride, representing the monetary
+      cost of tolls incurred between pickup and dropoff.
+
+  bcf:
+    description: Estimated per-trip carbon footprint (BCF) value, indicating the
+      trip’s greenhouse gas impact based on distance and service
+      characteristics.
+
+  sales_tax:
+    description: The sales_tax column records the dollar amount of sales tax charged
+      to the rider for each rideshare trip, representing the tax portion of the
+      fare attributable to that trip.
+
+  congestion_surcharge:
+    description: The congestion_surcharge represents the additional fee charged to a
+      rideshare trip for operating in designated high-traffic zones or periods,
+      reflecting regulatory congestion pricing added to the fare.
+
+  airport_fee:
+    description: The airport_fee column records the additional surcharge applied to
+      a rideshare trip for pickups or drop-offs at designated airport zones in
+      NYC.
+
+  tips:
+    description: The amount of gratuity paid by the passenger for a rideshare trip,
+      representing additional compensation to the driver beyond the base fare.
+
+  driver_pay:
+    description: The amount of money paid to the rideshare driver for completing a
+      trip, reflecting the driver’s earnings for that ride.
+
+  shared_request_flag:
+    description: Indicates whether the ride was requested as a shared/pooled trip
+      (Y) or a private, non-shared trip (N), affecting pricing, matching, and
+      service logistics.
+
+  shared_match_flag:
+    description: Indicates whether the ride was part of a shared trip (Y) or a
+      private, non-shared trip (N), reflecting if the passenger matched with
+      others for the journey.
+
+  access_a_ride_flag:
+    description: Indicates whether the trip was part of NYC’s Access-A-Ride
+      paratransit program (e.g., “N” for no), distinguishing standard rideshare
+      trips from ADA-accessible service rides.
+
+  wav_request_flag:
+    description: Indicates whether the ride request was for a wheelchair-accessible
+      vehicle (Y for requested, N for not), reflecting accessibility needs in
+      the trip.
+
+  wav_match_flag:
+    description: Indicates whether the trip request was matched to a wheelchair
+      accessible vehicle (Y) or not (N), reflecting compliance with WAV service
+      availability for that ride.
+
+measures:
+  count:
+    aggregate_type: count

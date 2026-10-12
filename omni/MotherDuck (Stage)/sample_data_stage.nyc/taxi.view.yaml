@@ -1,0 +1,129 @@
+# Reference this view as sample_data_stage_nyc__taxi
+catalog: sample_data_stage
+schema: nyc
+table_name: taxi
+
+dimensions:
+  vendor_id:
+    sql: '"VendorID"'
+    format: ID
+    description: Identifies the taxi company or dispatch provider that processed the
+      trip, used for attributing rides, billing, and vendor-level reporting.
+
+  tpep_pickup_datetime:
+    description: The timestamp when a taxi trip began, indicating the pickup time
+      used to track trip start, demand patterns, and service operations.
+
+  tpep_dropoff_datetime:
+    description: The timestamp when a Yellow Taxi trip ended, used to indicate the
+      drop-off time for measuring trip duration, aligning operations, and
+      billing.
+
+  passenger_count:
+    description: Number of passengers in the taxi for the trip, used to understand
+      ride occupancy and support pricing, capacity, and demand analysis.
+
+  trip_distance:
+    description: The trip_distance column records the total mileage of a taxi ride,
+      representing how far the passenger traveled from pickup to drop-off, which
+      drives fare calculation and operational metrics like demand and driver
+      efficiency.
+
+  ratecode_id:
+    sql: '"RatecodeID"'
+    format: ID
+    description: RatecodeID indicates the fare rate category assigned to the taxi
+      trip (e.g., standard metered, JFK flat fare, negotiated fare), which
+      determines how the passenger is charged.
+
+  store_and_fwd_flag:
+    description: Indicates whether the trip record was temporarily stored onboard
+      the taxi and forwarded to the server later (Y) or transmitted to the
+      server in real time (N), reflecting the data transmission method for the
+      ride.
+
+  pulocation_id:
+    sql: '"PULocationID"'
+    format: ID
+    description: Identifier for the taxi pickup zone (NYC Taxi & Limousine
+      Commission location ID) indicating where the trip began.
+
+  dolocation_id:
+    sql: '"DOLocationID"'
+    format: ID
+    description: DOLocationID identifies the Taxi & Limousine Commission zone where
+      the trip ended (the drop-off location), used for aggregating and analyzing
+      ride destinations across NYC.
+
+  payment_type:
+    description: Indicates the method by which the fare was paid for the taxi trip
+      (e.g., cash, credit card, no charge, dispute), enabling analysis of
+      customer payment preferences and settlement processes.
+
+  fare_amount:
+    description: The base dollar amount charged by the taxi for the trip, excluding
+      tips and surcharges, reflecting the core fare assessed for the ride.
+
+  extra:
+    description: The “extra” column captures additional surcharges applied to the
+      taxi fare (such as peak, airport, or other mandated fees), representing
+      incremental charges beyond the base fare for a trip.
+
+  mta_tax:
+    description: The MTA tax field represents the Metropolitan Transportation
+      Authority surcharge applied to eligible NYC taxi trips, indicating the
+      regulated fee (which may be waived or reversed in some cases) associated
+      with the ride.
+
+  tip_amount:
+    description: The tip_amount column records the dollar value of gratuities paid
+      by the passenger for a taxi trip, reflecting additional customer
+      compensation to the driver beyond the base fare.
+
+  tolls_amount:
+    description: The tolls_amount column records the total toll charges applied to a
+      taxi trip, reflecting roadway or bridge fees incurred during the ride that
+      affect the fare.
+
+  improvement_surcharge:
+    description: A fee applied to taxi fares intended to fund service improvements,
+      reflected as a positive surcharge (or occasionally an adjustment/credit
+      when negative) added to the passenger’s total fare.
+
+  total_amount:
+    description: The total_amount column represents the full fare charged to the
+      rider for a taxi trip, including all applicable charges such as base fare,
+      taxes, surcharges, tolls, and tips (and may be negative in cases of
+      refunds or adjustments).
+
+  congestion_surcharge:
+    description: The congestion_surcharge column records the fee applied (or
+      adjusted/credited) to a taxi trip due to city-imposed congestion pricing,
+      reflecting additional charges related to traffic conditions or designated
+      congestion zones.
+
+  airport_fee:
+    description: Monetary charge assessed by the taxi for pickups or drop-offs at
+      designated airports, reflecting airport access or surcharge fees applied
+      to the trip.
+
+measures:
+  count:
+    aggregate_type: count
+
+  total_amount_sum:
+    sql: ${sample_data_stage_nyc__taxi.total_amount}
+    description: "(Sum) Total Amount: The total_amount column represents the full
+      fare charged to the rider for a taxi trip, including all applicable
+      charges such as base fare, taxes, surcharges, tolls, and tips (and may be
+      negative in cases of refunds or adjustments)."
+    aggregate_type: sum
+
+  trip_distance_max:
+    sql: ${sample_data_stage_nyc__taxi.trip_distance}
+    label: Max Trip Distance
+    description: "(Max) Trip Distance: The trip_distance column records the total
+      mileage of a taxi ride, representing how far the passenger traveled from
+      pickup to drop-off, which drives fare calculation and operational metrics
+      like demand and driver efficiency."
+    aggregate_type: max

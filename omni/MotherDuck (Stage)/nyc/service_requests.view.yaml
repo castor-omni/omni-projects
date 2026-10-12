@@ -1,5 +1,4 @@
-# Reference this view as sample_data_stage_nyc__service_requests
-catalog: sample_data_stage
+# Reference this view as nyc__service_requests
 schema: nyc
 table_name: service_requests
 
@@ -204,3 +203,10 @@ dimensions:
 measures:
   count:
     aggregate_type: count
+
+  agency_count_distinct:
+    sql: ${nyc__service_requests.agency}
+    description: "(Count Distinct) Agency: The agency column identifies which New
+      York City government department handled the reported service request,
+      indicating organizational responsibility for addressing the issue."
+    aggregate_type: count_distinct

@@ -124,3 +124,9 @@ dimensions:
 measures:
   count:
     aggregate_type: count
+
+  trip_time_sum:
+    sql: ${nyc__rideshare.trip_time}
+    description: "(Sum) Trip Time: Duration of the ride from pickup to dropoff,
+      representing how long each trip took in seconds."
+    aggregate_type: sum

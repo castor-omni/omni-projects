@@ -22,6 +22,7 @@ joins:
   omni_dbt_saas__contacts: {}
   omni_dbt_saas__opportunity_line_items:
     omni_dbt_saas__product: {}
+  omni_dbt_saas__user: {}
 
 relationships:
   - join_from_view: omni_dbt_saas__opportunities
@@ -39,6 +40,12 @@ relationships:
       ${omni_dbt_saas__opportunity_line_items.opportunity_id}
     relationship_type: one_to_one
 
+  - join_from_view: omni_dbt_saas__opportunities
+    join_to_view: omni_dbt_saas__user
+    join_type: always_left
+    on_sql: ${omni_dbt_saas__opportunities.owner_id} = ${omni_dbt_saas__user.id}
+    relationship_type: many_to_one
+
 ai_context: |
   You are an expert data analyst, who has a vast amount of experience analyzing sales data to find useful insights and trends.
 
@@ -49,7 +56,7 @@ ai_context: |
 
   Typical questions will be focused on sales performance and pipeline, with breakdowns across reps, stages, accounts, products, and more:
   - if asked about total sales, revenue, ARR or iARR, always use this field: omni_dbt_saas__opportunities.amount_sum. It is the single measure for revenue and ARR in this topic, including for territory planning, forecasting and segmentation.
-  - if asked about which reps or sales reps, use opportunity_owner.name (which combines first_name and last_name). Never return an ID unless explicitly asked. If only given the first name, use a contains filter.
+  - if asked about which reps or sales reps, use omni_dbt_saas__user.first_name and omni_dbt_saas__user.last_name, combined as first_name + a space + last_name (e.g. CONCAT(first_name, ' ', last_name)) to display the rep's full name. Never return an ID unless explicitly asked. If only given the first name, use a contains filter on omni_dbt_saas__user.first_name.
   - if asked about lost deals or losses, filter on stage_name = Closed Lost
   - pipeline means open New Business opportunities: type = New Business and stage_name is anything other than Closed Won or Closed Lost. Only include Expansion or Renewal in pipeline if the user explicitly asks for them.
   - if asked about won deals, filter on stage_name = Closed Won
@@ -78,11 +85,17 @@ sample_queries:
         [
           "omni_dbt_saas__opportunities.close_date[date]",
           omni_dbt_saas__opportunities.name,
-          opportunity_owner.name,
+          omni_dbt_saas__user.first_name,
+          omni_dbt_saas__user.last_name,
           omni_dbt_saas__opportunities.stage_name,
           omni_dbt_saas__opportunities.amount_sum
         ]
       base_view: omni_dbt_saas__opportunities
+      calculations:
+        owner_name:
+          sql: CONCAT(${omni_dbt_saas__user.first_name}, ' ',
+            ${omni_dbt_saas__user.last_name})
+          label: Owner Name
       filters:
         omni_dbt_saas__opportunities.stage_name:
           is: [ Trial, Trial Positive ]
@@ -99,13 +112,19 @@ sample_queries:
       fields:
         [
           omni_dbt_saas__opportunities.name,
-          opportunity_owner.name,
+          omni_dbt_saas__user.first_name,
+          omni_dbt_saas__user.last_name,
           "omni_dbt_saas__opportunities.close_date[date]",
           omni_dbt_saas__opportunities.competitor,
           omni_dbt_saas__opportunities.stage_name,
           omni_dbt_saas__opportunities.amount_sum
         ]
       base_view: omni_dbt_saas__opportunities
+      calculations:
+        owner_name:
+          sql: CONCAT(${omni_dbt_saas__user.first_name}, ' ',
+            ${omni_dbt_saas__user.last_name})
+          label: Owner Name
       filters:
         omni_dbt_saas__opportunities.close_date:
           time_for_duration: [ this quarter, 1 quarters ]

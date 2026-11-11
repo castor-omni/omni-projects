@@ -38,6 +38,11 @@ measures:
   count:
     aggregate_type: count
 
+  product_code_count_distinct:
+    sql: ${omni_dbt_saas__product.product_code}
+    description: "(Count Distinct) Product Code: Internal product code or SKU"
+    aggregate_type: count_distinct
+
 #The info below was pulled from your dbt repository and is read-only.
 dbt:
   name: product

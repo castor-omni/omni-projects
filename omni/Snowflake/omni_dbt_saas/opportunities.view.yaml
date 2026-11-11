@@ -145,6 +145,15 @@ dimensions:
   ae_notes:
     sql: '"AE_NOTES"'
 
+  is_iqcc:
+    sql: ${omni_dbt_saas__opportunities.type} = 'New Business' AND
+      ${omni_dbt_saas__opportunities.is_won} = TRUE AND DATE_TRUNC('quarter',
+      ${omni_dbt_saas__opportunities.created_date}) = DATE_TRUNC('quarter',
+      ${omni_dbt_saas__opportunities.close_date})
+    label: Is IQCC
+    description: True for New Business opportunities closed won in the same quarter
+      they were created (in-quarter create close).
+
 measures:
   count:
     aggregate_type: count
@@ -158,6 +167,30 @@ measures:
   risk_score_sum:
     sql: ${omni_dbt_saas__opportunities.risk_score}
     aggregate_type: sum
+
+  won_opps_count:
+    label: Won Opps Count
+    description: Number of opportunities that were closed won.
+    aggregate_type: count
+    filters:
+      is_won:
+        is: true
+
+  amount_sum_won:
+    sql: ${omni_dbt_saas__opportunities.amount}
+    label: Amount Sum Won
+    description: Total contract amount (iARR) across closed won opportunities.
+    aggregate_type: sum
+    filters:
+      is_won:
+        is: true
+
+  conversion_rate:
+    sql: ${omni_dbt_saas__opportunities.won_opps_count} /
+      NULLIF(${omni_dbt_saas__opportunities.count}, 0)
+    label: Conversion Rate
+    format: percent_1
+    description: Won opportunities as a share of all opportunities in the query (win rate).
 
 #The info below was pulled from your dbt repository and is read-only.
 dbt:

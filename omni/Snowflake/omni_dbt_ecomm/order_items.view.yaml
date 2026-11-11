@@ -97,6 +97,33 @@ measures:
   count:
     aggregate_type: count
 
+  revenue:
+    sql: ${omni_dbt_ecomm__order_items.sale_price}
+    aggregate_type: sum
+
+  orders:
+    sql: ${omni_dbt_ecomm__order_items.order_id}
+    aggregate_type: count_distinct
+
+  shipping_days:
+    sql: ${omni_dbt_ecomm__order_items.time_to_ship}
+    aggregate_type: average
+    filters:
+      is_shipped:
+        is: true
+
+  first_order:
+    sql: ${omni_dbt_ecomm__order_items.created_at}
+    aggregate_type: min
+
+  last_order:
+    sql: ${omni_dbt_ecomm__order_items.created_at}
+    aggregate_type: max
+
+  average_price:
+    sql: ${omni_dbt_ecomm__order_items.sale_price}
+    aggregate_type: average
+
 #The info below was pulled from your dbt repository and is read-only.
 dbt:
   name: order_items

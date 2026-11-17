@@ -1,0 +1,44 @@
+# Reference this view as dim_date
+uploaded_table_name: dim_date.csv::9bde94e3-9e80-4f4a-b51f-c1a9c4020291
+
+dimensions:
+  date_key:
+    display_order: 0
+    primary_key: true
+
+  date:
+    display_order: 1
+
+  year:
+    display_order: 2
+
+  quarter:
+    display_order: 3
+
+  quarter_label:
+    display_order: 4
+
+  month_num:
+    display_order: 5
+
+  month_name:
+    display_order: 6
+
+  year_month:
+    display_order: 7
+
+  week_start_date:
+    display_order: 8
+
+  day_of_week_num:
+    display_order: 9
+
+  day_name:
+    display_order: 10
+
+  is_weekend:
+    display_order: 11
+
+measures:
+  count:
+    aggregate_type: count

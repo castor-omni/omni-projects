@@ -1,0 +1,23 @@
+# Reference this view as dim_clients
+uploaded_table_name: dim_clients.csv::4adb4660-1347-438c-9784-2593fc1d40f3
+
+dimensions:
+  client_id:
+    display_order: 0
+    primary_key: true
+
+  company_id:
+    display_order: 1
+
+  client_name:
+    display_order: 2
+
+  industry:
+    display_order: 3
+
+  client_tier:
+    display_order: 4
+
+measures:
+  count:
+    aggregate_type: count

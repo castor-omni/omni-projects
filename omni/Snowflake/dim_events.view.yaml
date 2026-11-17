@@ -1,0 +1,68 @@
+# Reference this view as dim_events
+uploaded_table_name: dim_events.csv::a44e81c0-6f6e-4443-a116-5b61e5e74a93
+
+dimensions:
+  event_id:
+    display_order: 0
+    primary_key: true
+
+  company_id:
+    display_order: 1
+
+  client_id:
+    display_order: 2
+
+  venue_id:
+    display_order: 3
+
+  event_name:
+    display_order: 4
+
+  event_type:
+    display_order: 5
+
+  start_date:
+    display_order: 6
+
+  end_date:
+    display_order: 7
+
+  num_days:
+    display_order: 8
+
+  status:
+    display_order: 9
+
+  producer_user_id:
+    display_order: 10
+
+  expected_attendance:
+    display_order: 11
+
+  created_date:
+    display_order: 12
+
+  budgeted_labor_cost_usd:
+    display_order: 13
+
+  quoted_revenue_usd:
+    display_order: 14
+
+measures:
+  count:
+    aggregate_type: count
+
+  total_budgeted_labor_cost:
+    sql: ${dim_events.budgeted_labor_cost_usd}
+    format: usdcurrency
+    aggregate_type: sum
+
+  total_quoted_revenue:
+    sql: ${dim_events.quoted_revenue_usd}
+    format: usdcurrency
+    aggregate_type: sum
+
+  total_expected_attendance:
+    sql: ${dim_events.expected_attendance}
+    format: number_0
+    aggregate_type: sum

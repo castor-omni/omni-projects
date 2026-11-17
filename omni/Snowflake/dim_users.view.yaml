@@ -1,0 +1,29 @@
+# Reference this view as dim_users
+uploaded_table_name: dim_users.csv::837b4416-a1de-4cba-b9a5-79cdb015ddec
+
+dimensions:
+  user_id:
+    display_order: 0
+    primary_key: true
+
+  company_id:
+    display_order: 1
+
+  full_name:
+    display_order: 2
+
+  email:
+    display_order: 3
+
+  role:
+    display_order: 4
+
+  is_admin:
+    display_order: 5
+
+  created_date:
+    display_order: 6
+
+measures:
+  count:
+    aggregate_type: count

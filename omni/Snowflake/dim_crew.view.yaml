@@ -1,0 +1,58 @@
+# Reference this view as dim_crew
+uploaded_table_name: dim_crew.csv::ef676135-ab22-47ba-9a9b-e38268a867f8
+
+dimensions:
+  crew_id:
+    display_order: 0
+    primary_key: true
+
+  first_name:
+    display_order: 1
+
+  last_name:
+    display_order: 2
+
+  full_name:
+    display_order: 3
+
+  home_city:
+    display_order: 4
+
+  home_state:
+    display_order: 5
+
+  primary_position_id:
+    display_order: 6
+
+  secondary_position_id:
+    display_order: 7
+
+  primary_department:
+    display_order: 8
+
+  experience_level:
+    display_order: 9
+
+  employment_type:
+    display_order: 10
+
+  is_marketplace_crew:
+    display_order: 11
+
+  onboarded_date:
+    display_order: 12
+
+  avg_rating:
+    display_order: 13
+
+  certification_count:
+    display_order: 14
+
+measures:
+  count:
+    aggregate_type: count
+
+  average_rating:
+    sql: ${dim_crew.avg_rating}
+    format: number_2
+    aggregate_type: average

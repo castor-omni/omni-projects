@@ -1,0 +1,40 @@
+# Reference this view as dim_venues
+uploaded_table_name: dim_venues.csv::5355a72f-1fea-4a86-9cad-2b862b0e2a73
+
+dimensions:
+  venue_id:
+    display_order: 0
+    primary_key: true
+
+  venue_name:
+    display_order: 1
+
+  venue_type:
+    display_order: 2
+
+  city:
+    display_order: 3
+
+  state:
+    display_order: 4
+
+  region:
+    display_order: 5
+
+  latitude:
+    display_order: 6
+
+  longitude:
+    display_order: 7
+
+  capacity:
+    display_order: 8
+
+measures:
+  count:
+    aggregate_type: count
+
+  total_capacity:
+    sql: ${dim_venues.capacity}
+    format: number_0
+    aggregate_type: sum

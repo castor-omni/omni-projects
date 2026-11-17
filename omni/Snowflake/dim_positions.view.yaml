@@ -1,0 +1,23 @@
+# Reference this view as dim_positions
+uploaded_table_name: dim_positions.csv::04bcba50-77c0-48b1-842c-d9b6e4e6e843
+
+dimensions:
+  position_id:
+    display_order: 0
+    primary_key: true
+
+  position_name:
+    display_order: 1
+
+  department:
+    display_order: 2
+
+  base_hourly_rate_usd:
+    display_order: 3
+
+  requires_certification:
+    display_order: 4
+
+measures:
+  count:
+    aggregate_type: count

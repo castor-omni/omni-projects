@@ -1,0 +1,7 @@
+base_view: dim_users
+group_label: Uploaded CSVs
+
+required_access_grants: []
+hidden_unless_access_grants: []
+
+joins: {}

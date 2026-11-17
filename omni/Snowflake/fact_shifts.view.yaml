@@ -1,0 +1,210 @@
+# Reference this view as fact_shifts
+uploaded_table_name: fact_shifts.csv::20f11a1c-ccd9-4083-b438-68b4538bbb1e
+
+dimensions:
+  shift_id:
+    display_order: 0
+    primary_key: true
+
+  company_id:
+    display_order: 1
+
+  event_id:
+    display_order: 2
+
+  crew_id:
+    display_order: 3
+
+  position_id:
+    display_order: 4
+
+  venue_id:
+    display_order: 5
+
+  client_id:
+    display_order: 6
+
+  booked_by_user_id:
+    display_order: 7
+
+  shift_date:
+    display_order: 8
+
+  shift_date_key:
+    display_order: 9
+
+  booked_date:
+    display_order: 10
+
+  booking_source:
+    display_order: 11
+
+  shift_status:
+    display_order: 12
+
+  scheduled_start_ts:
+    display_order: 13
+
+  scheduled_end_ts:
+    display_order: 14
+
+  clock_in_ts:
+    display_order: 15
+
+  clock_out_ts:
+    display_order: 16
+
+  is_late_clock_in:
+    display_order: 17
+
+  scheduled_hours:
+    display_order: 18
+
+  worked_hours:
+    display_order: 19
+
+  regular_hours:
+    display_order: 20
+
+  overtime_hours:
+    display_order: 21
+
+  pay_rate_usd:
+    display_order: 22
+
+  bill_rate_usd:
+    display_order: 23
+
+  scheduled_labor_cost_usd:
+    display_order: 24
+
+  scheduled_billable_usd:
+    display_order: 25
+
+  labor_cost_usd:
+    display_order: 26
+
+  billable_amount_usd:
+    display_order: 27
+
+  travel_cost_usd:
+    display_order: 28
+
+  gross_margin_usd:
+    display_order: 29
+
+measures:
+  count:
+    aggregate_type: count
+
+  total_scheduled_hours:
+    sql: ${fact_shifts.scheduled_hours}
+    format: number_1
+    aggregate_type: sum
+
+  total_worked_hours:
+    sql: ${fact_shifts.worked_hours}
+    format: number_1
+    aggregate_type: sum
+
+  total_regular_hours:
+    sql: ${fact_shifts.regular_hours}
+    format: number_1
+    aggregate_type: sum
+
+  total_overtime_hours:
+    sql: ${fact_shifts.overtime_hours}
+    format: number_1
+    aggregate_type: sum
+
+  total_scheduled_labor_cost:
+    sql: ${fact_shifts.scheduled_labor_cost_usd}
+    format: usdcurrency
+    aggregate_type: sum
+
+  total_scheduled_billable:
+    sql: ${fact_shifts.scheduled_billable_usd}
+    format: usdcurrency
+    aggregate_type: sum
+
+  total_labor_cost:
+    sql: ${fact_shifts.labor_cost_usd}
+    format: usdcurrency
+    description: Actual labor cost; only populated for completed shifts.
+    aggregate_type: sum
+
+  total_billable_amount:
+    sql: ${fact_shifts.billable_amount_usd}
+    format: usdcurrency
+    description: Actual billable amount; only populated for completed shifts.
+    aggregate_type: sum
+
+  total_travel_cost:
+    sql: ${fact_shifts.travel_cost_usd}
+    format: usdcurrency
+    aggregate_type: sum
+
+  total_gross_margin:
+    sql: ${fact_shifts.gross_margin_usd}
+    format: usdcurrency
+    aggregate_type: sum
+
+  gross_margin_pct:
+    sql: ${fact_shifts.total_gross_margin} /
+      NULLIF(${fact_shifts.total_billable_amount}, 0)
+    label: Gross Margin %
+    format: percent_1
+
+  average_pay_rate:
+    sql: ${fact_shifts.pay_rate_usd}
+    format: usdcurrency
+    aggregate_type: average
+
+  average_bill_rate:
+    sql: ${fact_shifts.bill_rate_usd}
+    format: usdcurrency
+    aggregate_type: average
+
+  completed_shift_count:
+    aggregate_type: count
+    filters:
+      shift_status:
+        is: Completed
+
+  no_show_count:
+    aggregate_type: count
+    filters:
+      shift_status:
+        is: No-Show
+
+  cancelled_count:
+    aggregate_type: count
+    filters:
+      shift_status:
+        is: Cancelled
+
+  no_show_rate:
+    sql: ${fact_shifts.no_show_count} / NULLIF(${fact_shifts.completed_shift_count}
+      + ${fact_shifts.no_show_count} + ${fact_shifts.cancelled_count}, 0)
+    format: percent_1
+    description: No-shows / (completed + no-show + cancelled shifts).
+
+  late_clock_in_count:
+    aggregate_type: count
+    filters:
+      is_late_clock_in:
+        is: true
+
+  late_clock_in_rate:
+    sql: ${fact_shifts.late_clock_in_count} /
+      NULLIF(${fact_shifts.completed_shift_count}, 0)
+    format: percent_1
+    description: Late clock-ins / completed shifts.
+
+  unique_crew_count:
+    sql: ${fact_shifts.crew_id}
+    aggregate_type: count_distinct
+
+  unique_event_count:
+    sql: ${fact_shifts.event_id}
+    aggregate_type: count_distinct

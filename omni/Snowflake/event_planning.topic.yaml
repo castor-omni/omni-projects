@@ -1,0 +1,70 @@
+base_view: fact_shifts
+label: Event Planning
+description: One row per crew member per event day (shift), Jan 2025–Dec 2026.
+
+joins:
+  dim_companies: {}
+  dim_events: {}
+  dim_crew: {}
+  dim_positions: {}
+  dim_venues: {}
+  dim_clients: {}
+  dim_users: {}
+  dim_date: {}
+
+relationships:
+  - join_from_view: fact_shifts
+    join_to_view: dim_companies
+    join_type: always_left
+    on_sql: ${fact_shifts.company_id} = ${dim_companies.company_id}
+    relationship_type: many_to_one
+
+  - join_from_view: fact_shifts
+    join_to_view: dim_events
+    join_type: always_left
+    on_sql: ${fact_shifts.event_id} = ${dim_events.event_id}
+    relationship_type: many_to_one
+
+  - join_from_view: fact_shifts
+    join_to_view: dim_crew
+    join_type: always_left
+    on_sql: ${fact_shifts.crew_id} = ${dim_crew.crew_id}
+    relationship_type: many_to_one
+
+  - join_from_view: fact_shifts
+    join_to_view: dim_positions
+    join_type: always_left
+    on_sql: ${fact_shifts.position_id} = ${dim_positions.position_id}
+    relationship_type: many_to_one
+
+  - join_from_view: fact_shifts
+    join_to_view: dim_venues
+    join_type: always_left
+    on_sql: ${fact_shifts.venue_id} = ${dim_venues.venue_id}
+    relationship_type: many_to_one
+
+  - join_from_view: fact_shifts
+    join_to_view: dim_clients
+    join_type: always_left
+    on_sql: ${fact_shifts.client_id} = ${dim_clients.client_id}
+    relationship_type: many_to_one
+
+  - join_from_view: fact_shifts
+    join_to_view: dim_users
+    join_type: always_left
+    on_sql: ${fact_shifts.booked_by_user_id} = ${dim_users.user_id}
+    relationship_type: many_to_one
+
+  - join_from_view: fact_shifts
+    join_to_view: dim_date
+    join_type: always_left
+    on_sql: ${fact_shifts.shift_date_key} = ${dim_date.date_key}
+    relationship_type: many_to_one
+
+ai_context: Shifts through Nov 17 2026 are Completed, No-Show or Cancelled;
+  later shifts are Confirmed or Pending. Actual labor cost, billable amount and
+  gross margin exist only for completed shifts (zero for no-shows/cancellations,
+  null for future shifts) — use scheduled cost/billable for forecasts and future
+  shifts. Companies are Lasso's customers (tenants); clients are each company's
+  own customers; users are company staff who booked shifts. Prefer names over
+  IDs.

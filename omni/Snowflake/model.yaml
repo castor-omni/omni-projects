@@ -34,6 +34,15 @@ ignored_schemas:
     ANALYTICS_DEV.DBT_CESTRADA_PROD_SAAS
   ]
 
+access_grants:
+  internal_users:
+    user_attribute: company_id
+    allowed_values: [ is_admin ]
+
+default_topic_required_access_grants: [ internal_users ]
+
+default_topic_hidden_unless_access_grants: [ internal_users ]
+
 constants:
   tone:
     value: Keep responses concise, professional, and friendly.

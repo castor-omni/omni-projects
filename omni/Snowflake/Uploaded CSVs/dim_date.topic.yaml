@@ -1,7 +1,7 @@
 base_view: dim_date
 group_label: Uploaded CSVs
 
-required_access_grants: []
-hidden_unless_access_grants: []
+required_access_grants: [ internal_users ]
+hidden_unless_access_grants: [ internal_users ]
 
 joins: {}

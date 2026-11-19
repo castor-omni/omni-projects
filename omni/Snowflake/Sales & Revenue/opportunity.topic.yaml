@@ -205,27 +205,3 @@ sample_queries:
       and region for the past complete fiscal quarter
     prompt: How did each customer segment and region perform in terms of win rate
       and revenue in the last fiscal quarter?
-  Open New Business Pipeline by Stage:
-    query:
-      fields:
-        [
-          omni_dbt_saas__opportunities.stage_name,
-          omni_dbt_saas__opportunities.count,
-          omni_dbt_saas__opportunities.amount_sum
-        ]
-      base_view: omni_dbt_saas__opportunities
-      filters:
-        omni_dbt_saas__opportunities.type:
-          is: New Business
-        omni_dbt_saas__opportunities.stage_name:
-          is_not: [ Closed Won, Closed Lost ]
-      limit: 1000
-      sorts:
-        - field: omni_dbt_saas__opportunities.amount_sum
-          desc: true
-      topic: opportunity
-    description: Open New Business pipeline, with deal count and amount for each
-      stage
-    prompt: What does our open pipeline look like by stage?
-    ai_context: Use this when asked about the current pipeline by stage. Pipeline
-      is open New Business opportunities only (not Closed Won or Closed Lost).

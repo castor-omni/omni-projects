@@ -192,6 +192,12 @@ measures:
     format: percent_1
     description: Won opportunities as a share of all opportunities in the query (win rate).
 
+  owner_id_count_distinct:
+    sql: ${omni_dbt_saas__opportunities.owner_id}
+    description: "(Count Distinct) Owner ID: ID of account executive who currently
+      owns the account"
+    aggregate_type: count_distinct
+
 #The info below was pulled from your dbt repository and is read-only.
 dbt:
   name: opportunities
